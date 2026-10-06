@@ -1,0 +1,14 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #10141f; color: #eef; font-family: system-ui, sans-serif; touch-action: none; overflow: hidden; }
+body { display: flex; align-items: center; justify-content: center; }
+main { width: min(94vw, 82vh, 460px); }
+header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+h1 { margin: 0; font-size: 48px; color: #3dffb0; }
+.scores { display: flex; gap: 8px; }
+.scores div { background: #1d2333; padding: 6px 14px; border-radius: 10px; font-size: 11px; color: #99a; text-align: center; }
+.scores b { display: block; font-size: 20px; color: #fff; }
+#board { position: relative; aspect-ratio: 1; background: #1d2333; border-radius: 14px; padding: 2.4%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.4%; }
+.cell { background: #262d40; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: clamp(18px, 7vw, 38px); transition: transform .08s; }
+.cell.pop { transform: scale(1.12); }
+.help { color: #889; font-size: 14px; text-align: center; }
+button { font: inherit; background: #3dffb0; color: #10141f; border: 0; border-radius: 999px; padding: 6px 14px; font-weight: 700; cursor: pointer; }

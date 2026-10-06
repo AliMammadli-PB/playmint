@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #07110e;
+  --color-ink-2: #0a1713;
+  --color-surface: #0f1f1a;
+  --color-surface-2: #152a23;
+  --color-surface-3: #1c362d;
+  --color-line: rgb(214 255 236 / 0.09);
+  --color-line-strong: rgb(214 255 236 / 0.18);
+  --color-paper: #edf5f0;
+  --color-muted: #93ab9f;
+  --color-faint: #5f776b;
+  --color-mint: #3dffb0;
+  --color-mint-2: #26d692;
+  --color-mint-dim: #1f8f68;
+  --color-amber: #ffc857;
+  --color-danger: #ff7a7a;
+  --color-sky: #7cc8ff;
+  --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background: var(--color-ink);
+}
+
+body {
+  background:
+    radial-gradient(1100px 520px at 85% -12%, rgb(61 255 176 / 0.10), transparent 60%),
+    radial-gradient(800px 420px at -10% 8%, rgb(31 143 104 / 0.14), transparent 55%),
+    var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgb(61 255 176 / 0.3);
+}
+
+@layer components {
+  .container-pm {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition
+      disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mint;
+  }
+  .btn-primary {
+    @apply bg-mint text-ink hover:bg-mint-2;
+  }
+  .btn-ghost {
+    @apply border border-line-strong text-paper hover:border-mint/60 hover:bg-surface-2;
+  }
+  .btn-danger {
+    @apply border border-danger/40 text-danger hover:bg-danger/10;
+  }
+  .btn-sm {
+    @apply px-3.5 py-1.5 text-xs;
+  }
+  .card {
+    @apply rounded-2xl border border-line bg-surface/80;
+  }
+  .input {
+    @apply w-full rounded-xl border border-line-strong bg-ink-2 px-3.5 py-2.5 text-sm text-paper placeholder:text-faint
+      focus:border-mint/70 focus:outline-none focus:ring-2 focus:ring-mint/20;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-paper;
+  }
+  .hint {
+    @apply mt-1 text-xs text-muted;
+  }
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-mint;
+  }
+  .h1 {
+    @apply font-display text-3xl font-bold tracking-tight sm:text-4xl;
+  }
+  .h2 {
+    @apply font-display text-xl font-bold tracking-tight sm:text-2xl;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-semibold;
+  }
+  .table-pm {
+    @apply w-full text-left text-sm;
+  }
+  .table-pm th {
+    @apply border-b border-line px-3 py-2.5 text-xs font-semibold uppercase tracking-wider text-muted;
+  }
+  .table-pm td {
+    @apply border-b border-line px-3 py-3 align-middle;
+  }
+  .table-pm tr:last-child td {
+    @apply border-b-0;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}

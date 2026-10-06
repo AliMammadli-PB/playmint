@@ -1,0 +1,40 @@
+{
+  "name": "playmint",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "seed:demo": "tsx --conditions=react-server --env-file=.env scripts/seed-demo.ts",
+    "admin:promote": "tsx --conditions=react-server --env-file=.env scripts/promote-admin.ts"
+  },
+  "dependencies": {
+    "@node-rs/argon2": "^2.2.2",
+    "drizzle-orm": "^0.45.3",
+    "next": "16.3.8",
+    "pg": "^8.23.1",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "recharts": "^3.10.1",
+    "yauzl": "^3.4.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/yauzl": "^3.4.0",
+    "drizzle-kit": "^0.31.11",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "vitest": "^5.0.3"
+  },
+  "packageManager": "pnpm@9.15.0"
+}
