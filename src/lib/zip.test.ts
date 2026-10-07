@@ -16,3 +16,5 @@ describe("source projects and build output",()=>{
 });
 
 it("finds nested exported games and drops unrelated artifacts",async()=>{const dir=await mkdtemp(join(tmpdir(),"pm-nested-"));try{const result=await extractGameZip(fixture("nested-project"),join(dir,"public"),join(dir,"private"));expect(result.runtimeKind).toBe("browser");expect(await readFile(join(dir,"public","index.html"),"utf8")).toContain("nested game");expect(result.report.warnings.some(w=>w.startsWith("unused_file_skipped:"))).toBe(true);await expect(stat(join(dir,"public","tool.exe"))).rejects.toThrow();}finally{await rm(dir,{recursive:true,force:true});}});
+
+it("retains nested extensionless licence notices in browser output",async()=>{const dir=await mkdtemp(join(tmpdir(),"pm-notices-"));try{const result=await extractGameZip(fixture("nested-licenses"),join(dir,"public"),join(dir,"private"));expect(result.runtimeKind).toBe("browser");expect(await readFile(join(dir,"public","vendor","LICENSE"),"utf8")).toContain("MIT");expect(await readFile(join(dir,"public","assets","NOTICE"),"utf8")).toContain("attribution");}finally{await rm(dir,{recursive:true,force:true});}});

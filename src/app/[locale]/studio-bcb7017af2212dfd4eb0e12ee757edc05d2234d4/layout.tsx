@@ -17,6 +17,10 @@ export default async function AdminLayout({ children, params }: LayoutProps<"/[l
     .select({ n: sql<number>`count(*)::int` })
     .from(schema.payouts)
     .where(eq(schema.payouts.status, "requested"));
+  const [{ n: legacyPending }] = await db
+    .select({ n: sql<number>`count(*)::int` })
+    .from(schema.gameVersions)
+    .where(sql`${schema.gameVersions.status} = 'pending' and ${schema.gameVersions.report}->'legacyFlash' is not null`);
   const base = `/${locale}/studio-bcb7017af2212dfd4eb0e12ee757edc05d2234d4`;
   return (
     <div className="admin-shell container-pm grid grid-cols-1 gap-6 py-8 lg:grid-cols-[210px_1fr]">
@@ -27,6 +31,7 @@ export default async function AdminLayout({ children, params }: LayoutProps<"/[l
           items={[
             { href: base, label: t.admin.nav.overview },
             { href: `${base}/review`, label: t.admin.nav.review, badge: pending },
+            { href: `${base}/legacy`, label: locale === "en" ? "Legacy imports" : locale === "az" ? "Köhnə Flash" : "Eski Flash", badge: legacyPending },
             { href: `${base}/games`, label: t.admin.nav.games },
             { href: `${base}/users`, label: t.admin.nav.users },
             { href: `${base}/ads`, label:locale==="en"?"Ad revenue":locale === "az" ? "Reklam gəlirləri" : "Reklam gelirleri" },

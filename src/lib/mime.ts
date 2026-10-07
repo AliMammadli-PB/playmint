@@ -37,6 +37,7 @@ const types: Record<string, string> = {
   woff: "font/woff",
   woff2: "font/woff2",
   wasm: "application/wasm",
+  swf: "application/x-shockwave-flash",
   glb: "model/gltf-binary",
   gltf: "model/gltf+json",
 };

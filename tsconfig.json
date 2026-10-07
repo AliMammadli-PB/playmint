@@ -60,7 +60,19 @@
     ".next-portal-live-20261007/types/**/*.ts",
     ".next-portal-live-20261007/dev/types/**/*.ts",
     ".next-opensource-20261007/types/**/*.ts",
-    ".next-opensource-20261007/dev/types/**/*.ts"
+    ".next-opensource-20261007/dev/types/**/*.ts",
+    ".next-curated-20261007/types/**/*.ts",
+    ".next-curated-20261007/dev/types/**/*.ts",
+    ".next-curated-final-20261007/types/**/*.ts",
+    ".next-curated-final-20261007/dev/types/**/*.ts",
+    ".next-curated-release-20261007/types/**/*.ts",
+    ".next-curated-release-20261007/dev/types/**/*.ts",
+    ".next-legacy-flash-20261007/types/**/*.ts",
+    ".next-legacy-flash-20261007/dev/types/**/*.ts",
+    ".next-curated-swf-20261007/types/**/*.ts",
+    ".next-curated-swf-20261007/dev/types/**/*.ts",
+    ".next-curated-live-20261007/types/**/*.ts",
+    ".next-curated-live-20261007/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

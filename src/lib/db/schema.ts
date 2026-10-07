@@ -132,8 +132,9 @@ export const games = pgTable(
 );
 
 export type ScanReport = {
-  openSource?: {author:string;repository:string;source:string;revision:string;license:string;adaptations:string[]};
+  openSource?: {author:string;repository:string;source:string;revision:string;license:string;adaptations:string[];licensePath?:string};
   sharedScanVersionId?: string;
+  scanScope?: {kind: "bundle-member"; member: string; bundleSha256: string};
   virustotal?: import("../virustotal-result").VirusTotalReport;
   rejectionReason?: "virustotal" | "manual";
   sourceRemovedAt?: string;
@@ -144,6 +145,7 @@ export type ScanReport = {
   externalHosts: string[];
   warnings: string[];
   project?: { kind: "browser"|"frontend-source"|"node-source"; root: string; publicRoot: string|null; ignoredFiles:number; requiresBuild:boolean; scripts:string[]; sourceProject?:boolean };
+  legacyFlash?: import("../legacy-flash").LegacyFlashMeta;
 };
 
 export const gameVersions = pgTable(

@@ -14,6 +14,8 @@ import { Cover } from "@/components/GameCard";
 import { SubmitButton } from "@/components/ui";
 import { Player } from "../../../g/[slug]/Player";
 import { reviewAction } from "../../actions";
+import { LegacyFlashPanel } from "@/components/LegacyFlashPanel";
+import { legacyRightsBlockPublish } from "@/lib/legacy-flash";
 
 export default async function ReviewDetail({ params, searchParams }: PageProps<"/[locale]/studio-bcb7017af2212dfd4eb0e12ee757edc05d2234d4/review/[versionId]">) {
   const { locale, t } = await resolveLocale(params);
@@ -68,6 +70,7 @@ export default async function ReviewDetail({ params, searchParams }: PageProps<"
 
         <div className="space-y-4">
           <VirusTotalPanel versionId={v.id} initial={v.report.virustotal} pending={v.status==="pending"} locale={locale}/>
+          <LegacyFlashPanel locale={locale} version={v} game={game}/>
           {v.status === "pending" && (
             <form action={reviewAction} className="card space-y-3 p-4">
               <input type="hidden" name="locale" value={locale} />
@@ -76,9 +79,12 @@ export default async function ReviewDetail({ params, searchParams }: PageProps<"
               <textarea name="note" rows={3} placeholder={t.admin.notePlaceholder} className="input" />
               {sp.error === "scan" && <p className="text-sm text-danger">{locale==="en"?"Approval requires a cover and a completed scan with no malicious or suspicious detections.":locale === "az" ? "Təsdiq üçün üz qabığı və zərərli/şübhəli nəticəsi olmayan tamamlanmış tarama lazımdır." : "Onay için kapak ve zararlı/şüpheli tespit içermeyen tamamlanmış tarama gerekiyor."}</p>}
               {!game.coverPath&&<p className="text-amber text-xs">{locale==="en"?"The developer must add a cover.":locale === "az" ? "Geliştirici oyunun üz qabığını əlavə etməlidir." : "Geliştirici oyun kapağını eklemeli."}</p>}
+              {sp.error === "rights" && <p className="text-sm text-danger">Publishing requires verified redistribution rights.</p>}
               {sp.error === "note" && <p className="text-sm text-danger">{t.admin.noteRequired}</p>}
               <div className="flex gap-2">
-                <SubmitButton name="decision" value="approve" disabled={v.runtimeKind!=="browser"||!game.coverPath||!scanAllowsApproval(v.report.virustotal)} className="btn btn-primary flex-1">✓ {t.admin.approve}</SubmitButton>
+                <span title={legacyRightsBlockPublish(v.report) ? "Publishing requires verified redistribution rights." : undefined} className="flex-1">
+                  <SubmitButton name="decision" value="approve" disabled={v.runtimeKind!=="browser"||!game.coverPath||!scanAllowsApproval(v.report.virustotal)||legacyRightsBlockPublish(v.report)} className="btn btn-primary w-full">✓ {t.admin.approve}</SubmitButton>
+                </span>
                 <SubmitButton name="decision" value="reject" className="btn btn-danger">✕ {t.admin.reject}</SubmitButton>
               </div>
             </form>

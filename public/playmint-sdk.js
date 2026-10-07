@@ -1,5 +1,5 @@
 /* Playmint SDK v2: gameplay callbacks never create financial credit. */
-(function(){'use strict';if(window.Playmint&&window.Playmint.version===2)return;
+(function(){'use strict';if(window.Playmint&&window.Playmint.version===2&&window.Playmint.storage){if(window.__playmintStorageListen)window.addEventListener("message",window.__playmintStorageListen);return;}
  var lifecycle=null,busy=false,lastAd=window.__PLAYMINT_LAST_AD||0,timer=null,config=window.__PLAYMINT_CONFIG||{enabled:false},previous=window.Playmint;
  function ready(){return config.enabled===true&&typeof window.adBreak==='function';}
  function run(type,name){if(!ready())return Promise.resolve({completed:false,reason:'ads_disabled'});if(busy)return Promise.resolve({completed:false,reason:'busy'});if(type!=='preroll'&&Date.now()-lastAd<config.intervalSeconds*1000)return Promise.resolve({completed:false,reason:'frequency_capped'});if(type!=='preroll'&&!lifecycle)return Promise.resolve({completed:false,reason:'pause_not_connected'});
@@ -8,6 +8,14 @@
   });
  }
  window.Playmint={version:2,init:function(options){if(!options||typeof options.pause!=='function'||typeof options.resume!=='function')return false;lifecycle=options;if(timer)clearInterval(timer);if(config.enabled&&config.midgame)timer=setInterval(function(){if(document.visibilityState==='visible'&&!busy)void run('pause','automatic_midgame');},config.intervalSeconds*1000);return true;},requestReward:function(placement){if(typeof placement!=='string'||!/^[a-z0-9_-]{1,40}$/.test(placement))return Promise.resolve({completed:false,reason:'invalid_placement'});if(!config.rewarded)return Promise.resolve({completed:false,reason:'ads_disabled'});return run('reward',placement);},gameBreak:function(){return run('pause','game_break');},purchases:{available:false,request:function(){return Promise.resolve({completed:false,reason:'coming_soon'});}}};
+ // The host exposes only this game's bounded device-local snapshot.
+ var values=Object.create(null),pending=Object.create(null),flushTimer=null,sequence=0;
+ function storageRequest(op,snapshot){return new Promise(function(resolve){if(parent===window){resolve({ok:false,snapshot:{}});return;}var id='save-'+Date.now()+'-'+(++sequence);var timeout=setTimeout(function(){delete pending[id];resolve({ok:false,snapshot:{}});},1800);pending[id]=function(result){clearTimeout(timeout);resolve(result);};parent.postMessage({type:'playmint:storage',id:id,op:op,snapshot:snapshot},'*');});}
+ window.__playmintStorageListen=function(event){var data=event.data;if(event.source!==parent||!data||data.type!=='playmint:storage-result'||typeof data.id!=='string'||!pending[data.id])return;var finish=pending[data.id];delete pending[data.id];finish(data);};window.addEventListener('message',window.__playmintStorageListen);
+ var storageReady=storageRequest('load').then(function(result){if(result.snapshot&&typeof result.snapshot==='object'){Object.keys(result.snapshot).slice(0,100).forEach(function(key){if(typeof result.snapshot[key]==='string'&&!['__proto__','constructor','prototype'].includes(key))values[key]=result.snapshot[key];});}});
+ function scheduleSave(){clearTimeout(flushTimer);flushTimer=setTimeout(function(){void storageRequest('save',values);},250);}
+ window.Playmint.storage={ready:storageReady,getItem:function(key){return Object.prototype.hasOwnProperty.call(values,key)?values[key]:null;},setItem:function(key,value){if(!/^[a-zA-Z0-9_.:-]{1,100}$/.test(key)||['__proto__','constructor','prototype'].includes(key)||String(value).length>32768)return;values[key]=String(value);scheduleSave();},removeItem:function(key){delete values[key];scheduleSave();},clear:function(){values=Object.create(null);scheduleSave();}};
+ window.pmStorage=window.Playmint.storage;
  // Startup is owned by the runtime boot loader, never by a game's reward button.
  window.__playmintStartup=function(){return config.startup?run('preroll','game_start'):Promise.resolve({completed:false,reason:'disabled'});};
 })();

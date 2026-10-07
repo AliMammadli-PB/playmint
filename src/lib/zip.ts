@@ -18,7 +18,7 @@ const allowedExt = new Set(
     "mp3 ogg oga wav m4a aac flac opus weba mp4 webm ogv " +
     "ttf otf woff woff2 fnt " +
     "wasm data unityweb glb gltf bin obj mtl ktx2 basis hdr " +
-    "atlas tmx tsx tsj ldtk"
+    "atlas tmx tsx tsj ldtk swf"
   ).split(" "),
 );
 const allowedBare = new Set(["license", "licence", "readme", "copying", "notice", "changelog", "authors"]);
@@ -202,7 +202,7 @@ export async function extractGameZip(zipPath: string, destDir: string, projectDi
             await fs.mkdir(path.dirname(outPath), { recursive: true });
             const scan = (textExt.has(extOf(target))||projectExt.has(extOf(target))) && e.uncompressedSize <= 3 * 1024 * 1024;
             if (textExt.has(extOf(target)) && !scan) warnings.add(`not_scanned_large_text:${target}`);
-            if (["wasm","bin","unityweb"].includes(extOf(target))) warnings.add(`binary_requires_review:${target}`);
+            if (["wasm","bin","unityweb","swf"].includes(extOf(target))) warnings.add(`binary_requires_review:${target}`);
             const chunks: Buffer[] = [];
             const counter = new Transform({
               transform(chunk: Buffer, _enc, cb) {
@@ -237,7 +237,7 @@ export async function extractGameZip(zipPath: string, destDir: string, projectDi
       if(project.publicRoot!==null){
         const output=project.publicRoot.slice(root.length);
         const runtime=files.filter(f=>f.path.startsWith(output)).map(f=>({...f,path:f.path.slice(output.length)}));
-        for(const file of runtime){if(!allowedExt.has(extOf(file.path))&&!allowedBare.has(file.path.toLowerCase()))throw new ZipError("zip_bad_files",file.path);const target=path.join(destDir,file.path);await fs.mkdir(path.dirname(target),{recursive:true});await fs.copyFile(path.join(privateRoot,output,file.path),target);}
+        for(const file of runtime){if(!allowedExt.has(extOf(file.path))&&!allowedBare.has(path.posix.basename(file.path).toLowerCase()))throw new ZipError("zip_bad_files",file.path);const target=path.join(destDir,file.path);await fs.mkdir(path.dirname(target),{recursive:true});await fs.copyFile(path.join(privateRoot,output,file.path),target);}
       }
     }
   } catch (err) {

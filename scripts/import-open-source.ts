@@ -45,4 +45,4 @@ async function approve(){
   await approveVersion(v.id,reviewer.id,`Curated MIT import from mashukui/web-games. Browser and source review completed. Shared collection runtime SHA-256 ${expected}, identical bytes verified for this version; actual VirusTotal analysis ${sharedScan.analysisId}.`);console.log('published',g.slug);
  }
 }
-void (async()=>{const mode=process.argv[2];if(mode==='stage')await stage();else if(mode==='scan')await scan();else if(mode==='approve')await approve();else if(mode==='status')console.log(JSON.stringify((await versions()).map(r=>({slug:r.game.slug,status:r.version.status,scan:r.version.report.virustotal?.status})),null,2));else throw new Error('mode_required');process.exit(0);})().catch(e=>{console.error(e);process.exit(1)});
+void(async()=>{if(process.argv[2]!=="status")throw new Error("This collection was retired at the owner request; do not republish.");console.log(JSON.stringify((await versions()).map(r=>({slug:r.game.slug,status:r.version.status,scan:r.version.report.virustotal?.status})),null,2));process.exit(0)})().catch(e=>{console.error(e);process.exit(1)});

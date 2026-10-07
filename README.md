@@ -79,6 +79,12 @@ open-source grant). Source material is private during review and removed after a
 Profile, category, cover, licensing and prices remain editable after upload. Password
 changes require the current password and confirmation and revoke other sessions.
 
+## Legacy Flash Games
+
+Old `.swf` games run in a pinned, self-hosted [Ruffle](https://ruffle.rs/) 0.7.0 runtime at `/legacy/ruffle/`. Players do not need a Flash plugin. Each imported game is a normal Playmint package (`index.html` plus `game.swf`) and is served from the isolated game origin, with the same sandbox rules as HTML5 games. The wrapper loads Ruffle from Playmint and opens `./game.swf`. Ruffle is configured with script access off, networking limited to the game package, and external URLs denied, so a SWF cannot read the Playmint session.
+
+`pnpm import:swf-games` reads `https://github.com/krestenlaust/swfgames/`, drops duplicate Git blobs, and creates pending review versions owned by the platform account Playmint Legacy. A file being on GitHub is not redistribution permission. Imports start with `rightsStatus=pending` and stay out of the public catalogue. Admin review can preview them, approve the technical check, or mark rights verified. Public publish uses the normal malware and runtime approval path. Rights verification and an explicit operator instruction to publish are recorded separately; operator authorization does not claim copyright ownership or an open-source licence. Reports are written under the private data directory, not the git repo.
+
 ## Project ZIP uploads
 Accepts plain HTML games and full Node.js/Vite/TypeScript projects. A ready dist/, build/
 or out/ entry takes priority over source index.html. Dependencies, VCS, test output, raw

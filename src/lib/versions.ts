@@ -11,6 +11,7 @@ import {archiveHash} from "@/lib/archive-hash";
 import { retainRuntimeOnly } from "@/lib/version-retention";
 import { newId } from "@/lib/ids";
 import { extractGameZip, rebaseGameAssets, ZipError } from "@/lib/zip";
+import { legacyRightsBlockPublish } from "@/lib/legacy-flash";
 
 /** Store + validate an uploaded zip and create a pending version. Throws ZipError. */
 export async function createVersion(gameId: string, zip: File | {archivePath:string;size:number;versionId?:string;archiveSha256?:string}, changelog: string, maxZipMb: number) {
@@ -76,6 +77,7 @@ export async function approveVersion(versionId: string, reviewerId: string, note
   await db.transaction(async (tx) => {
     const v = (await tx.select().from(schema.gameVersions).where(eq(schema.gameVersions.id, versionId)).for("update"))[0];
     if (!v || v.status !== "pending") throw new Error("not_pending");
+    if (legacyRightsBlockPublish(v.report)) throw new Error("rights_not_verified");
     if(v.runtimeKind!=="browser"||!v.entry)throw new Error("runtime_not_ready");
     if(!scanAllowsApproval(v.report.virustotal))throw new Error("scan_not_passed");
     const ownerGame=(await tx.select().from(schema.games).where(eq(schema.games.id,v.gameId)))[0];

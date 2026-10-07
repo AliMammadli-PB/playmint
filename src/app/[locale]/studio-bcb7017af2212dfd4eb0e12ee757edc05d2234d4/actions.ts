@@ -7,6 +7,8 @@ import { db, schema } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { approveVersion, rejectVersion } from "@/lib/versions";
+import { legacyRightsBlockPublish } from "@/lib/legacy-flash";
+import { deleteLegacyImport, markLegacyRights, markLegacyTechnical, rejectLegacyImport } from "@/lib/legacy-admin";
 import { saveDraftPeriod, finalizePeriod } from "@/lib/finance";
 import { saveSettings, defaultSettings, type Settings } from "@/lib/settings";
 import { audit } from "@/lib/audit";
@@ -25,7 +27,7 @@ export async function reviewAction(form: FormData) {
   let note = str(form, "note").slice(0, 2000);
   const decision = str(form, "decision");
   if (decision === "approve") {
-    try{await approveVersion(versionId, user.id, note);}catch(e){if(e instanceof Error&&['scan_not_passed','cover_required'].includes(e.message))redirect(`/${locale}/studio-bcb7017af2212dfd4eb0e12ee757edc05d2234d4/review/${versionId}?error=scan`);throw e;}
+    try{await approveVersion(versionId, user.id, note);}catch(e){if(e instanceof Error&&['scan_not_passed','cover_required','rights_not_verified'].includes(e.message))redirect(`/${locale}/studio-bcb7017af2212dfd4eb0e12ee757edc05d2234d4/review/${versionId}?error=${e.message==='rights_not_verified'?'rights':'scan'}`);throw e;}
   } else if (decision === "reject") {
     if(str(form,"reason")==="virustotal"){
       const version=(await db.select().from(schema.gameVersions).where(eq(schema.gameVersions.id,versionId)))[0];
@@ -50,12 +52,38 @@ export async function gameAdminAction(form: FormData) {
   if (op === "unfeature") set.featured = false;
   if (op === "unlist") set.status = "unlisted";
   if (op === "remove") set.status = "removed";
-  if (op === "publish") set.status = "published";
+  if (op === "publish") {
+    const game = (await db.select().from(schema.games).where(eq(schema.games.id, gameId)))[0];
+    const live = game?.liveVersionId ? (await db.select().from(schema.gameVersions).where(eq(schema.gameVersions.id, game.liveVersionId)))[0] : undefined;
+    if (!legacyRightsBlockPublish(live?.report)) set.status = "published";
+  }
   if (Object.keys(set).length) {
     await db.update(schema.games).set(set).where(eq(schema.games.id, gameId));
     await audit(user.id, `game.${op}`, gameId);
   }
   revalidatePath(`/${locale}/studio-bcb7017af2212dfd4eb0e12ee757edc05d2234d4/games`);
+}
+
+export async function legacyAction(form: FormData) {
+  const { user, locale } = await admin(form);
+  const versionId = str(form, "versionId");
+  const op = str(form, "op");
+  const back = `/${locale}/studio-bcb7017af2212dfd4eb0e12ee757edc05d2234d4/legacy`;
+  if (op === "reject" && !str(form, "note")) redirect(`${back}?error=note`);
+  try {
+    if (op === "technical") await markLegacyTechnical(versionId, user.id);
+    else if (op === "rights") await markLegacyRights(versionId, user.id, "verified");
+    else if (op === "reject") await rejectLegacyImport(versionId, user.id, str(form, "note"));
+    else if (op === "delete") await deleteLegacyImport(versionId, user.id);
+    else if (op === "publish") await approveVersion(versionId, user.id, str(form, "note"));
+  } catch (error) {
+    const digest = typeof error === "object" && error && "digest" in error ? String((error as { digest: unknown }).digest) : "";
+    if (digest.startsWith("NEXT_REDIRECT")) throw error;
+    const code = error instanceof Error ? error.message : "failed";
+    redirect(`${back}?error=${encodeURIComponent(code)}`);
+  }
+  revalidatePath(`/${locale}/studio-bcb7017af2212dfd4eb0e12ee757edc05d2234d4`, "layout");
+  redirect(back);
 }
 
 export async function userAdminAction(form: FormData) {

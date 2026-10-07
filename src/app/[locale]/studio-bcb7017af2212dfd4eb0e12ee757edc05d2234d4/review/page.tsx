@@ -30,6 +30,7 @@ export default async function ReviewQueue({ params }: PageProps<"/[locale]/studi
                   <StatusBadge tone="amber">v{v.number}</StatusBadge>
                   <span className="text-xs text-muted">VirusTotal: {v.report.virustotal?.status??"pending"}{v.report.virustotal?.stats&&` · ${v.report.virustotal.stats.malicious??0} zararlı · ${v.report.virustotal.stats.suspicious??0} şüpheli`}</span>
                   {game.liveVersionId ? <StatusBadge tone="sky">{locale==="en"?"Update":locale==="az"?"Yeniləmə":"Güncelleme"}</StatusBadge> : <StatusBadge tone="mint">{locale==="en"?"New":locale==="az"?"Yeni":"Yeni"}</StatusBadge>}
+                  {v.report.legacyFlash && <StatusBadge tone="muted">Legacy Flash · {v.report.legacyFlash.rightsStatus}</StatusBadge>}
                 </div>
                 <div className="mt-1 text-xs text-muted">
                   {dev?.displayName ?? email} · {date(v.createdAt, locale)} · {v.report.fileCount} {t.dev.files} · {bytes(v.report.totalBytes)}

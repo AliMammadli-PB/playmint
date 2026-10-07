@@ -13,7 +13,8 @@
     "admin:promote": "tsx --conditions=react-server --env-file=.env scripts/promote-admin.ts",
     "test:e2e": "playwright test",
     "test:integration": "node --env-file=.env scripts/redesign-qa.cjs",
-    "test:community": "node --env-file=.env scripts/community-qa.cjs"
+    "test:community": "node --env-file=.env scripts/community-qa.cjs",
+    "import:swf-games": "tsx --conditions=react-server --env-file=.env scripts/import-swf-games.ts"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",

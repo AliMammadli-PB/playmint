@@ -38,6 +38,7 @@ export const licenses = [
   { id: "BSD-3-Clause", url: "https://opensource.org/license/bsd-3-clause" },
   { id: "CC-BY-4.0", url: "https://creativecommons.org/licenses/by/4.0/" },
   { id: "CC-BY-SA-4.0", url: "https://creativecommons.org/licenses/by-sa/4.0/" },
+  { id: "ISC", url: "https://opensource.org/license/isc-license-txt" },
   { id: "Unlicense", url: "https://unlicense.org/" },
 ] as const;
 

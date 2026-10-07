@@ -36,6 +36,7 @@ export async function GET(_req: Request, ctx: RouteContext<"/play/[...path]">) {
     const version=(await db.select().from(schema.gameVersions).where(eq(schema.gameVersions.id,parts[0])))[0];
     if(!version)return new Response("Not found",{status:404});
     const game=(await db.select().from(schema.games).where(eq(schema.games.id,version.gameId)))[0];
+    if(game?.status==="removed")return new Response("Gone",{status:410,headers:gameFileHeaders});
     const live=!!game&&!game.isDemo&&game.status==="published"&&game.liveVersionId===version.id&&version.status==="approved";
     const html=await gameRuntimeHtml(await fs.promises.readFile(file,"utf8"),version.gameId,!live);
     return new Response(html,{headers:{...gameFileHeaders,"Content-Type":"text/html; charset=utf-8","Cache-Control":"private, no-store"}});

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import {parseGameSave,readGameSave} from "@/lib/game-save";
 
 type Labels = { play: string; fullscreen: string; premiumTitle: string; premiumText: string; premiumCta: string; sandboxNote: string; error: string };
 
@@ -103,6 +104,22 @@ export function Player({
     window.addEventListener("message",onMessage);
     return()=>{window.removeEventListener("message",onMessage);adAbort.current?.abort();};
   },[state]);
+
+  useEffect(()=>{
+    if(state!=="playing")return;
+    let lastWrite=0;
+    const receive=(event:MessageEvent)=>{
+      const source=frame.current?.contentWindow,data=event.data;
+      if(!source||event.source!==source||!data||data.type!=="playmint:storage"||typeof data.id!=="string"||data.id.length>80)return;
+      const reply=(payload:Record<string,unknown>)=>source.postMessage({type:"playmint:storage-result",id:data.id,...payload},"*");
+      if(data.op==="load"){try{reply({ok:true,snapshot:readGameSave(window.localStorage,gameId)});}catch{reply({ok:false,snapshot:{}});}return;}
+      if(data.op!=="save")return;
+      const snapshot=parseGameSave(data.snapshot);if(!snapshot){reply({ok:false,reason:"invalid_save"});return;}
+      if(Date.now()-lastWrite<100){reply({ok:false,reason:"throttled"});return;}lastWrite=Date.now();
+      try{window.localStorage.setItem(`pm:game-save:${gameId}`,JSON.stringify(snapshot));reply({ok:true});}catch{reply({ok:false,reason:"storage_unavailable"});}
+    };
+    window.addEventListener("message",receive);return()=>window.removeEventListener("message",receive);
+  },[state,gameId]);
 
   useEffect(() => {
     if (!immersive) return;
