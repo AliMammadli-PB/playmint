@@ -47,7 +47,7 @@ header .container-pm{max-width:1480px}
 header a,header summary{min-height:44px;cursor:pointer}
 header .container-pm>a[aria-label="Playmint"]{display:flex;align-items:center}
 header nav a{display:inline-flex;align-items:center}
-.language-menu{position:relative;flex-shrink:0}
+.language-menu{position:relative;flex-shrink:0;z-index:70}
 .language-trigger{list-style:none;display:flex;align-items:center;gap:8px;min-height:44px;padding:8px 11px;border:1px solid var(--color-line-strong);border-radius:10px;cursor:pointer;font-size:13px;background:var(--color-surface)}
 .language-trigger::-webkit-details-marker{display:none}
 .locale-flag{display:inline-block;width:24px;height:16px;object-fit:cover;border-radius:2px;flex-shrink:0}

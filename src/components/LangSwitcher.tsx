@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { locales, localeNames, localeCookie, type Locale } from "@/lib/i18n/config";
 import { LangFlag } from "./LangFlag";
@@ -17,13 +17,22 @@ export function LangSwitcher({ locale, label }: { locale: Locale; label: string 
     router.push(parts.join("/") + window.location.search);
   }
 
+  // Close on outside pointer — not onBlur. Touch devices often have
+  // relatedTarget=null on blur, which closed the menu before the option click fired.
+  useEffect(() => {
+    const el = menu.current;
+    if (!el) return;
+    function onPointerDown(e: PointerEvent) {
+      if (el.open && !el.contains(e.target as Node)) el.open = false;
+    }
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, []);
+
   return (
     <details
       ref={menu}
       className="language-menu"
-      onBlur={(e) => {
-        if (menu.current && !e.currentTarget.contains(e.relatedTarget as Node)) menu.current.open = false;
-      }}
       onKeyDown={(e) => {
         if (e.key === "Escape" && menu.current) {
           menu.current.open = false;
@@ -40,7 +49,23 @@ export function LangSwitcher({ locale, label }: { locale: Locale; label: string 
       </summary>
       <div className="language-options">
         {locales.map((l) => (
-          <button type="button" key={l} lang={l} aria-label={localeNames[l]} aria-current={locale === l ? "true" : undefined} onClick={() => change(l)}>
+          <button
+            type="button"
+            key={l}
+            lang={l}
+            aria-label={localeNames[l]}
+            aria-current={locale === l ? "true" : undefined}
+            onPointerDown={(e) => {
+              // Fire before any focus change so taps select even when blur would race.
+              if (e.button !== 0) return;
+              e.preventDefault();
+              change(l);
+            }}
+            onClick={(e) => {
+              // Keyboard Enter/Space (detail===0); pointer path already handled above.
+              if (e.detail === 0) change(l);
+            }}
+          >
             <LangFlag locale={l} />
             {localeNames[l]}
             {locale === l && <span className="language-check" aria-hidden="true">✓</span>}
