@@ -29,10 +29,10 @@ export function SubmitButton({
 
 export function FormError({ message }: { message?: string | null }) {
   if (!message) return null;
-  return <p className="rounded-xl border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger">{message}</p>;
+  return <p role="alert" className="rounded-xl border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger">{message}</p>;
 }
 
 export function FormSuccess({ message }: { message?: string | null }) {
   if (!message) return null;
-  return <p className="rounded-xl border border-mint/30 bg-mint/10 px-3.5 py-2.5 text-sm text-mint">{message}</p>;
+  return <p role="status" className="rounded-xl border border-mint/30 bg-mint/10 px-3.5 py-2.5 text-sm text-mint">{message}</p>;
 }

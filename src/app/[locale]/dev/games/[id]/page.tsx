@@ -1,3 +1,4 @@
+import {VersionTimeline} from "@/components/VersionTimeline";
 import {UploadPolicy} from "@/components/UploadPolicy";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -82,7 +83,7 @@ export default async function DevGame({ params }: PageProps<"/[locale]/dev/games
                 <div className="flex flex-wrap items-center gap-3">
                   <span className="font-display text-lg font-bold">v{v.number}</span>
                   <StatusBadge tone={versionTone[v.status]}>{t.dev.versionStatus[v.status]}</StatusBadge>
-                  {v.id === game.liveVersionId && <StatusBadge tone="mint">● live</StatusBadge>}
+                  {v.id === game.liveVersionId && <StatusBadge tone="mint">{locale==="en"?"Live":locale==="az"?"Yayımda":"Yayında"}</StatusBadge>}
                   <span className="text-xs text-faint">
                     {date(v.createdAt, locale)} · {v.report.fileCount} {t.dev.files} · {bytes(v.report.totalBytes)}
                   </span>
@@ -92,7 +93,7 @@ export default async function DevGame({ params }: PageProps<"/[locale]/dev/games
                   {!v.report.sourceRemovedAt && <a href={`/api/source/${v.id}`} className="btn btn-ghost btn-sm">⬇ zip</a>}
                 </div>
               </div>
-              {v.runtimeKind!=="browser"&&<p className="mt-3 rounded-xl bg-amber/10 p-3 text-sm text-amber">{locale==="en"?"Source project received. Build/runtime preparation is required before publishing.":locale==="az"?"Mənbə layihə qəbul edildi. Yayım üçün build/işləmə mühiti hazırlanmalıdır.":"Kaynak proje alındı. Yayın için build/çalıştırma hazırlığı gerekiyor."}</p>}
+              <VersionTimeline locale={locale} report={v.report} status={v.status}/>{v.runtimeKind!=="browser"&&<p className="mt-3 rounded-xl bg-amber/10 p-3 text-sm text-amber">{locale==="en"?"Source project received. Build/runtime preparation is required before publishing.":locale==="az"?"Mənbə layihə qəbul edildi. Yayım üçün build/işləmə mühiti hazırlanmalıdır.":"Kaynak proje alındı. Yayın için build/çalıştırma hazırlığı gerekiyor."}</p>}
               {v.changelog && <p className="mt-2 whitespace-pre-line text-sm text-muted">{v.changelog}</p>}
               {v.reviewNote && (
                 <p className={`mt-3 rounded-xl px-3 py-2 text-sm ${v.status === "rejected" ? "bg-danger/10 text-danger" : "bg-surface-2 text-muted"}`}>

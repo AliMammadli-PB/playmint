@@ -38,7 +38,7 @@ export default async function AdminOverview({ params }: PageProps<"/[locale]/stu
         <Kpi label={t.admin.kpiGames} value={num(Number(counts.games), locale)} />
         <Kpi label={t.admin.kpiPending} value={num(Number(counts.pending), locale)} accent={Number(counts.pending) > 0} />
         <Kpi label={t.admin.kpiPremium} value={num(Number(counts.premium), locale)} />
-        <Kpi label={locale==="en"?"Confirmed income this month":"Bu ay onaylı banka geliri"} value={m(estimate.grossCents)} />
+        <Kpi label={locale==="en"?"Confirmed income this month":locale === "az" ? "Bu ay təsdiqlənmiş bank gəliri" : "Bu ay onaylı banka geliri"} value={m(estimate.grossCents)} />
         <Kpi label={t.admin.kpiPlatformMonth} value={m(estimate.platformCents)} accent />
         <Kpi label={t.admin.kpiPayouts} value={num(Number(counts.payouts), locale)} />
       </div>

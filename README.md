@@ -68,14 +68,14 @@ Admins/developers can still review their files. No public games means an honest 
 Registration asks for player/developer role, name, unique username, email, password and
 password confirmation. Only player/developer roles are accepted server-side. Developer
 profiles are created atomically with signup; players land in the public catalogue.
-Creators land in Studio with independent overview, games, analytics, game subscriptions,
+Creators can open Studio with independent overview, games, analytics, game subscriptions,
 subscribers, earnings, ads, profile/payout settings and account security routes. Player
 accounts have independent home, library, subscriptions and account settings routes.
 Subscriber lists are scoped to owned games, with test records hidden by default. Analytics
 use real recorded sessions with game and date filters and period-unique player counts.
-Name + ZIP is the entire first upload form. The server generates the slug and safe defaults;
+The first-upload wizard collects metadata, cover and ZIP. The server generates the slug and safe defaults;
 ZIP checks and admin approval remain mandatory. License defaults to Developer (no implicit
-open-source grant); public source downloads require an open-source license selection.
+open-source grant). Source material is private during review and removed after approval.
 Profile, category, cover, licensing and prices remain editable after upload. Password
 changes require the current password and confirmation and revoke other sessions.
 
@@ -110,3 +110,15 @@ with review warnings. Unsafe paths and executables inside playable output still 
 The original archive is retained privately for project review. Source-only Node.js
 projects still require a prepared runtime before publication; no arbitrary code is run
 on the host. Automatic preparation does not bypass manual publication approval.
+
+## Arcade / Studio redesign
+
+Branch: `redesign/arcade-studio-20261007`. Arcade is dark; developer Studio and admin use the related light palette. Semantic tokens and responsive rules live in `src/app/globals.css`, with their contract in `DESIGN.md`. SVG flags are local assets; no `flag-icons` package is needed. Dependencies at every nesting level are ignored by Git.
+
+The upload wizard requests game details, category, mobile/fullscreen capability, cover and ZIP, then shows a review step. Archives up to the configured 2 GiB limit transfer in 8 MiB chunks. Selected playable output is capped at 512 MiB and 10,000 files. Upload completion alone never publishes a game. Every version needs admin approval. After approval original source/project material is deleted permanently; only playable output remains. Keep your own backups. Licensing does not imply public source downloads after cleanup. Terms, privacy, developer, copyright and refund pages are explicitly drafts until operator details are confirmed. Contact submissions are saved in the admin request queue, without claiming automatic email delivery.
+
+Checkout remains disabled by owner instruction. Game plans accept USD or TRY; neither currency creates a charge while checkout is disabled. H5 approval, separate runtime DNS/TLS, Google channel mapping and advertising consent are launch prerequisites. Ad SDK rewards never imply a financial credit; only confirmed received bank income creates withdrawable TRY balances. No exchange rate, subscription commission, refund timing or provider policy is invented.
+
+Validation: `pnpm test` and `pnpm test:e2e`. Playwright includes mobile immersive exit with preserved iframe, localized SVG flags/query preservation, responsive catalogue checks and serious/critical axe accessibility checks. Set `PLAYMINT_TEST_ORIGIN` for a test host and `PLAYMINT_CHROMIUM_PATH` for an installed browser. Financial tests must use private test accounts and never real bank references.
+
+Build into a fresh release directory with `PLAYMINT_BUILD_DIR=.next-<release> pnpm build`, verify the release, then restart PM2 with that same environment value. Never rebuild the directory currently serving production. Retain the preceding release directory for rollback.

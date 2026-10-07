@@ -1,9 +1,8 @@
 import {Space_Grotesk, DM_Sans} from 'next/font/google';
 import {cookies,headers} from 'next/headers';
 import {isLocale,localeCookie} from '@/lib/i18n/config';
-import "flag-icons/css/flag-icons.min.css";
 import './globals.css';
-const display=Space_Grotesk({variable:'--font-display',subsets:['latin','latin-ext'],display:'swap'});
+const display=Space_Grotesk({variable:'--font-heading',subsets:['latin','latin-ext'],display:'swap'});
 const body=DM_Sans({variable:'--font-body',subsets:['latin','latin-ext'],display:'swap'});
 export default async function RootLayout({children}:{children:React.ReactNode}){
  const preferred=(await headers()).get('x-playmint-locale')||(await cookies()).get(localeCookie)?.value;

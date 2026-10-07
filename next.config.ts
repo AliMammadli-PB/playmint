@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  distDir: process.env.PLAYMINT_BUILD_DIR || ".next",
   poweredByHeader: false,
   serverExternalPackages: ["@node-rs/argon2", "yauzl"],
   experimental: {

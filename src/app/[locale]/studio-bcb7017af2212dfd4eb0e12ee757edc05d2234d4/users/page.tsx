@@ -52,19 +52,19 @@ export default async function AdminUsers({ params, searchParams }: PageProps<"/[
             {users.map(({ u, premiumUntil }) => (
               <tr key={u.id}>
                 <td>
-                  <div className="font-semibold">{u.name} {u.banned && <StatusBadge tone="danger">banned</StatusBadge>}</div>
+                  <div className="font-semibold">{u.name} {u.banned && <StatusBadge tone="danger">{locale==="en"?"Blocked":locale==="az"?"Bloklanıb":"Engelli"}</StatusBadge>}</div>
                   <div className="text-xs text-faint">{u.email}</div>
                 </td>
                 <td>
                   <form action={userAdminAction} className="flex items-center gap-1.5">
                     <input type="hidden" name="locale" value={locale} />
                     <input type="hidden" name="userId" value={u.id} />
-                    <select name="op" defaultValue={`role:${u.role}`} disabled={u.id === me?.id} className="input w-auto py-1 text-xs">
+                    <select aria-label={`${t.admin.role}: ${u.name}`} name="op" defaultValue={`role:${u.role}`} disabled={u.id === me?.id} className="input w-auto py-1 text-xs">
                       {(["player", "developer", "admin"] as const).map((r) => (
                         <option key={r} value={`role:${r}`}>{t.admin.roles[r]}</option>
                       ))}
                     </select>
-                    {u.id !== me?.id && <button className="btn btn-ghost btn-sm">✓</button>}
+                    {u.id !== me?.id && <button aria-label={`${t.common.save}: ${u.name}`} className="btn btn-ghost btn-sm">{t.common.save}</button>}
                   </form>
                 </td>
                 <td className="text-xs">{premiumUntil ? <span className="text-amber">★ {date(premiumUntil, locale)}</span> : "—"}</td>

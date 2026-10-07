@@ -72,10 +72,10 @@ export default async function ReviewDetail({ params, searchParams }: PageProps<"
             <form action={reviewAction} className="card space-y-3 p-4">
               <input type="hidden" name="locale" value={locale} />
               <input type="hidden" name="versionId" value={v.id} />
-              <label className="label">{locale==="en"?"Rejection reason":"Ret nedeni"}<select name="reason" className="input"><option value="manual">{locale==="en"?"Admin review":"Admin incelemesi"}</option><option value="virustotal">VirusTotal</option></select></label>
+              <label className="label">{locale==="en"?"Rejection reason":locale === "az" ? "Rədd edilmə səbəbi" : "Ret nedeni"}<select name="reason" className="input"><option value="manual">{locale==="en"?"Admin review":locale === "az" ? "Admin yoxlaması" : "Admin incelemesi"}</option><option value="virustotal">VirusTotal</option></select></label>
               <textarea name="note" rows={3} placeholder={t.admin.notePlaceholder} className="input" />
-              {sp.error === "scan" && <p className="text-sm text-danger">{locale==="en"?"Approval requires a cover and a completed scan with no malicious or suspicious detections.":"Onay için kapak ve zararlı/şüpheli tespit içermeyen tamamlanmış tarama gerekiyor."}</p>}
-              {!game.coverPath&&<p className="text-amber text-xs">{locale==="en"?"The developer must add a cover.":"Geliştirici oyun kapağını eklemeli."}</p>}
+              {sp.error === "scan" && <p className="text-sm text-danger">{locale==="en"?"Approval requires a cover and a completed scan with no malicious or suspicious detections.":locale === "az" ? "Təsdiq üçün üz qabığı və zərərli/şübhəli nəticəsi olmayan tamamlanmış tarama lazımdır." : "Onay için kapak ve zararlı/şüpheli tespit içermeyen tamamlanmış tarama gerekiyor."}</p>}
+              {!game.coverPath&&<p className="text-amber text-xs">{locale==="en"?"The developer must add a cover.":locale === "az" ? "Geliştirici oyunun üz qabığını əlavə etməlidir." : "Geliştirici oyun kapağını eklemeli."}</p>}
               {sp.error === "note" && <p className="text-sm text-danger">{t.admin.noteRequired}</p>}
               <div className="flex gap-2">
                 <SubmitButton name="decision" value="approve" disabled={v.runtimeKind!=="browser"||!game.coverPath||!scanAllowsApproval(v.report.virustotal)} className="btn btn-primary flex-1">✓ {t.admin.approve}</SubmitButton>
@@ -84,7 +84,7 @@ export default async function ReviewDetail({ params, searchParams }: PageProps<"
             </form>
           )}
           <div className="card space-y-3 p-4 text-sm">
-            <h2 className="font-display font-bold">{t.dev.report}</h2><p className="text-xs text-muted">{locale==="en"?"Static scan for suspicious patterns and external hosts. Review the source before approving; this is not an antivirus verdict.":"Şüpheli kod ve dış adresler için statik tarama raporu. Onaydan önce kaynakları incele; bu rapor antivirüs sonucu değildir."}</p>
+            <h2 className="font-display font-bold">{t.dev.report}</h2><p className="text-xs text-muted">{locale==="en"?"Static scan for suspicious patterns and external hosts. Review the source before approving; this is not an antivirus verdict.":locale === "az" ? "Şübhəli kod və xarici ünvanlar üçün statik tarama hesabatı. Təsdiqdən əvvəl mənbəni yoxla; bu hesabat antivirus nəticəsi deyil." : "Şüpheli kod ve dış adresler için statik tarama raporu. Onaydan önce kaynakları incele; bu rapor antivirüs sonucu değildir."}</p>
             <p className="text-muted">{v.report.fileCount} {t.dev.files} · {bytes(v.report.totalBytes)} · entry: <code>{v.entry}</code></p>
             <div>
               <div className="font-semibold text-amber">⚠ {t.dev.warnings} ({v.report.warnings.length})</div>

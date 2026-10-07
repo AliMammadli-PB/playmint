@@ -1,3 +1,4 @@
+import {validateGameOrigin} from "./game-origin";
 import path from "node:path";
 
 function required(name: string): string {
@@ -12,7 +13,7 @@ export const env = {
   },
   siteUrl: (process.env.SITE_URL || "http://localhost:3000").replace(/\/$/, ""),
   /** Origin that serves uploaded game files. Empty → same-origin strict sandbox under /play. */
-  gameOrigin: (process.env.GAME_ORIGIN || "").replace(/\/$/, ""),
+  get gameOrigin(){return validateGameOrigin(process.env.GAME_ORIGIN||"",process.env.SITE_URL||"http://localhost:3000");},
   dataDir: process.env.DATA_DIR || path.join(process.cwd(), ".data"),
   adminEmails: (process.env.ADMIN_EMAILS || "")
     .split(",")

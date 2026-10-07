@@ -1,0 +1,2 @@
+import {defineConfig} from '@playwright/test';
+export default defineConfig({testDir:'./tests/e2e',fullyParallel:false,workers:1,timeout:45000,use:{storageState:process.env.PLAYMINT_TEST_STORAGE_STATE,baseURL:process.env.PLAYMINT_TEST_ORIGIN||'https://playmint.tr',headless:true,launchOptions:process.env.PLAYMINT_CHROMIUM_PATH?{executablePath:process.env.PLAYMINT_CHROMIUM_PATH,args:['--no-sandbox']}:undefined},reporter:[['list'],['html',{outputFolder:'test-results/playwright-report',open:'never'}]],outputDir:'test-results/artifacts'});

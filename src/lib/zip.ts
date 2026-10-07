@@ -7,8 +7,9 @@ import { pipeline } from "node:stream/promises";
 import { Transform } from "node:stream";
 import type { ScanReport } from "@/lib/db/schema";
 
-export const MAX_FILES = 10000;
-export const MAX_TOTAL_BYTES = 512 * 1024 * 1024;
+import {MAX_RUNTIME_BYTES,MAX_RUNTIME_FILES} from "./upload-policy";
+export const MAX_FILES = MAX_RUNTIME_FILES;
+export const MAX_TOTAL_BYTES = MAX_RUNTIME_BYTES;
 
 const allowedExt = new Set(
   (

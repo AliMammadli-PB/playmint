@@ -1,6 +1,5 @@
 import type { Dict } from "@/lib/i18n";
 import { categories, licenses } from "@/lib/catalog";
-import { categoryEmoji } from "@/lib/catalog";
 
 export function metaFieldProps(t: Dict) {
   return {
@@ -18,7 +17,7 @@ export function metaFieldProps(t: Dict) {
       cover: t.dev.fCover,
       premium: t.dev.fPremium,
     },
-    categories: categories.map((c) => ({ value: c, label: `${categoryEmoji[c]} ${t.categories[c]}` })),
+    categories: categories.map((c) => ({ value: c, label: t.categories[c] })),
     licenses: licenses.map((l) => ({ value: l.id, label: l.id })),
     orientations: (["landscape", "portrait", "any"] as const).map((o) => ({ value: o, label: t.dev.orientation[o] })),
   };

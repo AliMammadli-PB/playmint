@@ -28,10 +28,10 @@ The public site is https://playmint.tr in Turkish, Azerbaijani, and English. Pla
 - A game becomes public only after an admin approves its live version.
 - Registration creates a player or a developer. Admin is not a signup role.
 - Production payments are not connected. Visitors see payment as unavailable. Only a game's owner or an admin can run a no-charge plan test.
-- Rewarded ads are not live until a provider adapter is configured. The browser cannot invent revenue.
+- H5 ads remain disabled pending Google approval, separate runtime DNS/TLS, channel mapping and consent configuration. The SDK is injected but does not create revenue from browser events.
 - Confirmed net rewarded-ad revenue splits 50% to the developer and 50% to Playmint. Odd cents stay with the platform.
 - A game's subscription payments belong to that game's developer after reported payment fees. Whether Playmint takes a subscription commission is undecided.
-- Settlement currency is USD. Test payments stay out of finance and payouts.
+- Game subscription offers may use USD or TRY. Advertising settlements and IBAN withdrawals use actually received TRY; no FX conversion is invented. Test payments stay out of finance and payouts.
 - Legacy subscriptions remain for audit and do not unlock other games.
 
 ## Brand Commitments
@@ -49,3 +49,9 @@ Product behavior is the running Next.js app and its README. Brand images live un
 - Nothing unfinished or unreviewed is presented as public.
 - A payment or reward that did not happen is never shown as if it did.
 - An empty catalogue says so, instead of filling itself with fake games.
+
+## Current release decisions
+
+Public Arcade uses a dark theme; Studio/admin use the related light palette. Games lead the catalog. Upload wizard collects category, cover, mobile/fullscreen capabilities and ZIP. Each version requires approval; only playable output remains after approval. ZIP limit up to 2 GiB; selected output 512 MiB / 10,000 files.
+
+Playmint is an individual project. support@playmint.tr and legal@playmint.tr are supplied contacts. Operator identity and country are not yet confirmed; no company, registration number or address is invented. Five legal policies are initial drafts. Contact messages are saved to the admin queue. Production checkout stays disabled by explicit owner instruction.

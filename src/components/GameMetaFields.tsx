@@ -151,7 +151,7 @@ export function GameMetaFields({
           <div><label className="label" htmlFor="subscriptionPrice">{copy.price}</label>
           <input className="input" id="subscriptionPrice" name="subscriptionPrice" type="number" min="0" max="10000" step="0.01" defaultValue={(defaults.subscriptionPriceCents ?? 0)/100} /></div>
           <div><label className="label" htmlFor="subscriptionCurrency">{copy.currency}</label>
-          <select className="input" id="subscriptionCurrency" name="subscriptionCurrency" defaultValue={defaults.subscriptionCurrency ?? "USD"}>{["USD"].map(c=><option key={c}>{c}</option>)}</select></div>
+          <select className="input" id="subscriptionCurrency" name="subscriptionCurrency" defaultValue={defaults.subscriptionCurrency ?? "USD"}>{["USD","TRY"].map(c=><option key={c}>{c}</option>)}</select></div>
         </div>
         <div><label className="label" htmlFor="subscriptionBenefits">{copy.benefits}</label><textarea className="input" id="subscriptionBenefits" name="subscriptionBenefits" rows={3} maxLength={1000} defaultValue={defaults.subscriptionBenefits} /></div>
         <label className="flex gap-3 text-sm"><input type="checkbox" name="rewardedAds" defaultChecked={defaults.rewardedAds} />{copy.ads}</label>

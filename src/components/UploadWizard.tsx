@@ -1,0 +1,8 @@
+"use client";
+import {useRef,useState} from "react";
+export function UploadWizard({locale,steps,submitLabel}:{locale:string;steps:React.ReactNode[];submitLabel:string}){
+ const [step,setStep]=useState(0);const root=useRef<HTMLDivElement>(null);
+ const names=locale==="en"?["Game details","Files","Review"]:locale==="az"?["Oyun məlumatları","Fayllar","Yoxlama"]:["Oyun bilgileri","Dosyalar","Kontrol"];
+ function next(){const current=root.current?.querySelector(`[data-step="${step}"]`);for(const el of current?.querySelectorAll<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>("input,select,textarea")??[]){if(!el.checkValidity()){el.reportValidity();return;}}setStep(step+1);root.current?.querySelector<HTMLElement>("h2")?.focus();}
+ return <div ref={root} className="space-y-6"><input name="wizardStep" type="hidden" value={step===2?"review":"details"}/><ol className="status-timeline" aria-label={locale==="en"?"Upload steps":locale==="az"?"Yükləmə addımları":"Yükleme adımları"}>{names.map((name,i)=><li key={name} data-complete={i<=step} aria-current={i===step?"step":undefined}><span>{i+1}</span>{name}</li>)}</ol><h2 className="h2" tabIndex={-1}>{names[step]}</h2>{steps.map((content,i)=><div key={i} data-step={i} hidden={step!==2&&step!==i} className="space-y-5">{content}</div>)}<div className="flex flex-wrap gap-3">{step>0&&<button type="button" className="btn btn-ghost" onClick={()=>setStep(step-1)}>{locale==="en"?"Back":locale==="az"?"Geri":"Geri"}</button>}{step<2?<button key="continue" type="button" className="btn btn-primary" onClick={e=>{e.preventDefault();next();}}>{locale==="en"?"Continue":locale==="az"?"Davam et":"Devam et"}</button>:<button key="upload" type="submit" className="btn btn-primary">{submitLabel}</button>}</div></div>;
+}

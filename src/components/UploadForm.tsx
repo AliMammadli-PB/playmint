@@ -8,12 +8,14 @@ import { FormError, FormSuccess } from "./ui";
 /** Multipart form posted with XHR so we can show upload progress. */
 export function UploadForm({
   endpoint,
+  hideSubmit = false,
   redirectTo,
   submitLabel,
   labels,
   children,
 }: {
   endpoint: string;
+  hideSubmit?: boolean;
   /** Path template; {key} placeholders are filled from the JSON response. */
   redirectTo: string;
   submitLabel: string;
@@ -35,7 +37,7 @@ export function UploadForm({
     if(fields&&progress!==null)for(const node of formRef.current?.querySelectorAll<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>('input[name],select[name],textarea[name]')??[]){if(node.name!=="locale"&&node.type!=="file"&&fields[node.name]!==undefined){if(node instanceof HTMLInputElement&&(node.type==="checkbox"||node.type==="radio"))node.checked=fields[node.name]===node.value;else node.value=fields[node.name];}}
   },[title,progress,fields]);
   function submit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();void startUpload(endpoint,new FormData(e.currentTarget),labels);
+    e.preventDefault();const fields=new FormData(e.currentTarget);if(hideSubmit&&fields.get("wizardStep")!=="review")return;void startUpload(endpoint,fields,labels);
   }
 
   const busy = progress !== null && !error;
@@ -57,9 +59,9 @@ export function UploadForm({
           </p>
         </div>
       )}
-      <button type="submit" disabled={busy || done} className="btn btn-primary w-full sm:w-auto">
+      {!hideSubmit && <button type="submit" disabled={busy || done} className="btn btn-primary w-full sm:w-auto">
         {submitLabel}
-      </button>
+      </button>}
     </form>
   );
 }

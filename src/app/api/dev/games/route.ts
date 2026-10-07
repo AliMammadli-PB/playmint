@@ -55,7 +55,7 @@ export async function POST(req: Request) {
     meta={title,slug:`${base}-${suffix}`,category,mobileResponsive,fullscreenSupported,tagline:{tr:title,az:title,en:title},description:{},tags:[],license:"Developer",orientation:["landscape","portrait","any"].includes(String(form.get("orientation")))?String(form.get("orientation")):"landscape",premiumOnly:false,subscriptionPriceCents:0,subscriptionCurrency:"USD",subscriptionBenefits:"",rewardedAds:false};
   }else{
     const parsed=parseGameMeta(form,t);if("error" in parsed)return Response.json({error:parsed.error},{status:400});
-    if(form.get("openSource")!=="on")return Response.json({error:t.dev.errors.openSourceRequired},{status:400});
+    if(parsed.meta.license!=="Developer"&&form.get("openSource")!=="on")return Response.json({error:t.dev.errors.openSourceRequired},{status:400});
     meta=parsed.meta;
   }
   const taken=await db.select({id:schema.games.id}).from(schema.games).where(eq(schema.games.slug,meta.slug));

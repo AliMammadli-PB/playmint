@@ -19,8 +19,8 @@ export default async function AdminLayout({ children, params }: LayoutProps<"/[l
     .where(eq(schema.payouts.status, "requested"));
   const base = `/${locale}/studio-bcb7017af2212dfd4eb0e12ee757edc05d2234d4`;
   return (
-    <div className="container-pm grid gap-6 py-8 lg:grid-cols-[210px_1fr]">
-      <aside className="lg:sticky lg:top-24 lg:self-start">
+    <div className="admin-shell container-pm grid grid-cols-1 gap-6 py-8 lg:grid-cols-[210px_1fr]">
+      <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
         <div className="mb-3 hidden px-3.5 text-xs font-semibold uppercase tracking-widest text-faint lg:block">{t.nav.admin}</div>
         <PanelNav
           root={base}
@@ -29,8 +29,9 @@ export default async function AdminLayout({ children, params }: LayoutProps<"/[l
             { href: `${base}/review`, label: t.admin.nav.review, badge: pending },
             { href: `${base}/games`, label: t.admin.nav.games },
             { href: `${base}/users`, label: t.admin.nav.users },
-            { href: `${base}/ads`, label:locale==="en"?"Ad revenue":"Reklam gelirleri" },
+            { href: `${base}/ads`, label:locale==="en"?"Ad revenue":locale === "az" ? "Reklam gəlirləri" : "Reklam gelirleri" },
             { href: `${base}/finance`, label: t.admin.nav.finance, badge: payouts },
+            { href: `${base}/requests`, label: locale==="en"?"Contact / reports":locale==="az"?"Əlaqə / bildirişlər":"İletişim / bildirimler" },
             { href: `${base}/settings`, label: t.admin.nav.settings },
           ]}
         />

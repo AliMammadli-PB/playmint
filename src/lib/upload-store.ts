@@ -6,8 +6,9 @@ import {pipeline} from "node:stream/promises";
 import path from "node:path";
 import {paths} from "@/lib/env";
 import {newId} from "@/lib/ids";
-export const CHUNK_BYTES=8*1024*1024;
-export const MAX_ARCHIVE_BYTES=2*1024*1024*1024;
+import {MAX_ARCHIVE_BYTES,UPLOAD_CHUNK_BYTES} from "./upload-policy";
+export {MAX_ARCHIVE_BYTES} from "./upload-policy";
+export const CHUNK_BYTES=UPLOAD_CHUNK_BYTES;
 const TTL=24*3600_000;
 export type UploadRecord={id:string;owner:string;filename:string;total:number;received:number;next:number;createdAt:number;updatedAt:number;status:"uploading"|"ready"|"queued"|"processing"|"done"|"failed";job?:{gameId:string;isNew:boolean;reused?:boolean;locale:"tr"|"az"|"en";changelog:string;maxZipMb:number};pid?:number;versionId?:string;error?:string};
 export class UploadError extends Error{constructor(public code:string,public status=400){super(code);}}

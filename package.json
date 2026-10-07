@@ -10,7 +10,9 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "seed:demo": "tsx --conditions=react-server --env-file=.env scripts/seed-demo.ts",
-    "admin:promote": "tsx --conditions=react-server --env-file=.env scripts/promote-admin.ts"
+    "admin:promote": "tsx --conditions=react-server --env-file=.env scripts/promote-admin.ts",
+    "test:e2e": "playwright test",
+    "test:integration": "node --env-file=.env scripts/redesign-qa.cjs"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",
@@ -20,16 +22,19 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "recharts": "^3.10.1",
+    "server-only": "0.0.1",
     "yauzl": "^3.4.0",
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/yauzl": "^3.4.0",
+    "axe-core": "^4.14.0",
     "drizzle-kit": "^0.31.11",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",

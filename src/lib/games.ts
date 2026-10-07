@@ -42,7 +42,7 @@ export type GameCardData = {
 };
 
 export type ListOptions = {
-  sort?: "popular" | "new" | "liked";
+  sort?: "popular" | "new" | "liked" | "trending";
   category?: string;
   q?: string;
   premium?: boolean;
@@ -67,6 +67,8 @@ export async function listGames(opts: ListOptions = {}): Promise<GameCardData[]>
   const order =
     opts.sort === "new"
       ? [desc(g.publishedAt)]
+      : opts.sort === "trending"
+        ? [desc(sql`coalesce((select sum(s.plays) from daily_game_stats s where s.game_id = ${g.id} and s.day >= current_date - 6),0)`),desc(g.publishedAt)]
       : opts.sort === "liked"
         ? [desc(g.likeCount), desc(g.playCount)]
         : [desc(sql`${g.playCount} + ${g.likeCount} * 5`), desc(g.publishedAt)];

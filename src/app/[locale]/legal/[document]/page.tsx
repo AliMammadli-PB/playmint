@@ -1,0 +1,5 @@
+import Link from "next/link";
+import {notFound} from "next/navigation";
+import {resolveLocale} from "@/lib/i18n";
+import {legalDocuments,legalCopy,type LegalDocument} from "@/lib/legal-copy";
+export default async function Legal({params}:{params:Promise<{locale:string;document:string}>}){const {locale}=await resolveLocale(params);const {document}=await params;if(!legalDocuments.includes(document as LegalDocument))notFound();const c=legalCopy(locale,document as LegalDocument);return <article className="legal-copy"><nav className="legal-nav">{legalDocuments.map(d=><Link className="btn btn-ghost btn-sm" href={`/${locale}/legal/${d}`} key={d} aria-current={document===d?"page":undefined}>{legalCopy(locale,d).title}</Link>)}</nav><h1>{c.title}</h1><p className="rounded-xl border border-amber/40 bg-amber/10 p-4">{c.draft}</p>{c.paragraphs.map((p,i)=><p key={i}>{p}</p>)}<div className="mt-8 flex flex-wrap gap-3"><Link className="btn btn-primary" href={`/${locale}/report`}>{locale==="en"?"Contact / report":locale==="az"?"Əlaqə / bildir":"İletişim / bildir"}</Link><a className="btn btn-ghost" href="mailto:legal@playmint.tr">legal@playmint.tr</a></div></article>}

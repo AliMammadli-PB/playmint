@@ -1,3 +1,4 @@
+import {legalDocuments,legalCopy} from "@/lib/legal-copy";
 import Link from "next/link";
 import type { Dict } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -18,6 +19,7 @@ export function Footer({ locale, t }: { locale: Locale; t: Dict }) {
         </div>
       </div>
       <div className="container-pm pb-8 text-xs text-faint">
+        <nav className="mb-5 flex flex-wrap gap-x-5 gap-y-3">{legalDocuments.map(d=><Link className="inline-flex min-h-11 items-center" href={`/${locale}/legal/${d}`} key={d}>{legalCopy(locale,d).title}</Link>)}<Link className="inline-flex min-h-11 items-center" href={`/${locale}/report`}>{locale==="en"?"Contact / report":locale==="az"?"Əlaqə / bildir":"İletişim / bildir"}</Link></nav>
         © {new Date().getFullYear()} Playmint · {t.footer.rights}
       </div>
     </footer>

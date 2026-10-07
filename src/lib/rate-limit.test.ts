@@ -1,0 +1,4 @@
+import {expect,test,vi} from 'vitest';
+import {rateLimit,clientIp} from './rate-limit';
+test('fixed-window rate limit rejects overflow and resets only after expiry',()=>{vi.useFakeTimers();vi.setSystemTime(100000);const key='test-window';expect(rateLimit(key,2,1000)).toBe(true);expect(rateLimit(key,2,1000)).toBe(true);expect(rateLimit(key,2,1000)).toBe(false);vi.advanceTimersByTime(999);expect(rateLimit(key,2,1000)).toBe(false);vi.advanceTimersByTime(1);expect(rateLimit(key,2,1000)).toBe(true);vi.useRealTimers();});
+test('Cloudflare-provided client address precedes forwarding chains',()=>{const h=new Headers({'cf-connecting-ip':'203.0.113.1','x-forwarded-for':'203.0.113.2, 203.0.113.3'});expect(clientIp(h)).toBe('203.0.113.1');h.delete('cf-connecting-ip');expect(clientIp(h)).toBe('203.0.113.2');});

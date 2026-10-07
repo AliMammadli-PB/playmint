@@ -17,13 +17,14 @@ export default async function Browse({ params, searchParams }: PageProps<"/[loca
   const sp = await searchParams;
   const q = typeof sp.q === "string" ? sp.q.trim().slice(0, 80) : "";
   const category = isCategory(sp.category) ? sp.category : undefined;
-  const sort = sp.sort === "new" || sp.sort === "liked" ? sp.sort : "popular";
+  const sort = sp.sort === "new" || sp.sort === "liked" || sp.sort === "trending" ? sp.sort : "popular";
+  const featured=sp.featured==="1";
   const premium = sp.premium === "1";
-  const games = await listGames({ q: q || undefined, category, sort, premium, limit: 96 });
+  const games = await listGames({ q: q || undefined, category, sort, premium, featured, limit: 96 });
 
   const href = (patch: Record<string, string | undefined>) => {
     const p = new URLSearchParams();
-    const merged = { q: q || undefined, category, sort: sort === "popular" ? undefined : sort, premium: premium ? "1" : undefined, ...patch };
+    const merged = { q: q || undefined, category, sort: sort === "popular" ? undefined : sort, premium: premium ? "1" : undefined, featured: featured ? "1" : undefined, ...patch };
     for (const [k, v] of Object.entries(merged)) if (v) p.set(k, v);
     const s = p.toString();
     return `/${locale}/games${s ? `?${s}` : ""}`;
@@ -41,15 +42,15 @@ export default async function Browse({ params, searchParams }: PageProps<"/[loca
         <form action={`/${locale}/games`} className="w-full sm:hidden">
           <input name="q" type="search" defaultValue={q} placeholder={t.nav.search} className="input rounded-full" />
         </form>
-        <div className="flex gap-2">
-          {(["popular", "new", "liked"] as const).map((s) => (
+        <div className="flex flex-wrap gap-2">
+          {(["popular", "trending", "new", "liked"] as const).map((s) => (
             <Link key={s} href={href({ sort: s === "popular" ? undefined : s })} className={chip(sort === s)}>
-              {s === "popular" ? t.browse.sortPopular : s === "new" ? t.browse.sortNew : t.browse.sortLiked}
+              {s === "trending" ? (locale==="en"?"Trending":locale==="az"?"Trend":"Trend") : s === "popular" ? t.browse.sortPopular : s === "new" ? t.browse.sortNew : t.browse.sortLiked}
             </Link>
           ))}
         </div>
       </div>
-      <div className="browse-editorial"><img src={`/brand/${category==="puzzle"?"puzzle":category==="racing"?"racing":"arcade"}.webp`} alt="" width="1200" height="500"/><span>{locale==="en"?"Find your next favourite":locale==="az"?"Növbəti sevimli oyununu tap":"Sıradaki favorini bul"}</span></div><CatalogTabs locale={locale} active="browse"/>
+      <CatalogTabs locale={locale} active="browse"/>
       <div className="mt-6 flex gap-2 overflow-x-auto pb-2 no-scrollbar">
         <Link href={href({ category: undefined })} className={chip(!category)}>
           {t.common.all}

@@ -31,7 +31,7 @@ export function LangSwitcher({ locale, label }: { locale: Locale; label: string 
         }
       }}
     >
-      <summary aria-label={`${label}: ${localeNames[locale]}`} className="language-trigger">
+      <summary aria-label={`${label}: ${locale.toUpperCase()} — ${localeNames[locale]}`} className="language-trigger">
         <LangFlag locale={locale} />
         <span>{locale.toUpperCase()}</span>
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
@@ -42,7 +42,7 @@ export function LangSwitcher({ locale, label }: { locale: Locale; label: string 
         {locales.map((l) => (
           <button type="button" key={l} lang={l} aria-label={localeNames[l]} aria-current={locale === l ? "true" : undefined} onClick={() => change(l)}>
             <LangFlag locale={l} />
-            {l.toUpperCase()}
+            {localeNames[l]}
             {locale === l && <span className="language-check" aria-hidden="true">✓</span>}
           </button>
         ))}

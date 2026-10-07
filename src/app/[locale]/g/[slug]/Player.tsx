@@ -35,6 +35,8 @@ export function Player({
   const adDialog = useRef<HTMLDivElement>(null);
   const [adUrl,setAdUrl]=useState<string|null>(null);
   const [immersive,setImmersive]=useState(false);
+  const [nativeFullscreen,setNativeFullscreen]=useState(false);
+  useEffect(()=>{const sync=()=>setNativeFullscreen(document.fullscreenElement===wrap.current||(document as Document & {webkitFullscreenElement?:Element}).webkitFullscreenElement===wrap.current);document.addEventListener("fullscreenchange",sync);document.addEventListener("webkitfullscreenchange",sync);return()=>{document.removeEventListener("fullscreenchange",sync);document.removeEventListener("webkitfullscreenchange",sync);};},[]);
 
   const token = useRef<string | null>(null);
 
@@ -52,7 +54,7 @@ export function Player({
       token.current = data.token;
       setUrl(data.url);
       setState("playing");
-      if (window.matchMedia("(max-width: 800px)").matches) setImmersive(true);
+      if (fullscreenEnabled && window.matchMedia("(max-width: 800px)").matches) setImmersive(true);
     } catch {
       setState("error");
     }
@@ -152,7 +154,7 @@ export function Player({
             sandbox={sandbox}
             allow={fullscreenEnabled?"fullscreen; gamepad; autoplay":"gamepad; autoplay"}
             referrerPolicy="no-referrer"
-            allowFullScreen
+            allowFullScreen={fullscreenEnabled}
             className="absolute inset-0 h-full w-full border-0"
           />
         ) : (
@@ -193,14 +195,14 @@ export function Player({
           </>
         )}
         {state === "playing" && fullscreenEnabled && (
-          <button type="button" onClick={toggleFullscreen} className="player-fullscreen btn btn-ghost btn-sm" aria-pressed={immersive}>
-            {immersive ? "✕" : "⛶"} {labels.fullscreen}
+          <button type="button" onClick={toggleFullscreen} className="player-fullscreen btn btn-ghost btn-sm" aria-pressed={immersive||nativeFullscreen}>
+            {immersive||nativeFullscreen ? (locale==="en"?"Close fullscreen":locale==="az"?"Tam ekrandan çıx":"Tam ekrandan çık") : labels.fullscreen}
           </button>
         )}
       </div>
-      {adUrl&&<div ref={adDialog} role="dialog" aria-modal="true" aria-label={locale==="en"?"Rewarded ad":"Ödüllü reklam"} className="fixed inset-0 z-[80] bg-black/90 flex flex-col items-center justify-center p-4" onKeyDown={e=>{if(e.key==="Escape"){adAbort.current?.abort();return;}if(e.key!=="Tab"||!adDialog.current)return;const items=[...adDialog.current.querySelectorAll<HTMLElement>("button, iframe, a, input, select, textarea")];if(!items.length)return;const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}}><button autoFocus onClick={()=>adAbort.current?.abort()} className="btn btn-ghost mb-3">{locale==="en"?"Close · no reward":"Kapat · ödül verilmez"}</button><iframe title="Rewarded ad" src={adUrl} sandbox="allow-scripts allow-same-origin" className="w-full max-w-3xl h-[60vh] rounded-xl bg-black"/></div>}
+      {adUrl&&<div ref={adDialog} role="dialog" aria-modal="true" aria-label={locale==="en"?"Rewarded ad":locale === "az" ? "Mükafatlı reklam" : "Ödüllü reklam"} className="fixed inset-0 z-[80] bg-black/90 flex flex-col items-center justify-center p-4" onKeyDown={e=>{if(e.key==="Escape"){adAbort.current?.abort();return;}if(e.key!=="Tab"||!adDialog.current)return;const items=[...adDialog.current.querySelectorAll<HTMLElement>("button, iframe, a, input, select, textarea")];if(!items.length)return;const first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}}><button autoFocus onClick={()=>adAbort.current?.abort()} className="btn btn-ghost mb-3">{locale==="en"?"Close · no reward":locale === "az" ? "Bağla · mükafat verilmir" : "Kapat · ödül verilmez"}</button><iframe title="Rewarded ad" src={adUrl} sandbox="allow-scripts allow-same-origin" className="w-full max-w-3xl h-[60vh] rounded-xl bg-black"/></div>}
       <div className="mt-2 flex items-center justify-between gap-3 text-xs text-faint">
-        <span>🔒 {labels.sandboxNote}</span>
+        <span className="inline-flex items-center gap-2"><svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>{labels.sandboxNote}</span>
       </div>
     </div>
   );

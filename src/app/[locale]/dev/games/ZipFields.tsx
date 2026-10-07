@@ -2,7 +2,7 @@ export function ZipFields({
   labels,
   maxMb,
   showChangelog = false,
-  requireOpenSource=true,
+  requireOpenSource=false,
 }: {
   labels: { zip: string; zipHint: string; changelog: string; openSource: string };
   maxMb: number;
@@ -12,7 +12,7 @@ export function ZipFields({
   return (
     <div className="space-y-5 rounded-2xl border border-dashed border-mint/40 bg-mint/[0.03] p-5">
       <div>
-        <label className="label" htmlFor="zip">📦 {labels.zip}</label>
+        <label className="label" htmlFor="zip">{labels.zip}</label>
         <input
           id="zip"
           name="zip"

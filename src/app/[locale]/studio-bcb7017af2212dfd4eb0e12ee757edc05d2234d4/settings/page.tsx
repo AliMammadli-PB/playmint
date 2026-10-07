@@ -15,7 +15,7 @@ export default async function AdminSettings({ params, searchParams }: PageProps<
   ];
   return (
     <div className="max-w-2xl space-y-6">
-      <h1 className="h1">{t.admin.settingsTitle}</h1><p className="text-sm text-muted">{locale==="en"?"Rewarded ads: 50% developer / 50% Playmint. Game prices are set by developers.":"Ödüllü reklamlar: %50 geliştirici / %50 Playmint. Oyun fiyatlarını geliştiriciler belirler."}</p>
+      <h1 className="h1">{t.admin.settingsTitle}</h1><p className="text-sm text-muted">{locale==="en"?"Rewarded ads: 50% developer / 50% Playmint. Game prices are set by developers.":locale === "az" ? "Mükafatlı reklamlar: 50% geliştirici / 50% Playmint. Oyun qiymətlərini geliştiricilər müəyyən edir." : "Ödüllü reklamlar: %50 geliştirici / %50 Playmint. Oyun fiyatlarını geliştiriciler belirler."}</p>
       {sp.saved && <FormSuccess message={t.common.saved} />}
       <form action={settingsAction} className="card grid gap-4 p-5 sm:grid-cols-2">
         <input type="hidden" name="locale" value={locale} />

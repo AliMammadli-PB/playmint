@@ -31,7 +31,7 @@ export function GameCard({ game, locale, t }: { game: GameCardData; locale: Loca
       </div>
       <div className="space-y-1 p-3.5">
         <h3 className="truncate font-display text-[15px] font-bold">{game.title}</h3>
-        <p className="text-[11px] text-mint">{game.subscriptionPriceCents>0?`${money(game.subscriptionPriceCents,game.subscriptionCurrency,locale)} / ${locale==="en"?"month":"ay"}`:t.common.free}</p>
+        <p className="text-[11px] text-mint">{game.subscriptionPriceCents>0?`${money(game.subscriptionPriceCents,game.subscriptionCurrency,locale)} / ${locale==="en"?"month":locale === "az" ? "ay" : "ay"}`:t.common.free}</p>
         {pickText(game.tagline,locale)!==game.title&&<p className="line-clamp-1 text-xs text-muted">{pickText(game.tagline, locale)}</p>}
         <div className="flex flex-wrap gap-2 pt-1 text-xs text-muted">{isCategory(game.category)&&<span className="inline-flex items-center gap-1.5"><CategoryIcon category={game.category} className="h-4 w-4"/>{t.categories[game.category]}</span>}</div><div className="flex items-center justify-between pt-1 text-[11px] text-faint">
           <span className="truncate">{game.developerName}</span>
