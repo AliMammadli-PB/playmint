@@ -25,5 +25,5 @@ export function metaFieldProps(t: Dict) {
 }
 
 export function uploadLabels(t: Dict) {
-  return { uploading: t.dev.uploading, processing: t.dev.processing, submitted: t.dev.submitted, error: t.common.error };
+  return { uploading: t.dev.uploading, processing: t.dev.processing, submitted: t.dev.submitted, error: t.common.error, tooBig:t.dev.errors.file_too_big };
 }

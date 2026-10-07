@@ -1,3 +1,4 @@
+import {StudioHeading} from "@/components/Studio";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { resolveLocale } from "@/lib/i18n";
@@ -12,7 +13,7 @@ export default async function DevSettings({ params }: PageProps<"/[locale]/dev/s
   if (!p) redirect(`/${locale}/developers`);
   return (
     <div className="max-w-2xl space-y-6">
-      <h1 className="h1">{t.dev.settingsTitle}</h1>
+      <StudioHeading eyebrow="YOUR IDENTITY & PAYOUTS" title={t.dev.settingsTitle} accent="violet"/>
       <SettingsForm
         locale={locale}
         labels={{
@@ -27,7 +28,7 @@ export default async function DevSettings({ params }: PageProps<"/[locale]/dev/s
           save: t.common.save,
           saved: t.common.saved,
         }}
-        methods={(["iban", "paypal", "wise"] as const).map((m) => ({ value: m, label: t.dev.payoutMethods[m] }))}
+        methods={(["iban"] as const).map((m) => ({ value: m, label: t.dev.payoutMethods[m] }))}
         defaults={p}
       />
     </div>

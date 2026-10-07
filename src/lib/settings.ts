@@ -2,7 +2,7 @@ import "server-only";
 import { db, schema } from "@/lib/db";
 
 export type Settings = {
-  /** Developer share of net subscription revenue, in basis points (7000 = 70%). */
+  /** Fixed developer share of net rewarded-ad revenue. */
   devShareBps: number;
   premiumPriceCents: number;
   currency: string;
@@ -20,16 +20,16 @@ export type Settings = {
 };
 
 export const defaultSettings: Settings = {
-  devShareBps: 7000,
+  devShareBps: 5000,
   premiumPriceCents: 499,
-  currency: "USD",
+  currency: "TRY",
   paymentFeeBps: 0,
-  minPayoutCents: 5000,
-  holdDays: 30,
+  minPayoutCents: 100000,
+  holdDays: 0,
   dailyCapSeconds: 3 * 3600,
   likeBonus: 0.15,
   likeMinSeconds: 120,
-  maxZipMb: 50,
+  maxZipMb: 2048,
 };
 
 export async function getSettings(): Promise<Settings> {

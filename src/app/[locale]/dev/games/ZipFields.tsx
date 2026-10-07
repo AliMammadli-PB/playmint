@@ -2,10 +2,12 @@ export function ZipFields({
   labels,
   maxMb,
   showChangelog = false,
+  requireOpenSource=true,
 }: {
   labels: { zip: string; zipHint: string; changelog: string; openSource: string };
   maxMb: number;
   showChangelog?: boolean;
+  requireOpenSource?:boolean;
 }) {
   return (
     <div className="space-y-5 rounded-2xl border border-dashed border-mint/40 bg-mint/[0.03] p-5">
@@ -28,10 +30,10 @@ export function ZipFields({
           <textarea id="changelog" name="changelog" rows={3} maxLength={2000} className="input" />
         </div>
       )}
-      <label className="flex items-start gap-2.5 text-sm">
+      {requireOpenSource&&<label className="flex items-start gap-2.5 text-sm">
         <input type="checkbox" name="openSource" required className="mt-0.5 h-4 w-4 accent-[#3dffb0]" />
         <span>{labels.openSource}</span>
-      </label>
+      </label>}
     </div>
   );
 }

@@ -1,0 +1,8 @@
+export function GameArt({title}: {title:string}) {
+ const snake=title.toLowerCase().includes("snake"); const merge=title.includes("2048");
+ return <svg viewBox="0 0 640 360" className="h-full w-full" role="img" aria-label={title}>
+ <rect width="640" height="360" fill={merge?"#f5b357":snake?"#0e4850":"#352d75"}/>
+ <circle cx="510" cy="60" r="170" fill="#fff" opacity=".07"/><circle cx="100" cy="340" r="170" fill="#000" opacity=".08"/>
+ {snake ? <><path d="M160 130h140v80h130v-70h60" fill="none" stroke="#91f8c1" strokeWidth="38" strokeLinejoin="round" strokeLinecap="round"/><circle cx="487" cy="136" r="4" fill="#12382e"/><rect x="181" y="231" width="25" height="25" rx="6" fill="#ff7a82"/>{[80,560,350].map((x,i)=><path key={x} d={`M${x} ${60+i*90}h18m-9-9v18`} stroke="#fff" opacity=".2"/>)}</> : merge ? <>{[2,4,8,16,32,64].map((n,i)=><g key={n} transform={`translate(${140+i%3*122} ${52+Math.floor(i/3)*122}) rotate(${i%2?3:-3} 52 52)`}><rect width="106" height="106" rx="19" fill={i===5?"#34312b":"#fff1d8"}/><text x="53" y="68" textAnchor="middle" fontFamily="sans-serif" fontSize="42" fontWeight="800" fill={i===5?"#fff1d8":"#79562a"}>{n}</text></g>)}</> : <><circle cx="478" cy="85" r="35" fill="#c0b3ff"/><path d="M0 310l100-130 90 65 100-170 140 220 80-130 130 135" fill="#514491"/><rect x="86" y="270" width="160" height="25" rx="8" fill="#88e9bc"/><rect x="347" y="211" width="150" height="25" rx="8" fill="#88e9bc"/><rect x="187" y="205" width="46" height="55" rx="12" fill="#f7efdc"/><circle cx="218" cy="222" r="4" fill="#352d75"/><path d="M256 173q57-73 97 1" stroke="#e2d5ff" strokeWidth="3" strokeDasharray="7 7" fill="none"/></>}
+ </svg>;
+}

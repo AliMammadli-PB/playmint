@@ -1,0 +1,4 @@
+import {crossOrigin} from "@/lib/origin";
+import {getCurrentUser} from "@/lib/auth";
+import {appendChunk,UploadError,CHUNK_BYTES} from "@/lib/upload-store";
+export async function POST(req:Request,ctx:RouteContext<"/api/uploads/[id]/chunks">){if(crossOrigin(req))return Response.json({error:"forbidden"},{status:403});const user=await getCurrentUser();if(!user||(user.role!=="developer"&&user.role!=="admin"))return Response.json({error:"forbidden"},{status:403});if(Number(req.headers.get('content-length')??0)>CHUNK_BYTES)return Response.json({error:'bad_chunk'},{status:413});const {id}=await ctx.params;const index=Number(new URL(req.url).searchParams.get('index'));try{const r=await appendChunk(id,user.id,index,req.body);return Response.json({next:r.next,received:r.received,status:r.status});}catch(e){return Response.json({error:e instanceof UploadError?e.code:"error"},{status:e instanceof UploadError?e.status:500});}}

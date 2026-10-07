@@ -1,5 +1,5 @@
 /**
- * Publish the bundled demo games under the "Playmint Studio" account (idempotent).
+ * Prepare unpublished internal demo games under the "Playmint Studio" account (idempotent).
  * Usage: pnpm seed:demo
  */
 import fs from "node:fs/promises";
@@ -70,13 +70,14 @@ async function main() {
       tagline: d.tagline,
       description: d.description,
       license: "MIT",
-      featured: d.featured,
+      featured: false,
+      isDemo: true,
     });
     const zipPath = path.join(process.cwd(), "demo-games", `${d.slug}.zip`);
     const file = new File([await fs.readFile(zipPath)], `${d.slug}.zip`, { type: "application/zip" });
     const versionId = await createVersion(gameId, file, "Initial release", 50);
-    await approveVersion(versionId, studio.id, "Bundled demo");
-    console.log(`published ${d.slug}`);
+    // Internal fixtures stay pending; they never enter the public catalogue.
+    console.log(`prepared internal demo ${d.slug}`);
   }
   process.exit(0);
 }

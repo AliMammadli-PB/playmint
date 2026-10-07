@@ -1,0 +1,13 @@
+import {describe,it,expect,vi,afterAll} from "vitest";
+import fs from "node:fs/promises";
+const temp=vi.hoisted(()=>`/tmp/playmint-chunks-${process.pid}-${Date.now()}`);
+vi.mock("@/lib/env",()=>({paths:{uploads:()=>temp}}));
+import {beginUpload,appendChunk,getUpload,archivePath,cancelUpload,queueUpload,CHUNK_BYTES,MAX_ARCHIVE_BYTES} from "./upload-store";
+const body=(buffer:Buffer)=>new ReadableStream<Uint8Array>({start(c){c.enqueue(buffer);c.close();}});
+afterAll(async()=>{await fs.rm(temp,{recursive:true,force:true});});
+describe("large archive transport",()=>{
+ it("streams sequential chunks to disk and permits safe retry without duplicate bytes",async()=>{const owner="chunk-owner-1",r=await beginUpload(owner,"game.zip",CHUNK_BYTES+32,MAX_ARCHIVE_BYTES);const first=Buffer.alloc(CHUNK_BYTES,3);await appendChunk(r.id,owner,0,body(first));const retry=await appendChunk(r.id,owner,0,body(first));expect(retry.received).toBe(CHUNK_BYTES);await appendChunk(r.id,owner,1,body(Buffer.alloc(32,4)));const done=await getUpload(r.id,owner);expect(done.status).toBe("ready");expect((await fs.stat(archivePath(r.id))).size).toBe(CHUNK_BYTES+32);});
+ it("rejects gaps, wrong lengths and access by another user",async()=>{const r=await beginUpload("chunk-owner-2","game.zip",64,MAX_ARCHIVE_BYTES);await expect(appendChunk(r.id,"chunk-owner-2",1,body(Buffer.alloc(64)))).rejects.toThrow("bad_chunk");await expect(appendChunk(r.id,"chunk-owner-2",0,body(Buffer.alloc(65)))).rejects.toThrow("bad_chunk");expect((await fs.stat(archivePath(r.id))).size).toBe(0);await expect(getUpload(r.id,"intruder")).rejects.toThrow("not_found");await cancelUpload(r.id,"chunk-owner-2");});
+ it("accepts archives above the old 50 MB cap and rejects over 2 GB",async()=>{const r=await beginUpload("chunk-owner-3","large.zip",150*1024*1024,MAX_ARCHIVE_BYTES);expect(r.total).toBe(150*1024*1024);await cancelUpload(r.id,"chunk-owner-3");await expect(beginUpload("chunk-owner-3","huge.zip",MAX_ARCHIVE_BYTES+1,MAX_ARCHIVE_BYTES)).rejects.toThrow("file_too_big");});
+ it("cannot queue partial data and releases canceled upload slots",async()=>{const owner="chunk-owner-4",a=await beginUpload(owner,"a.zip",64,MAX_ARCHIVE_BYTES),b=await beginUpload(owner,"b.zip",64,MAX_ARCHIVE_BYTES);await expect(beginUpload(owner,"c.zip",64,MAX_ARCHIVE_BYTES)).rejects.toThrow("too_many_uploads");await expect(queueUpload(a.id,owner,{gameId:"game",locale:"tr",isNew:true,changelog:"",maxZipMb:2048})).rejects.toThrow("not_ready");await cancelUpload(a.id,owner);const c=await beginUpload(owner,"c.zip",64,MAX_ARCHIVE_BYTES);expect(c.status).toBe("uploading");await cancelUpload(b.id,owner);await cancelUpload(c.id,owner);});
+});

@@ -23,7 +23,7 @@ export function BecomeDevForm({
       </div>
       <div>
         <label className="label" htmlFor="handle">{labels.handle}</label>
-        <input id="handle" name="handle" required pattern="[a-z0-9][a-z0-9\-]{1,28}[a-z0-9]" defaultValue={state?.handle} className="input font-mono" />
+        <input id="handle" name="handle" required pattern="[a-z0-9][a-z0-9_\-]{1,28}[a-z0-9]" defaultValue={state?.handle} className="input font-mono" />
         <p className="hint">{labels.handleHint}</p>
       </div>
       <label className="flex items-start gap-2.5 text-sm text-muted">

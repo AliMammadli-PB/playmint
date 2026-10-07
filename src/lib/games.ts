@@ -5,6 +5,9 @@ import { gameFilesBase } from "@/lib/env";
 
 const g = schema.games;
 const d = schema.developerProfiles;
+/** Every public catalogue surface uses the same reviewed, non-demo live-version policy. */
+export const publicGameCondition = and(eq(g.status,"published"),eq(g.isDemo,false),sql`exists (select 1 from game_versions v where v.id = ${g.liveVersionId} and v.game_id = ${g.id} and v.status = 'approved' and v.reviewed_at is not null and v.reviewed_by is not null)`)!;
+
 
 export const cardFields = {
   id: g.id,
@@ -14,6 +17,8 @@ export const cardFields = {
   category: g.category,
   coverPath: g.coverPath,
   premiumOnly: g.premiumOnly,
+  subscriptionPriceCents:g.subscriptionPriceCents,
+  subscriptionCurrency:g.subscriptionCurrency,
   likeCount: g.likeCount,
   playCount: g.playCount,
   developerName: d.displayName,
@@ -28,6 +33,8 @@ export type GameCardData = {
   category: string;
   coverPath: string | null;
   premiumOnly: boolean;
+  subscriptionPriceCents:number;
+  subscriptionCurrency:string;
   likeCount: number;
   playCount: number;
   developerName: string | null;
@@ -47,7 +54,7 @@ export type ListOptions = {
 };
 
 export async function listGames(opts: ListOptions = {}): Promise<GameCardData[]> {
-  const where: SQL[] = [eq(g.status, "published"), sql`${g.liveVersionId} is not null`];
+  const where: SQL[] = [publicGameCondition];
   if (opts.category) where.push(eq(g.category, opts.category));
   if (opts.premium) where.push(eq(g.premiumOnly, true));
   if (opts.featured) where.push(eq(g.featured, true));
@@ -89,7 +96,7 @@ export async function getVersion(id: string) {
 }
 
 export function playUrl(version: { id: string; entry: string }) {
-  return `${gameFilesBase()}/${version.id}/${version.entry.split("/").map(encodeURIComponent).join("/")}`;
+  return `${gameFilesBase()}/${version.id}/${version.entry.split("/").map(encodeURIComponent).join("/")}?pm_runtime=3`;
 }
 
 export function coverUrl(coverPath: string | null) {
@@ -97,21 +104,16 @@ export function coverUrl(coverPath: string | null) {
 }
 
 export async function siteStats() {
-  const rows = await db.execute<{ games: string; devs: string; plays: string }>(sql`
-    select
-      (select count(*) from games where status = 'published' and live_version_id is not null) as games,
-      (select count(distinct developer_id) from games where status = 'published' and live_version_id is not null) as devs,
-      (select coalesce(sum(play_count), 0) from games) as plays
-  `);
-  const r = rows.rows[0];
-  return { games: Number(r.games), devs: Number(r.devs), plays: Number(r.plays) };
+  const [row] = await db.select({games:sql<number>`count(*)::int`,devs:sql<number>`count(distinct ${g.developerId})::int`,plays:sql<number>`coalesce(sum(${g.playCount}),0)::int`}).from(g).where(publicGameCondition);
+  return row;
+
 }
 
 export async function categoryCounts() {
   const rows = await db
     .select({ category: g.category, n: sql<number>`count(*)::int` })
     .from(g)
-    .where(and(eq(g.status, "published"), sql`${g.liveVersionId} is not null`))
+    .where(publicGameCondition)
     .groupBy(g.category);
   return Object.fromEntries(rows.map((r) => [r.category, r.n])) as Record<string, number>;
 }

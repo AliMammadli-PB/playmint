@@ -1,3 +1,5 @@
+import {CategoryIcon} from "@/components/CategoryIcon";
+import {CatalogShell,CatalogTabs} from "@/components/CatalogShell";
 import Link from "next/link";
 import { resolveLocale } from "@/lib/i18n";
 import { fill } from "@/lib/i18n/text";
@@ -30,7 +32,7 @@ export default async function Browse({ params, searchParams }: PageProps<"/[loca
     `shrink-0 rounded-full border px-3.5 py-1.5 text-sm transition ${active ? "border-mint bg-mint/15 text-mint" : "border-line bg-surface/70 text-muted hover:text-paper"}`;
 
   return (
-    <div className="container-pm py-10">
+    <CatalogShell locale={locale} active="browse">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="h1">{q ? fill(t.browse.resultsFor, { q }) : category ? t.categories[category] : t.browse.title}</h1>
@@ -47,13 +49,14 @@ export default async function Browse({ params, searchParams }: PageProps<"/[loca
           ))}
         </div>
       </div>
+      <div className="browse-editorial"><img src={`/brand/${category==="puzzle"?"puzzle":category==="racing"?"racing":"arcade"}.webp`} alt="" width="1200" height="500"/><span>{locale==="en"?"Find your next favourite":locale==="az"?"Növbəti sevimli oyununu tap":"Sıradaki favorini bul"}</span></div><CatalogTabs locale={locale} active="browse"/>
       <div className="mt-6 flex gap-2 overflow-x-auto pb-2 no-scrollbar">
         <Link href={href({ category: undefined })} className={chip(!category)}>
           {t.common.all}
         </Link>
         {categories.map((c) => (
           <Link key={c} href={href({ category: c })} className={chip(category === c)}>
-            {categoryEmoji[c]} {t.categories[c]}
+            <span className="inline-flex items-center gap-2"><CategoryIcon category={c}/>{t.categories[c]}</span>
           </Link>
         ))}
         <Link href={href({ premium: premium ? undefined : "1" })} className={chip(premium)}>
@@ -67,6 +70,6 @@ export default async function Browse({ params, searchParams }: PageProps<"/[loca
           <div className="card p-12 text-center text-muted">{t.browse.empty}</div>
         )}
       </div>
-    </div>
+    </CatalogShell>
   );
 }

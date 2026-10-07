@@ -1,56 +1,10 @@
 import Link from "next/link";
-import { eq } from "drizzle-orm";
-import { resolveLocale } from "@/lib/i18n";
-import { fill } from "@/lib/i18n/text";
-import { requireDeveloper } from "@/lib/auth";
-import { db, schema } from "@/lib/db";
-import { dailyStats, sumStats } from "@/lib/stats";
-import { computePeriod, currentMonth, developerBalance } from "@/lib/finance";
-import { hours, money, num } from "@/lib/format";
-import { Kpi } from "@/components/Kpi";
-import { StatsChart } from "@/components/StatsChart";
-
-export default async function DevOverview({ params }: PageProps<"/[locale]/dev">) {
-  const { locale, t } = await resolveLocale(params);
-  const user = await requireDeveloper(locale);
-  const games = await db.select({ id: schema.games.id }).from(schema.games).where(eq(schema.games.developerId, user.id));
-  const ids = games.map((g) => g.id);
-  const [days, balance, estimate] = await Promise.all([dailyStats(ids, 30), developerBalance(user.id), computePeriod(currentMonth())]);
-  const sum = sumStats(days);
-  const idSet = new Set(ids);
-  const est = estimate.games.filter((g) => idSet.has(g.gameId)).reduce((a, g) => a + g.amountCents, 0);
-
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="h1">{fill(t.dev.overviewTitle, { name: user.name })}</h1>
-        <Link href={`/${locale}/dev/games/new`} className="btn btn-primary">+ {t.dev.nav.newGame}</Link>
-      </div>
-      {ids.length === 0 ? (
-        <div className="card p-10 text-center">
-          <div className="text-5xl">🚀</div>
-          <p className="mt-4 text-muted">{t.dev.noGames}</p>
-          <Link href={`/${locale}/dev/games/new`} className="btn btn-primary mt-5">{t.dev.uploadFirst}</Link>
-        </div>
-      ) : (
-        <>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
-            <Kpi label={t.dev.kpiPlays} value={num(sum.plays, locale)} hint={t.dev.last30} />
-            <Kpi label={t.dev.kpiUnique} value={num(sum.unique, locale)} hint={t.dev.last30} />
-            <Kpi label={t.dev.kpiHours} value={hours(sum.seconds, locale)} hint={t.dev.last30} />
-            <Kpi label={t.dev.kpiPremiumHours} value={hours(sum.premiumSeconds, locale)} hint={t.dev.last30} />
-            <Kpi label={t.dev.kpiEstimate} value={money(est, estimate.currency, locale)} hint={t.dev.estimateHint} accent />
-            <Kpi label={t.dev.kpiAvailable} value={money(balance.availableCents, balance.currency, locale)} accent />
-          </div>
-          <div className="card p-5">
-            <h2 className="mb-4 font-display font-bold">{t.dev.chartTitle}</h2>
-            <StatsChart
-              data={days.map((d) => ({ day: d.day, plays: d.plays, minutes: Math.round(d.seconds / 60), premiumMinutes: Math.round(d.premiumSeconds / 60) }))}
-              labels={{ plays: t.dev.seriesPlays, minutes: t.dev.seriesMinutes, premium: t.dev.seriesPremium }}
-            />
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
+import {and,eq,sql,gt} from "drizzle-orm";
+import {resolveLocale} from "@/lib/i18n";
+import {requireDeveloper} from "@/lib/auth";
+import {db,schema} from "@/lib/db";
+import {developerBalance} from "@/lib/finance";
+import {money,num} from "@/lib/format";
+import {StudioHeading,StudioIcon,Metric,StudioEmpty} from "@/components/Studio";
+import {studioCopy} from "@/lib/studio-copy";
+export default async function Overview({params}:PageProps<"/[locale]/dev">){const {locale,t}=await resolveLocale(params);const user=await requireDeveloper(locale),c=studioCopy(locale),en=locale==="en",az=locale==="az";const games=await db.select().from(schema.games).where(and(eq(schema.games.developerId,user.id),eq(schema.games.isDemo,false)));const balance=await developerBalance(user.id);const [sub]=await db.select({n:sql<number>`count(distinct ${schema.subscriptions.userId})::int`}).from(schema.subscriptions).innerJoin(schema.games,eq(schema.games.id,schema.subscriptions.gameId)).where(and(eq(schema.games.developerId,user.id),eq(schema.subscriptions.status,"active"),gt(schema.subscriptions.currentPeriodEnd,new Date()),sql`${schema.subscriptions.provider} <> 'mock'`));const published=games.filter(g=>g.status==="published"),plays=games.reduce((n,g)=>n+g.playCount,0);return <div className="space-y-7"><StudioHeading eyebrow="YOUR CREATOR WORKSPACE" title={c.overview} description={en?"Your games, your community, your next step.":az?"Oyunların, icman və növbəti addımın.":"Oyunların, topluluğun ve bir sonraki adımın."}/><section className="studio-welcome"><div><p className="studio-kicker">PLAYMINT STUDIO</p><h2 className="mt-3">{en?"Welcome back":az?"Xoş gəldin":"Hoş geldin"}, {user.name}.</h2><p>{en?"Everything you need to publish and grow your games is here.":az?"Oyununu yayımlamaq və böyütmək üçün hər şey burada.":"Oyununu yayınlamak ve büyütmek için ihtiyacın olan her şey burada."}</p><Link className="btn btn-primary mt-5" href={`/${locale}/dev/games/new`}>{c.upload} <StudioIcon name="upload"/></Link></div><div className="studio-welcome-art brand-worlds"><img src="/brand/studio.webp" alt="" width="768" height="512"/></div></section><section className="studio-shortcuts">{[{path:"/games",image:"arcade",title:c.games,description:en?"Manage your releases":"Yayınlarını yönet"},{path:"/sdk",image:"puzzle",title:"SDK & Docs",description:en?"Connect rewards and ads":"Ödülleri ve reklamları bağla"},{path:"/games/new",image:"racing",title:c.upload,description:en?"Publish your next project":"Sıradaki projen burada başlasın"}].map(item=><Link href={`/${locale}/dev${item.path}`} key={item.path}><img src={`/brand/${item.image}.webp`} alt="" width="600" height="360" loading="lazy"/><div><strong>{item.title}</strong><p>{item.description}</p><span aria-hidden="true">↗</span></div></Link>)}</section><div className="grid grid-cols-2 xl:grid-cols-4 gap-4"><Metric label={c.games} value={num(games.length,locale)} note={`${published.length} ${t.dev.gameStatus.published}`} icon="game"/><Metric label={t.dev.kpiPlays} value={num(plays,locale)} note={en?"All time":"Tüm zamanlar"} icon="chart" accent="blue"/><Metric label={c.subscribers} value={num(sub.n,locale)} note={en?"Active, excluding tests":az?"Aktiv, testlər xaric":"Aktif, testler hariç"} icon="users" accent="violet"/><Metric label={t.dev.available} value={money(balance.availableCents,balance.currency,locale)} icon="wallet" accent="amber"/></div><div className="grid gap-5 xl:grid-cols-[1.6fr_1fr]"><section>{games.length?<div className="studio-box"><div className="flex justify-between items-center mb-4"><h2>{c.games}</h2><Link className="text-xs text-mint" href={`/${locale}/dev/games`}>{t.common.seeAll} →</Link></div>{games.slice(0,5).map(g=><Link key={g.id} className="flex justify-between gap-4 py-4 border-b border-line last:border-0" href={`/${locale}/dev/games/${g.id}`}><div><strong className="text-sm">{g.title}</strong><p className="text-xs text-muted mt-1">{g.category} · {g.playCount} {t.common.plays}</p></div><span className="text-xs text-mint">{t.dev.gameStatus[g.status]} ↗</span></Link>)}</div>:<StudioEmpty title={en?"Your first game starts here":az?"İlk oyunun burada başlayır":"İlk oyunun burada başlıyor"} text={en?"Give it a name, upload the ZIP, and we'll review it.":az?"Adını yaz, ZIP faylını yüklə, yoxlamaya göndər.":"Adını yaz, ZIP dosyanı yükle ve incelemeye gönder."} href={`/${locale}/dev/games/new`} cta={c.upload}/>}</section><section className="studio-box"><h2 className="mb-6">{en?"Your publishing journey":az?"Yayımlama addımları":"Yayınlama yolculuğun"}</h2><ol className="studio-steps">{[{title:c.upload,text:en?"Your game name and ZIP are enough.":az?"Oyun adı və ZIP kifayətdir.":"Oyun adı ve ZIP dosyası yeterli."},{title:en?"Review & publish":az?"Yoxlama və yayım":"İnceleme ve yayın",text:en?"Every version is reviewed before going live.":az?"Hər versiya yayımdan əvvəl yoxlanılır.":"Her sürüm yayına girmeden önce incelenir."},{title:c.plans,text:en?"Set your price and subscriber benefits.":az?"Qiymətini və üstünlükləri təyin et.":"Fiyatını ve abone avantajlarını belirle."}].map((s,i)=><li key={s.title}><span>0{i+1}</span><div><strong>{s.title}</strong><p>{s.text}</p></div></li>)}</ol></section></div></div>;}

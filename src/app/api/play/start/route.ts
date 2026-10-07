@@ -25,16 +25,17 @@ export async function POST(req: Request) {
     const v = await getVersion(body.previewVersionId);
     const allowed = user && (user.role === "admin" || user.id === game.developerId);
     if (!v || v.gameId !== game.id || !allowed) return Response.json({ error: "forbidden" }, { status: 403 });
+    if(v.runtimeKind!=="browser"||!v.entry)return Response.json({error:"runtime_not_ready"},{status:409});
     return Response.json({ url: playUrl(v), token: null });
   }
 
-  if (game.status !== "published" || !game.liveVersionId) return Response.json({ error: "not_live" }, { status: 404 });
-  const premium = await isPremium(user?.id);
+  if (game.isDemo || game.status !== "published" || !game.liveVersionId) return Response.json({ error: "not_live" }, { status: 404 });
+  const premium = await isPremium(user?.id, game.id);
   if (game.premiumOnly && !premium && user?.id !== game.developerId && user?.role !== "admin") {
     return Response.json({ error: "premium_required" }, { status: 402 });
   }
   const version = await getVersion(game.liveVersionId);
-  if (!version) return Response.json({ error: "not_live" }, { status: 404 });
+  if (!version || version.gameId!==game.id || version.status!=="approved" || !version.reviewedAt || !version.reviewedBy) return Response.json({ error: "not_live" }, { status: 404 });
 
   const jar = await cookies();
   let visitorId = jar.get("pm_vid")?.value;

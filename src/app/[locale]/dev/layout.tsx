@@ -1,26 +1,7 @@
-import { resolveLocale } from "@/lib/i18n";
-import { requireDeveloper } from "@/lib/auth";
-import { PanelNav } from "@/components/PanelNav";
-
-export default async function DevLayout({ children, params }: LayoutProps<"/[locale]/dev">) {
-  const { locale, t } = await resolveLocale(params);
-  await requireDeveloper(locale);
-  const base = `/${locale}/dev`;
-  return (
-    <div className="container-pm grid gap-6 py-8 lg:grid-cols-[210px_1fr]">
-      <aside className="lg:sticky lg:top-24 lg:self-start">
-        <div className="mb-3 hidden px-3.5 text-xs font-semibold uppercase tracking-widest text-faint lg:block">{t.nav.devPanel}</div>
-        <PanelNav
-          root={base}
-          items={[
-            { href: base, label: t.dev.nav.overview },
-            { href: `${base}/games`, label: t.dev.nav.games },
-            { href: `${base}/earnings`, label: t.dev.nav.earnings },
-            { href: `${base}/settings`, label: t.dev.nav.settings },
-          ]}
-        />
-      </aside>
-      <div className="min-w-0">{children}</div>
-    </div>
-  );
-}
+import Link from "next/link";
+import {resolveLocale} from "@/lib/i18n";
+import {requireDeveloper} from "@/lib/auth";
+import {StudioNav} from "@/components/StudioNav";
+import {studioCopy} from "@/lib/studio-copy";
+import {StudioIcon} from "@/components/Studio";
+export default async function DevLayout({children,params}:LayoutProps<"/[locale]/dev">){const {locale}=await resolveLocale(params);const user=await requireDeveloper(locale);const c=studioCopy(locale),base=`/${locale}/dev`;return <div className="studio-shell"><aside className="studio-sidebar"><div className="studio-brand"><span className="studio-brand-icon"><StudioIcon name="code"/></span><div><strong>Playmint Studio</strong><span>{locale==="en"?"Creator workspace":locale==="az"?"Geliştirici paneli":"Geliştirici çalışma alanı"}</span></div></div><Link className="btn btn-primary w-full mb-5" href={`${base}/games/new`}><StudioIcon name="upload"/>{c.upload}</Link><StudioNav base={base} items={[{path:"",label:c.overview,icon:"home"},{path:"/games",label:c.games,icon:"game"},{path:"/notifications",label:locale==="en"?"Notifications":locale==="az"?"Bildirişlər":"Bildirimler",icon:"bell"},{path:"/analytics",label:c.analytics,icon:"chart"},{path:"/subscriptions",label:c.plans,icon:"plan"},{path:"/subscribers",label:c.subscribers,icon:"users"},{path:"/earnings",label:c.earnings,icon:"wallet"},{path:"/ads",label:c.ads,icon:"ads"},{path:"/sdk",label:"SDK & Docs",icon:"code"},{path:"/settings",label:c.settings,icon:"settings"}]}/><Link href={`${base}/account`} className="studio-account"><span>{user.name.slice(0,1).toUpperCase()}</span><div><strong>{user.name}</strong><small>{locale==="en"?"Developer account":locale==="az"?"Geliştirici hesabı":"Geliştirici hesabı"}</small></div></Link><Link className="studio-player-link" href={`/${locale}/games`}>{c.catalogue} ↗</Link></aside><div className="studio-content">{children}</div></div>;}

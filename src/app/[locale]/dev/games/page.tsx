@@ -1,5 +1,6 @@
+import {StudioHeading,StudioIcon,StudioEmpty} from "@/components/Studio";
 import Link from "next/link";
-import { desc, eq } from "drizzle-orm";
+import { and, ne, desc, eq } from "drizzle-orm";
 import { resolveLocale } from "@/lib/i18n";
 import { requireDeveloper } from "@/lib/auth";
 import { db, schema } from "@/lib/db";
@@ -12,7 +13,7 @@ import { gameTone, versionTone } from "@/lib/tones";
 export default async function DevGames({ params }: PageProps<"/[locale]/dev/games">) {
   const { locale, t } = await resolveLocale(params);
   const user = await requireDeveloper(locale);
-  const games = await db.select().from(schema.games).where(eq(schema.games.developerId, user.id)).orderBy(desc(schema.games.createdAt));
+  const games = await db.select().from(schema.games).where(and(eq(schema.games.developerId, user.id),eq(schema.games.isDemo,false),ne(schema.games.status,"removed"))).orderBy(desc(schema.games.createdAt));
   const versions = await db
     .select({ gameId: schema.gameVersions.gameId, number: schema.gameVersions.number, status: schema.gameVersions.status })
     .from(schema.gameVersions)
@@ -22,53 +23,6 @@ export default async function DevGames({ params }: PageProps<"/[locale]/dev/game
   const latest = new Map<string, (typeof versions)[number]>();
   for (const v of versions) if (!latest.has(v.gameId)) latest.set(v.gameId, v);
 
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="h1">{t.dev.gamesTitle}</h1>
-        <Link href={`/${locale}/dev/games/new`} className="btn btn-primary">+ {t.dev.nav.newGame}</Link>
-      </div>
-      {games.length === 0 ? (
-        <div className="card p-10 text-center text-muted">{t.dev.noGames}</div>
-      ) : (
-        <div className="card overflow-x-auto">
-          <table className="table-pm">
-            <thead>
-              <tr>
-                <th>{t.dev.colGame}</th>
-                <th>{t.common.status}</th>
-                <th>{t.dev.colLatest}</th>
-                <th className="text-right">{t.common.plays}</th>
-                <th className="text-right">{t.common.likes}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {games.map((g) => {
-                const v = latest.get(g.id);
-                return (
-                  <tr key={g.id} className="hover:bg-surface-2/50">
-                    <td>
-                      <Link href={`/${locale}/dev/games/${g.id}`} className="flex items-center gap-3">
-                        <div className="h-10 w-16 shrink-0 overflow-hidden rounded-lg">
-                          <Cover title={g.title} path={g.coverPath} category={g.category} className="text-xl [&_span]:text-xl" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="truncate font-semibold hover:text-mint">{g.title}</div>
-                          <div className="font-mono text-xs text-faint">/{g.slug}</div>
-                        </div>
-                      </Link>
-                    </td>
-                    <td><StatusBadge tone={gameTone[g.status]}>{t.dev.gameStatus[g.status]}</StatusBadge></td>
-                    <td>{v && <StatusBadge tone={versionTone[v.status]}>v{v.number} · {t.dev.versionStatus[v.status]}</StatusBadge>}</td>
-                    <td className="text-right tabular-nums">{num(g.playCount, locale)}</td>
-                    <td className="text-right tabular-nums">{num(g.likeCount, locale)}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
+  const en=locale==="en",az=locale==="az";
+  return <div className="space-y-7"><StudioHeading eyebrow="YOUR GAME LIBRARY" title={t.dev.gamesTitle} description={en?"Manage every game, every version and every release.":az?"Oyunlarını, versiyalarını və yayımlarını idarə et.":"Oyunlarını, sürümlerini ve yayınlarını tek yerden yönet."} action={<Link href={`/${locale}/dev/games/new`} className="btn btn-primary"><StudioIcon name="upload"/>{t.dev.nav.newGame}</Link>}/>{games.filter(g=>!g.isDemo).length?<div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">{games.filter(g=>!g.isDemo).map(g=>{const v=latest.get(g.id);return <article key={g.id} className="overflow-hidden rounded-2xl border border-line bg-white hover:shadow-xl hover:shadow-mint/5 transition"><div className="aspect-video bg-surface-2"><Cover title={g.title} path={g.coverPath} category={g.category}/></div><div className="p-5"><h2 className="font-bold text-lg truncate"><Link href={`/${locale}/dev/games/${g.id}`}>{g.title}</Link></h2><div className="flex flex-wrap gap-2 my-3"><StatusBadge tone={gameTone[g.status]}>{t.dev.gameStatus[g.status]}</StatusBadge>{v&&<StatusBadge tone={versionTone[v.status]}>{t.dev.versionStatus[v.status]}</StatusBadge>}</div><div className="flex justify-between border-t border-line pt-4 text-xs text-muted"><span>{num(g.playCount,locale)} {t.common.plays}</span><Link href={`/${locale}/dev/games/${g.id}#edit`} className="btn btn-primary btn-sm">{en?"Edit":az?"Düzəliş et":"Düzenle"} ↗</Link></div></div></article>;})}</div>:<StudioEmpty title={en?"Make room for your first game":az?"İlk oyununa yer aç":"İlk oyununa yer aç"} text={en?"Upload a game to start building your library.":az?"Oyun kitabxananı yaratmaq üçün oyun yüklə.":"Oyun kütüphaneni oluşturmak için ilk oyununu yükle."} href={`/${locale}/dev/games/new`} cta={t.dev.nav.newGame}/>}</div>;
 }

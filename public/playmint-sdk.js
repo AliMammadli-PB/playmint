@@ -1,0 +1,13 @@
+/* Playmint SDK v2: gameplay callbacks never create financial credit. */
+(function(){'use strict';if(window.Playmint&&window.Playmint.version===2)return;
+ var lifecycle=null,busy=false,lastAd=window.__PLAYMINT_LAST_AD||0,timer=null,config=window.__PLAYMINT_CONFIG||{enabled:false},previous=window.Playmint;
+ function ready(){return config.enabled===true&&typeof window.adBreak==='function';}
+ function run(type,name){if(!ready())return Promise.resolve({completed:false,reason:'ads_disabled'});if(busy)return Promise.resolve({completed:false,reason:'busy'});if(type!=='preroll'&&Date.now()-lastAd<config.intervalSeconds*1000)return Promise.resolve({completed:false,reason:'frequency_capped'});if(type!=='preroll'&&!lifecycle)return Promise.resolve({completed:false,reason:'pause_not_connected'});
+  busy=true;return new Promise(function(resolve){var finished=false,paused=false,viewed=false;function finish(reason){if(finished)return;finished=true;clearTimeout(timeout);busy=false;if(paused){paused=false;try{lifecycle.resume();}catch{}}resolve({completed:type==='reward'&&viewed,reason:reason||''});}
+   var timeout=setTimeout(function(){finish('timeout');},185000);try{window.adBreak({type:type,name:name,beforeAd:function(){if(finished)throw new Error('expired_ad_request');if(lifecycle){lifecycle.pause();paused=true;}lastAd=Date.now();window.__PLAYMINT_LAST_AD=lastAd;},afterAd:function(){if(paused){paused=false;try{lifecycle.resume();}catch{}}},beforeReward:function(show){show();},adViewed:function(){viewed=true;},adDismissed:function(){viewed=false;},adBreakDone:function(info){finish(info.breakStatus);}});}catch{finish('error');}
+  });
+ }
+ window.Playmint={version:2,init:function(options){if(!options||typeof options.pause!=='function'||typeof options.resume!=='function')return false;lifecycle=options;if(timer)clearInterval(timer);if(config.enabled&&config.midgame)timer=setInterval(function(){if(document.visibilityState==='visible'&&!busy)void run('pause','automatic_midgame');},config.intervalSeconds*1000);return true;},requestReward:function(placement){if(typeof placement!=='string'||!/^[a-z0-9_-]{1,40}$/.test(placement))return Promise.resolve({completed:false,reason:'invalid_placement'});if(!config.rewarded)return Promise.resolve({completed:false,reason:'ads_disabled'});return run('reward',placement);},gameBreak:function(){return run('pause','game_break');},purchases:{available:false,request:function(){return Promise.resolve({completed:false,reason:'coming_soon'});}}};
+ // Startup is owned by the runtime boot loader, never by a game's reward button.
+ window.__playmintStartup=function(){return config.startup?run('preroll','game_start'):Promise.resolve({completed:false,reason:'disabled'});};
+})();

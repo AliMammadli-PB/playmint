@@ -1,3 +1,4 @@
+import {UploadPolicy} from "@/components/UploadPolicy";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { and, desc, eq } from "drizzle-orm";
@@ -39,10 +40,13 @@ export default async function DevGame({ params }: PageProps<"/[locale]/dev/games
           <div className="mt-2 flex flex-wrap items-center gap-3">
             <h1 className="h1">{game.title}</h1>
             <StatusBadge tone={gameTone[game.status]}>{t.dev.gameStatus[game.status]}</StatusBadge>
-            {game.premiumOnly && <StatusBadge tone="amber">★ Premium</StatusBadge>}
+            {game.premiumOnly && <StatusBadge tone="amber">{t.common.premium}</StatusBadge>}
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <Link href="#edit" className="btn btn-primary btn-sm">{locale==="en"?"Edit game":locale==="az"?"Oyunu düzəlt":"Oyunu düzenle"}</Link>
+          <Link href="#update" className="btn btn-ghost btn-sm">{t.dev.newVersion}</Link>
+          <Link href={`/${locale}/dev/games/new`} className="btn btn-ghost btn-sm">{t.dev.nav.newGame}</Link>
           {game.liveVersionId && (
             <Link href={`/${locale}/g/${game.slug}`} className="btn btn-ghost btn-sm">{t.dev.viewPublic} ↗</Link>
           )}
@@ -85,9 +89,10 @@ export default async function DevGame({ params }: PageProps<"/[locale]/dev/games
                 </div>
                 <div className="flex gap-2">
                   <Link href={`/${locale}/g/${game.slug}?preview=${v.id}`} className="btn btn-ghost btn-sm">{t.dev.preview}</Link>
-                  <a href={`/api/source/${v.id}`} className="btn btn-ghost btn-sm">⬇ zip</a>
+                  {!v.report.sourceRemovedAt && <a href={`/api/source/${v.id}`} className="btn btn-ghost btn-sm">⬇ zip</a>}
                 </div>
               </div>
+              {v.runtimeKind!=="browser"&&<p className="mt-3 rounded-xl bg-amber/10 p-3 text-sm text-amber">{locale==="en"?"Source project received. Build/runtime preparation is required before publishing.":locale==="az"?"Mənbə layihə qəbul edildi. Yayım üçün build/işləmə mühiti hazırlanmalıdır.":"Kaynak proje alındı. Yayın için build/çalıştırma hazırlığı gerekiyor."}</p>}
               {v.changelog && <p className="mt-2 whitespace-pre-line text-sm text-muted">{v.changelog}</p>}
               {v.reviewNote && (
                 <p className={`mt-3 rounded-xl px-3 py-2 text-sm ${v.status === "rejected" ? "bg-danger/10 text-danger" : "bg-surface-2 text-muted"}`}>
@@ -108,7 +113,7 @@ export default async function DevGame({ params }: PageProps<"/[locale]/dev/games
             </div>
           ))}
         </div>
-        <div className="card p-5">
+        <div id="update" className="card scroll-mt-24 p-5">
           <h3 className="mb-4 font-display font-bold">{t.dev.newVersion}</h3>
           {pending && <p className="mb-4 text-sm text-amber">{t.dev.pendingExists}</p>}
           <UploadForm
@@ -119,16 +124,18 @@ export default async function DevGame({ params }: PageProps<"/[locale]/dev/games
           >
             <input type="hidden" name="locale" value={locale} />
             <ZipFields
+              requireOpenSource={game.license!=="Developer"}
               showChangelog
               maxMb={s.maxZipMb}
               labels={{ zip: fill(t.dev.fZip, { mb: s.maxZipMb }), zipHint: t.dev.fZipHint, changelog: t.dev.fChangelog, openSource: t.dev.fOpenSource }}
             />
+            <UploadPolicy locale={locale}/>
           </UploadForm>
         </div>
       </section>
 
       <section className="space-y-4">
-        <h2 className="h2 text-lg">{t.dev.editTitle}</h2>
+        <h2 id="edit" className="h2 scroll-mt-24 text-lg">{t.dev.editTitle}</h2>
         <div className="card p-5">
           <EditGameForm
             gameId={game.id}
@@ -145,7 +152,13 @@ export default async function DevGame({ params }: PageProps<"/[locale]/dev/games
               tags: game.tags,
               license: game.license,
               orientation: game.orientation,
+              mobileResponsive:game.mobileResponsive,
+              fullscreenSupported:game.fullscreenSupported,
               premiumOnly: game.premiumOnly,
+              subscriptionPriceCents: game.subscriptionPriceCents,
+              subscriptionCurrency: game.subscriptionCurrency,
+              subscriptionBenefits: game.subscriptionBenefits,
+              rewardedAds: game.rewardedAds,
             }}
           />
         </div>

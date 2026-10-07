@@ -1,34 +1,52 @@
 "use client";
-
+import { useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { locales, localeNames, localeCookie, type Locale } from "@/lib/i18n/config";
+import { LangFlag } from "./LangFlag";
 
 export function LangSwitcher({ locale, label }: { locale: Locale; label: string }) {
   const pathname = usePathname();
   const router = useRouter();
+  const menu = useRef<HTMLDetailsElement>(null);
+
+  function change(next: Locale) {
+    document.cookie = `${localeCookie}=${next}; path=/; max-age=31536000; samesite=lax`;
+    const parts = pathname.split("/");
+    parts[1] = next;
+    if (menu.current) menu.current.open = false;
+    router.push(parts.join("/") + window.location.search);
+  }
+
   return (
-    <label className="relative inline-flex items-center">
-      <span className="sr-only">{label}</span>
-      <select
-        value={locale}
-        onChange={(e) => {
-          const next = e.target.value as Locale;
-          document.cookie = `${localeCookie}=${next}; path=/; max-age=31536000; samesite=lax`;
-          const parts = pathname.split("/");
-          parts[1] = next;
-          router.push(parts.join("/") + window.location.search);
-        }}
-        className="w-[4.25rem] cursor-pointer appearance-none truncate rounded-full sm:w-auto border border-line-strong bg-transparent py-1.5 pl-3 pr-7 text-xs font-semibold uppercase text-muted hover:text-paper focus:outline-none"
-      >
+    <details
+      ref={menu}
+      className="language-menu"
+      onBlur={(e) => {
+        if (menu.current && !e.currentTarget.contains(e.relatedTarget as Node)) menu.current.open = false;
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Escape" && menu.current) {
+          menu.current.open = false;
+          menu.current.querySelector("summary")?.focus();
+        }
+      }}
+    >
+      <summary aria-label={`${label}: ${localeNames[locale]}`} className="language-trigger">
+        <LangFlag locale={locale} />
+        <span>{locale.toUpperCase()}</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="m3 4 3 3 3-3" stroke="currentColor" strokeWidth="1.5" />
+        </svg>
+      </summary>
+      <div className="language-options">
         {locales.map((l) => (
-          <option key={l} value={l} className="bg-surface text-paper">
-            {l.toUpperCase()} · {localeNames[l]}
-          </option>
+          <button type="button" key={l} lang={l} aria-label={localeNames[l]} aria-current={locale === l ? "true" : undefined} onClick={() => change(l)}>
+            <LangFlag locale={l} />
+            {l.toUpperCase()}
+            {locale === l && <span className="language-check" aria-hidden="true">✓</span>}
+          </button>
         ))}
-      </select>
-      <svg className="pointer-events-none absolute right-2.5 h-3 w-3 text-muted" viewBox="0 0 12 12" aria-hidden>
-        <path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" strokeWidth="1.5" fill="none" />
-      </svg>
-    </label>
+      </div>
+    </details>
   );
 }

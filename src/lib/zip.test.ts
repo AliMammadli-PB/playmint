@@ -1,0 +1,18 @@
+import {describe,it,expect} from "vitest";
+import {mkdtemp,rm,readFile,stat} from "node:fs/promises";
+import {tmpdir} from "node:os";
+import {join} from "node:path";
+import {extractGameZip,rebaseGameAssets,ZipError} from "./zip";
+const fixture=(n:string)=>join(process.cwd(),"tests/fixtures",n+".zip");
+describe("uploaded games",()=>{
+ for(const name of ["traversal","symlink","executable","no-index"]){it(`rejects ${name}`,async()=>{const dir=await mkdtemp(join(tmpdir(),"pm-zip-"));try{await expect(extractGameZip(fixture(name),join(dir,"game"))).rejects.toBeInstanceOf(ZipError);}finally{await rm(dir,{recursive:true,force:true});}});}
+ it("accepts HTML games but reports suspicious script and external hosts",async()=>{const dir=await mkdtemp(join(tmpdir(),"pm-zip-"));try{const {report}=await extractGameZip(fixture("suspicious"),join(dir,"game"));expect(report.warnings).toContain("reads_cookies:game.js");expect(report.externalHosts).toContain("tracker.example.com");expect(report.entry).toBe("index.html");}finally{await rm(dir,{recursive:true,force:true});}});
+});
+
+describe("source projects and build output",()=>{
+ it("selects nested dist instead of Vite source index and skips node_modules symlinks",async()=>{const dir=await mkdtemp(join(tmpdir(),"pm-project-"));try{const output=join(dir,"public"),project=join(dir,"private");const result=await extractGameZip(fixture("vite-project"),output,project);expect(result.runtimeKind).toBe("browser");expect(result.entry).toBe("index.html");expect(await readFile(join(output,"index.html"),"utf8")).toContain("/assets/game.js");expect(result.report.project?.ignoredFiles).toBeGreaterThan(0);await expect(stat(join(output,"package.json"))).rejects.toThrow();await expect(stat(join(project,".env"))).rejects.toThrow();await rebaseGameAssets(output,result.runtimeFiles,"https://playmint.tr/play/test-version");expect(await readFile(join(output,"index.html"),"utf8")).toContain("https://playmint.tr/play/test-version/assets/game.js");expect(await readFile(join(output,"assets/game.css"),"utf8")).toContain("https://playmint.tr/play/test-version/assets/pixel.svg");}finally{await rm(dir,{recursive:true,force:true});}});
+ for(const [name,kind] of [["node-source","node-source"],["frontend-source","frontend-source"]])it(`accepts ${name} privately without executing it`,async()=>{const dir=await mkdtemp(join(tmpdir(),"pm-source-"));try{const result=await extractGameZip(fixture(name),join(dir,"public"),join(dir,"private"));expect(result.runtimeKind).toBe(kind);expect(result.entry).toBe("");expect(result.report.project?.requiresBuild).toBe(true);await expect(stat(join(dir,"public","index.html"))).rejects.toThrow();}finally{await rm(dir,{recursive:true,force:true});}});
+ it("retains case-sensitive index filenames",async()=>{const dir=await mkdtemp(join(tmpdir(),"pm-case-"));try{const result=await extractGameZip(fixture("uppercase-entry"),join(dir,"public"),join(dir,"private"));expect(result.entry).toBe("INDEX.HTML");}finally{await rm(dir,{recursive:true,force:true});}});
+});
+
+it("finds nested exported games and drops unrelated artifacts",async()=>{const dir=await mkdtemp(join(tmpdir(),"pm-nested-"));try{const result=await extractGameZip(fixture("nested-project"),join(dir,"public"),join(dir,"private"));expect(result.runtimeKind).toBe("browser");expect(await readFile(join(dir,"public","index.html"),"utf8")).toContain("nested game");expect(result.report.warnings.some(w=>w.startsWith("unused_file_skipped:"))).toBe(true);await expect(stat(join(dir,"public","tool.exe"))).rejects.toThrow();}finally{await rm(dir,{recursive:true,force:true});}});

@@ -1,32 +1,12 @@
-import { resolveLocale } from "@/lib/i18n";
-import { fill } from "@/lib/i18n/text";
-import { getSettings } from "@/lib/settings";
-import { metaFieldProps, uploadLabels } from "@/lib/i18n/forms";
-import { UploadForm } from "@/components/UploadForm";
-import { GameMetaFields } from "@/components/GameMetaFields";
-import { ZipFields } from "../ZipFields";
-
-export default async function NewGame({ params }: PageProps<"/[locale]/dev/games/new">) {
-  const { locale, t } = await resolveLocale(params);
-  const s = await getSettings();
-  return (
-    <div className="space-y-6">
-      <h1 className="h1">{t.dev.newTitle}</h1>
-      <div className="card p-6">
-        <UploadForm
-          endpoint="/api/dev/games"
-          redirectTo={`/${locale}/dev/games/{gameId}`}
-          submitLabel={t.dev.submitNew}
-          labels={uploadLabels(t)}
-        >
-          <input type="hidden" name="locale" value={locale} />
-          <GameMetaFields {...metaFieldProps(t)} />
-          <ZipFields
-            labels={{ zip: fill(t.dev.fZip, { mb: s.maxZipMb }), zipHint: t.dev.fZipHint, changelog: t.dev.fChangelog, openSource: t.dev.fOpenSource }}
-            maxMb={s.maxZipMb}
-          />
-        </UploadForm>
-      </div>
-    </div>
-  );
-}
+import {CoverPicker} from '@/components/CoverPicker';
+import {UploadPolicy} from '@/components/UploadPolicy';
+import {GameCapabilities} from '@/components/GameCapabilities';
+import {resolveLocale} from '@/lib/i18n';
+import {requireDeveloper} from '@/lib/auth';
+import {getSettings} from '@/lib/settings';
+import {uploadLabels} from '@/lib/i18n/forms';
+import {UploadForm} from '@/components/UploadForm';
+import {SimpleZipPicker} from '@/components/SimpleZipPicker';
+import {StudioHeading} from '@/components/Studio';
+import {categories} from '@/lib/catalog';
+export default async function NewGame({params}:PageProps<'/[locale]/dev/games/new'>){const {locale,t}=await resolveLocale(params);await requireDeveloper(locale);const s=await getSettings(),en=locale==='en',az=locale==='az';return <div className="space-y-7"><StudioHeading eyebrow="PLAYMINT / PUBLISH" title={en?'Give your game a home':az?'Oyunun burada yer alsın':'Oyunun burada yer alsın'} description={en?'Name it, show it, tell players how to enjoy it.':az?'Adını yaz, üz qabığını seç və oyununu yüklə.':'Adını yaz, kapağını seç ve oyuncuların nasıl oynayacağını belirt.'}/><div className="upload-workspace"><div className="upload-primary"><UploadForm endpoint="/api/dev/games" redirectTo={`/${locale}/dev/games/{gameId}`} submitLabel={en?'Upload game':az?'Oyunu yüklə':'Oyunu yükle'} labels={uploadLabels(t)}><input type="hidden" name="locale" value={locale}/><input type="hidden" name="simpleUpload" value="on"/><div className="grid gap-5 sm:grid-cols-2"><div><label className="label" htmlFor="title">{en?'Game name':az?'Oyunun adı':'Oyun adı'}</label><input className="input" id="title" name="title" required maxLength={60} placeholder="Pocket Factory"/></div><div><label className="label" htmlFor="category">{en?'Category':az?'Kateqoriya':'Kategori'}</label><select className="input" id="category" name="category" required defaultValue=""><option value="" disabled>{en?'Choose a category':az?'Kateqoriya seç':'Kategori seç'}</option>{categories.map(c=><option value={c} key={c}>{t.categories[c]}</option>)}</select></div></div><CoverPicker locale={locale}/><GameCapabilities locale={locale} required/><div><label className="label" htmlFor="orientation">{en?'Screen orientation':az?'Ekran istiqaməti':'Ekran yönü'}</label><select className="input" id="orientation" name="orientation" defaultValue="landscape"><option value="landscape">{en?'Landscape':'Yatay'}</option><option value="portrait">{en?'Portrait':'Dikey'}</option><option value="any">{en?'Both':'İkisi de'}</option></select></div><SimpleZipPicker locale={locale} maxMb={s.maxZipMb}/><UploadPolicy locale={locale}/></UploadForm></div><aside className="upload-note"><img src="/brand/studio.webp" alt="" width="800" height="500"/><p className="editorial-eyebrow">YOUR NEXT RELEASE</p><h2>{en?'From your desk to their next favourite.':az?'Masandan oyunçularına.':'Masandan oyuncularına.'}</h2><p>{en?'Upload the full project ZIP. A ready dist/build is picked automatically. Every version is reviewed before release.':az?'Layihənin ZIP faylını yüklə. Hazır dist/build avtomatik seçilir. Hər versiya yoxlanılır.':'Projenin ZIP dosyasını yükle. Hazır dist/build otomatik seçilir. Her sürüm yayınlanmadan önce incelenir.'}</p></aside></div></div>;}

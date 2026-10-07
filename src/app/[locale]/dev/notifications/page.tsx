@@ -1,0 +1,13 @@
+import Link from 'next/link';
+import {and,desc,eq,inArray} from 'drizzle-orm';
+import {db,schema} from '@/lib/db';
+import {resolveLocale} from '@/lib/i18n';
+import {requireDeveloper} from '@/lib/auth';
+import {StudioHeading,StudioEmpty} from '@/components/Studio';
+import {date} from '@/lib/format';
+export default async function Notifications({params}:PageProps<'/[locale]/dev/notifications'>){
+ const {locale}=await resolveLocale(params);const user=await requireDeveloper(locale),en=locale==='en',az=locale==='az';
+ const payouts=await db.select().from(schema.payouts).where(eq(schema.payouts.developerId,user.id)).orderBy(desc(schema.payouts.createdAt));
+ const rows=await db.select({version:schema.gameVersions,game:schema.games}).from(schema.gameVersions).innerJoin(schema.games,eq(schema.games.id,schema.gameVersions.gameId)).where(and(eq(schema.games.developerId,user.id),inArray(schema.gameVersions.status,['approved','rejected','superseded']))).orderBy(desc(schema.gameVersions.reviewedAt));
+ return <div className="space-y-6"><StudioHeading eyebrow="REVIEW INBOX" title={en?'Notifications':az?'Bildirişlər':'Bildirimler'} description={en?'Approval decisions and rejection reasons for your games.':az?'Oyunlarının təsdiq qərarları və rədd səbəbləri.':'Oyunlarının onay kararları ve ret gerekçeleri.'}/>{payouts.filter(p=>p.status!=='requested').map(p=><article className="card space-y-2 p-5" key={p.id}><h2 className="font-bold">{p.status==='paid'?(en?'Withdrawal paid':'Para çekimi ödendi'):(en?'Withdrawal rejected':'Para çekimi reddedildi')}</h2><p className="text-sm text-muted">{p.note||p.reference}</p></article>)}{rows.length?rows.map(({version:v,game:g})=><article key={v.id} className="card space-y-3 p-5"><div className="flex flex-wrap justify-between gap-3"><Link className="font-bold" href={`/${locale}/dev/games/${g.id}`}>{g.title} · v{v.number}</Link><span className={v.status==='rejected'?'text-danger':'text-mint'}>{v.status==='rejected'?(en?'Rejected':az?'Rədd edildi':'Reddedildi'):(en?'Approved':az?'Təsdiqləndi':'Onaylandı')}</span></div>{v.report.rejectionReason==='virustotal'&&<p className="text-sm font-semibold text-danger">VirusTotal</p>}<p className="whitespace-pre-line text-sm text-muted">{v.reviewNote||(en?'Your game version was approved.':az?'Oyun versiyan təsdiqləndi.':'Oyun sürümün onaylandı.')}</p><p className="text-xs text-faint">{v.reviewedAt?date(v.reviewedAt,locale):''}</p></article>):<StudioEmpty title={en?'No decisions yet':az?'Hələ qərar yoxdur':'Henüz karar yok'} text={en?'Review messages will appear here.':az?'Yoxlama mesajları burada görünəcək.':'İnceleme mesajları burada görünecek.'}/>}</div>;
+}

@@ -35,5 +35,7 @@ export const paths = {
   games: () => path.join(env.dataDir, "games"),
   sources: () => path.join(env.dataDir, "sources"),
   covers: () => path.join(env.dataDir, "covers"),
+  projects: () => path.join(env.dataDir,"projects"),
+  scans: () => path.join(env.dataDir,"scans"),
   uploads: () => path.join(env.dataDir, "uploads"),
 };

@@ -10,12 +10,14 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/login">)
 
 export default async function LoginPage({ params, searchParams }: PageProps<"/[locale]/login">) {
   const { locale, t } = await resolveLocale(params);
-  const next = (await searchParams).next;
+  const query = await searchParams;
+  const next = query.next;
   if (await getCurrentUser()) redirect(`/${locale}`);
   return (
     <AuthForm
       mode="login"
       locale={locale}
+      notice={query.reset === "1" ? t.auth.resetDone : undefined}
       next={typeof next === "string" ? next : undefined}
       labels={{
         title: t.auth.loginTitle,

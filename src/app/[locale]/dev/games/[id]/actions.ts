@@ -23,6 +23,8 @@ export async function updateGameAction(_prev: EditState, form: FormData): Promis
   const parsed = parseGameMeta(form, t);
   if ("error" in parsed) return { error: parsed.error };
   const { meta } = parsed;
+  if(!form.has("mobileResponsive"))meta.mobileResponsive=game.mobileResponsive;
+  if(!form.has("fullscreenSupported"))meta.fullscreenSupported=game.fullscreenSupported;
   const clash = await db
     .select({ id: schema.games.id })
     .from(schema.games)
@@ -30,6 +32,7 @@ export async function updateGameAction(_prev: EditState, form: FormData): Promis
   if (clash.length) return { error: t.dev.errors.slugTaken };
 
   const cover = await saveCover(form.get("cover"), id);
+  if(!cover&&!game.coverPath)return {error:locale==="en"?"A game cover is required.":locale==="az"?"Oyun üz qabığı tələb olunur.":"Oyun kapağı zorunludur."};
   if (cover === "invalid") return { error: t.dev.errors.cover_invalid };
   if (cover) await deleteCover(game.coverPath);
 
@@ -38,5 +41,10 @@ export async function updateGameAction(_prev: EditState, form: FormData): Promis
     .set({ ...meta, coverPath: cover ?? game.coverPath, updatedAt: new Date() })
     .where(eq(schema.games.id, id));
   revalidatePath(`/${locale}/dev/games/${id}`);
+  revalidatePath(`/${locale}/dev/games`);
+  revalidatePath(`/${locale}/dev`);
+  revalidatePath(`/${locale}/games`);
+  revalidatePath(`/${locale}/g/${game.slug}`);
+  if(meta.slug!==game.slug)revalidatePath(`/${locale}/g/${meta.slug}`);
   return { ok: true };
 }

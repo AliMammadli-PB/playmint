@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { eq } from "drizzle-orm";
+import { eq,ne,and } from "drizzle-orm";
 import { db, schema } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { getDict } from "@/lib/i18n";
@@ -25,11 +25,12 @@ export async function becomeDeveloperAction(_prev: BecomeDevState, form: FormDat
   const taken = await db.select().from(schema.developerProfiles).where(eq(schema.developerProfiles.handle, handle));
   if (taken.length && taken[0].userId !== user.id) return { error: t.handleTaken, ...keep };
 
-  await db
-    .insert(schema.developerProfiles)
-    .values({ userId: user.id, handle, displayName })
-    .onConflictDoUpdate({ target: schema.developerProfiles.userId, set: { handle, displayName } });
-  if (user.role === "player") await db.update(schema.users).set({ role: "developer" }).where(eq(schema.users.id, user.id));
+  const reserved=await db.select({id:schema.users.id}).from(schema.users).where(and(eq(schema.users.username,handle),ne(schema.users.id,user.id)));
+  if(reserved.length)return {error:t.handleTaken,...keep};
+  try{await db.transaction(async tx=>{
+    await tx.insert(schema.developerProfiles).values({userId:user.id,handle,displayName}).onConflictDoUpdate({target:schema.developerProfiles.userId,set:{handle,displayName}});
+    await tx.update(schema.users).set({username:handle,role:user.role==="player"?"developer":user.role}).where(eq(schema.users.id,user.id));
+  });}catch(err){const e=err as {code?:string;cause?:{code?:string}};if(e.code==="23505"||e.cause?.code==="23505")return {error:t.handleTaken,...keep};throw err;}
   await audit(user.id, "developer.join", handle);
   redirect(`/${locale}/dev`);
 }

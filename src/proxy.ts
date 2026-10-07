@@ -5,7 +5,11 @@ import { isLocale, localeCookie, pickLocale } from "@/lib/i18n/config";
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const first = pathname.split("/")[1];
-  if (isLocale(first)) return NextResponse.next();
+  if (isLocale(first)) {
+    const headers=new Headers(request.headers);
+    headers.set("x-playmint-locale",first);
+    return NextResponse.next({request:{headers}});
+  }
   const cookie = request.cookies.get(localeCookie)?.value;
   const locale = isLocale(cookie) ? cookie : pickLocale(request.headers.get("accept-language"));
   const url = request.nextUrl.clone();
@@ -15,5 +19,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next|play|media|favicon.ico|robots.txt|sitemap.xml|.*\\..*).*)"],
+  matcher: ["/((?!api|_next|play|game-runtime|media|favicon.ico|robots.txt|sitemap.xml|.*\\..*).*)"],
 };

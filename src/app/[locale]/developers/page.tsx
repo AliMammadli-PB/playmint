@@ -15,11 +15,12 @@ export default async function DevelopersPage({ params }: PageProps<"/[locale]/de
   const { locale, t } = await resolveLocale(params);
   const [user, s] = await Promise.all([getCurrentUser(), getSettings()]);
   const vars = {
-    share: Math.round(s.devShareBps / 100),
+    share: 50,
     hold: s.holdDays,
     min: money(s.minPayoutCents, s.currency, locale),
     mb: s.maxZipMb,
   };
+  const copy=locale==="en"?{title:"Make games. Find your players.",subtitle:"Publish your browser game. Manage your own subscriptions and earn from rewarded ads.",model:["Set a separate monthly subscription price and benefits for each game.","Players can play free games without an account. Subscriptions only cover the selected game.","Verified net ad revenue: 50% to the game's developer, 50% to Playmint.","Offer optional ads for extra HP, a revive or a bonus through the Playmint SDK.","Payments and ads need an active provider. Test transactions never count as earnings."],steps:[{t:"Upload",d:"Submit your HTML, CSS and JS game as a ZIP."},{t:"Review",d:"The admin reviews the files and scan report before publishing."},{t:"Set your price",d:"Choose your game's monthly subscription and benefits."},{t:"Earn",d:"Track verified advertising revenue in your panel."}]}:locale==="az"?{title:"Oyununu yarat. Oyunçularını tap.",subtitle:"Brauzer oyununu yayımla. Abunəliklərini idarə et, reklamlardan qazan.",model:["Hər oyun üçün aylıq qiyməti və üstünlükləri özün seç.","Pulsuz oyunlar giriş olmadan oynanır; abunəlik yalnız seçilən oyuna aiddir.","Təsdiqlənmiş xalis reklam gəliri: %50 geliştirici, %50 Playmint.","SDK vasitəsilə HP, revive və bonus üçün könüllü reklam təklif et.","Ödəniş və reklam təminatçısı qoşulmalıdır. Test əməliyyatları gəlir sayılmır."],steps:[{t:"Yüklə",d:"HTML, CSS, JS oyununu ZIP olaraq göndər."},{t:"Yoxlama",d:"Admin faylları və hesabatı yoxlayıb yayımlayır."},{t:"Qiymətini seç",d:"Oyununa aid aylıq abunəlik və üstünlükləri seç."},{t:"Qazan",d:"Reklam gəlirini panelindən izlə."}]}:{title:"Oyununu yarat. Oyuncularını bul.",subtitle:"Tarayıcı oyununu yayınla. Kendi aboneliklerini yönet, ödüllü reklamlardan kazan.",model:["Her oyun için aylık abonelik fiyatını ve avantajlarını kendin belirle.","Ücretsiz oyunlar giriş yapmadan oynanır. Abonelik yalnızca seçilen oyunda geçerlidir.","Doğrulanmış net reklam geliri: %50 oyunun geliştiricisi, %50 Playmint.","Playmint SDK ile ekstra HP, yeniden canlanma veya bonus için isteğe bağlı reklam sun.","Ödeme ve reklam sağlayıcısı bağlanmalıdır. Test işlemleri kazanca dahil edilmez."],steps:[{t:"Oyununu yükle",d:"HTML, CSS ve JS oyununu ZIP olarak gönder."},{t:"İnceleme",d:"Dosyalar ve tarama raporu admin tarafından incelenir."},{t:"Fiyatını belirle",d:"Oyununa özel aylık aboneliği ve avantajları seç."},{t:"Kazancını takip et",d:"Doğrulanmış reklam gelirini panelinde gör."}]};
   const isDev = user && (user.role === "developer" || user.role === "admin");
 
   return (
@@ -27,10 +28,10 @@ export default async function DevelopersPage({ params }: PageProps<"/[locale]/de
       <section className="container-pm grid gap-10 py-14 lg:grid-cols-[1.2fr_1fr] lg:items-start">
         <div>
           <p className="eyebrow">{t.devLanding.eyebrow}</p>
-          <h1 className="mt-4 font-display text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">{t.devLanding.title}</h1>
-          <p className="mt-5 max-w-xl text-lg text-muted">{t.devLanding.subtitle}</p>
-          <ol className="mt-10 grid gap-4 sm:grid-cols-2">
-            {t.devLanding.steps.map((step, i) => (
+          <h1 className="mt-4 font-display text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">{copy.title}</h1>
+          <p className="mt-5 max-w-xl text-lg text-muted">{copy.subtitle}</p>
+          <img src="/brand/studio.webp" alt="" className="developer-editorial-art" width="1000" height="640"/><ol className="mt-10 grid gap-4 sm:grid-cols-2">
+            {copy.steps.map((step, i) => (
               <li key={step.t} className="card p-5">
                 <div className="font-display text-sm font-bold text-mint">0{i + 1}</div>
                 <div className="mt-1 font-display text-lg font-bold">{step.t}</div>
@@ -76,7 +77,7 @@ export default async function DevelopersPage({ params }: PageProps<"/[locale]/de
         <div className="card p-7">
           <h2 className="h2">{t.devLanding.modelTitle}</h2>
           <ul className="mt-5 space-y-4">
-            {t.devLanding.model.map((m) => (
+            {copy.model.map((m) => (
               <li key={m} className="flex gap-3 text-sm leading-relaxed text-muted">
                 <span className="mt-0.5 text-mint">●</span>
                 <span>{fill(m, vars)}</span>

@@ -16,7 +16,7 @@ export function playToken(sessionId: string) {
   return `${sessionId}.${sign(sessionId)}`;
 }
 
-function verifyToken(token: string): string | null {
+export function verifyToken(token: string): string | null {
   const [id, sig] = token.split(".");
   if (!id || !sig) return null;
   const expected = Buffer.from(sign(id));

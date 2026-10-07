@@ -13,7 +13,6 @@ export function Footer({ locale, t }: { locale: Locale; t: Dict }) {
         </div>
         <div className="flex flex-wrap gap-x-6 gap-y-2">
           <Link href={`/${locale}/games`} className="hover:text-paper">{t.nav.games}</Link>
-          <Link href={`/${locale}/premium`} className="hover:text-paper">{t.nav.premium}</Link>
           <Link href={`/${locale}/developers`} className="hover:text-paper">{t.footer.forDevs}</Link>
           <Link href={`/${locale}/developers#model`} className="hover:text-paper">{t.footer.howEarn}</Link>
         </div>

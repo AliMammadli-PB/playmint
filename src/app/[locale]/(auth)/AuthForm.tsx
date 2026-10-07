@@ -1,64 +1,17 @@
 "use client";
-
 import Link from "next/link";
-import { useActionState } from "react";
-import { loginAction, registerAction, type AuthState } from "./actions";
-import { FormError, SubmitButton } from "@/components/ui";
-
-type Labels = {
-  title: string;
-  subtitle?: string;
-  email: string;
-  password: string;
-  name: string;
-  submit: string;
-  switchText: string;
-  switchLink: string;
-};
-
-export function AuthForm({ mode, locale, next, labels }: { mode: "login" | "register"; locale: string; next?: string; labels: Labels }) {
-  const [state, action] = useActionState<AuthState, FormData>(mode === "login" ? loginAction : registerAction, null);
-  const other = mode === "login" ? "register" : "login";
-  return (
-    <div className="container-pm flex justify-center py-16">
-      <div className="card w-full max-w-md p-7 sm:p-8">
-        <h1 className="h1 text-2xl sm:text-3xl">{labels.title}</h1>
-        {labels.subtitle && <p className="mt-2 text-sm text-muted">{labels.subtitle}</p>}
-        <form action={action} className="mt-7 space-y-4">
-          <input type="hidden" name="locale" value={locale} />
-          {next && <input type="hidden" name="next" value={next} />}
-          {mode === "register" && (
-            <div>
-              <label className="label" htmlFor="name">{labels.name}</label>
-              <input id="name" name="name" required maxLength={60} defaultValue={state?.name} className="input" autoComplete="name" />
-            </div>
-          )}
-          <div>
-            <label className="label" htmlFor="email">{labels.email}</label>
-            <input id="email" name="email" type="email" required defaultValue={state?.email} className="input" autoComplete="email" />
-          </div>
-          <div>
-            <label className="label" htmlFor="password">{labels.password}</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              minLength={mode === "register" ? 8 : undefined}
-              className="input"
-              autoComplete={mode === "login" ? "current-password" : "new-password"}
-            />
-          </div>
-          <FormError message={state?.error} />
-          <SubmitButton className="btn btn-primary w-full">{labels.submit}</SubmitButton>
-        </form>
-        <p className="mt-6 text-center text-sm text-muted">
-          {labels.switchText}{" "}
-          <Link href={`/${locale}/${other}${next ? `?next=${encodeURIComponent(next)}` : ""}`} className="font-semibold text-mint hover:underline">
-            {labels.switchLink}
-          </Link>
-        </p>
-      </div>
-    </div>
-  );
+import {useActionState,useState} from "react";
+import {loginAction,registerAction,sendRegisterCode,type AuthState} from "./actions";
+import {FormError,FormSuccess,SubmitButton} from "@/components/ui";
+import {StudioIcon} from "@/components/Studio";
+type Labels={title:string;subtitle?:string;email:string;password:string;name:string;submit:string;switchText:string;switchLink:string};
+export function AuthForm({mode,locale,next,labels,notice}:{mode:"login"|"register";locale:string;next?:string;labels:Labels;notice?:string}){
+ const [state,action]=useActionState<AuthState,FormData>(mode==="login"?loginAction:registerAction,null);
+ const [role,setRole]=useState("player");const [codeNote,setCodeNote]=useState<string|null>(null);const [sending,setSending]=useState(false);const en=locale==="en",az=locale==="az",register=mode==="register";
+ async function onSendCode(){const email=(document.getElementById("email") as HTMLInputElement|null)?.value??"";setSending(true);const result=await sendRegisterCode(locale,email);setCodeNote(result.message);setSending(false);}
+ const title=register?(en?"Your next chapter starts here.":az?"Yeni macəran burada başlayır.":"Yeni maceran burada başlıyor."):labels.title;
+ const c={player:en?"Player":az?"Oyunçu":"Oyuncu",developer:en?"Developer":az?"Geliştirici":"Geliştirici",username:en?"Username":az?"İstifadəçi adı":"Kullanıcı adı",confirm:en?"Confirm password":az?"Şifrəni təkrar et":"Şifreyi tekrar yaz"};
+ return <div className="auth-layout"><aside className="auth-story"><span className="studio-kicker">PLAYMINT COMMUNITY</span><h2>{en?"Play something new. Build something yours.":az?"Yeni oyunları kəşf et. Öz oyununu yarat.":"Yeni oyunlar keşfet. Kendi dünyanı yarat."}</h2><p>{en?"One community, two ways to join. Discover independent games or publish your own.":az?"Bir icma, iki yol. Müstəqil oyunları kəşf et və ya öz oyununu yayımla.":"Bir topluluk, iki farklı yol. Bağımsız oyunları keşfet veya kendi oyununu yayınla."}</p><img className="auth-editorial-art" src="/brand/studio.webp" alt="" width="800" height="500"/><span className="text-sm">{en?"Your account. Your choice.":az?"Sənin hesabın. Sənin seçimin.":"Senin hesabın. Senin seçimin."}</span></aside><section className="auth-fields"><Link href={`/${locale}`} className="text-sm text-muted">← Playmint</Link><h1 className="h1 mt-6">{title}</h1><p className="text-muted text-sm mt-3">{register?(en?"Choose how you want to join, then create your account.":az?"Hesab növünü seç və hesabını yarat.":"Hesap türünü seç, bilgilerini gir ve topluluğa katıl."):labels.subtitle}</p><form action={action} className="mt-6 space-y-4"><input type="hidden" name="locale" value={locale}/>{next&&<input type="hidden" name="next" value={next}/>}
+ {register&&<><fieldset><legend className="label">{en?"I am joining as":az?"Hesab növü":"Nasıl katılmak istiyorsun?"}</legend><div className="grid grid-cols-2 gap-3">{["player","developer"].map(r=><label key={r} className={`role-choice ${role===r?"selected":""}`}><input name="role" type="radio" value={r} checked={role===r} onChange={()=>setRole(r)} className="sr-only"/><StudioIcon name={r==="player"?"game":"code"}/><strong>{r==="player"?c.player:c.developer}</strong><span>{r==="player"?(en?"Discover & play":az?"Kəşf et və oyna":"Keşfet ve oyna"):(en?"Publish & earn":az?"Yayımla və qazan":"Yayınla ve kazan")}</span></label>)}</div></fieldset><div className="grid gap-4 sm:grid-cols-2"><div><label className="label" htmlFor="name">{labels.name}</label><input id="name" name="name" required maxLength={60} defaultValue={state?.name} className="input" autoComplete="name"/></div><div><label className="label" htmlFor="username">{c.username}</label><input id="username" name="username" required minLength={3} maxLength={24} pattern="[a-z0-9][a-z0-9_-]{1,22}[a-z0-9]" defaultValue={state?.username} className="input" autoComplete="username" placeholder="oyuncu_01"/></div></div></>}
+ <div className={register?"grid gap-4 sm:grid-cols-[minmax(0,1fr)_11rem] sm:items-end":""}><div><label className="label" htmlFor="email">{labels.email}</label><input id="email" name="email" type="email" required defaultValue={state?.email} className="input" autoComplete="email"/></div>{register&&<button type="button" className="btn btn-ghost w-full" onClick={onSendCode} disabled={sending}>{en?"Send code":az?"Kodu göndər":"Kodu gönder"}</button>}</div>{register&&<div><label className="label" htmlFor="otp">{en?"Email code":az?"E-poçt kodu":"E-posta kodu"}</label><input id="otp" name="otp" inputMode="numeric" autoComplete="one-time-code" required minLength={6} maxLength={6} pattern="[0-9]{6}" className="input tracking-[0.3em]" placeholder="000000"/></div>}{codeNote&&<p className="text-sm text-muted">{codeNote}</p>}<div className={register?"grid gap-4 sm:grid-cols-2":""}><div><label className="label" htmlFor="password">{labels.password}</label><input id="password" name="password" type="password" required minLength={register?8:undefined} maxLength={128} className="input" autoComplete={register?"new-password":"current-password"}/></div>{register&&<div><label className="label" htmlFor="passwordConfirm">{c.confirm}</label><input id="passwordConfirm" name="passwordConfirm" type="password" required minLength={8} maxLength={128} className="input" autoComplete="new-password"/></div>}</div>{!register&&<p className="text-sm"><Link className="font-semibold text-mint" href={`/${locale}/forgot`}>{en?"Forgot password":az?"Şifrəmi unutdum":"Şifremi unuttum"}</Link></p>}<FormSuccess message={notice}/><FormError message={state?.error}/><SubmitButton className="btn btn-primary w-full py-3">{labels.submit} →</SubmitButton></form><p className="mt-6 text-sm text-muted">{labels.switchText} <Link className="font-semibold text-mint" href={`/${locale}/${register?"login":"register"}${next?`?next=${encodeURIComponent(next)}`:""}`}>{labels.switchLink}</Link></p></section></div>;
 }

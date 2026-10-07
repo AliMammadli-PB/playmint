@@ -4,6 +4,7 @@ import path from "node:path";
 import type { Dict } from "@/lib/i18n";
 import type { I18nText } from "@/lib/db/schema";
 import { isCategory, isLicense, slugRe } from "@/lib/catalog";
+import {parseSupport} from "@/lib/game-capabilities";
 import { paths } from "@/lib/env";
 import { randomToken } from "@/lib/ids";
 
@@ -16,7 +17,13 @@ export type GameMeta = {
   tags: string[];
   license: string;
   orientation: string;
+  mobileResponsive: boolean|null;
+  fullscreenSupported: boolean|null;
   premiumOnly: boolean;
+  subscriptionPriceCents: number;
+  subscriptionCurrency: string;
+  subscriptionBenefits: string;
+  rewardedAds: boolean;
 };
 
 const str = (form: FormData, k: string, max: number) => String(form.get(k) ?? "").trim().slice(0, max);
@@ -49,7 +56,16 @@ export function parseGameMeta(form: FormData, t: Dict): { meta: GameMeta } | { e
   if (!isCategory(category)) return { error: e.categoryInvalid };
   if (!isLicense(license)) return { error: e.licenseInvalid };
   if (!tagline.tr) return { error: e.taglineRequired };
-  return { meta: { title, slug, category, tagline, description, tags, license, orientation, premiumOnly: form.get("premiumOnly") === "on" } };
+  const price = Number(form.get("subscriptionPrice") ?? 0);
+  const currency = str(form, "subscriptionCurrency", 3).toUpperCase() || "USD";
+  if (!Number.isFinite(price) || price < 0 || price > 10000 || currency !== "USD") return { error: "Geçerli bir fiyat ve para birimi seçin." };
+  const premiumOnly = form.get("premiumOnly") === "on";
+  if (premiumOnly && price <= 0) return { error: "Abonelik gerektiren oyun için bir fiyat belirleyin." };
+  let mobileResponsive:boolean|null,fullscreenSupported:boolean|null;
+  try{mobileResponsive=parseSupport(form.get("mobileResponsive"));fullscreenSupported=parseSupport(form.get("fullscreenSupported"));}catch{return {error:"Mobil ve tam ekran seçeneklerini kontrol et."};}
+  return { meta: { mobileResponsive,fullscreenSupported,title, slug, category, tagline, description, tags, license, orientation, premiumOnly,
+    subscriptionPriceCents: Math.round(price * 100), subscriptionCurrency: currency,
+    subscriptionBenefits: str(form, "subscriptionBenefits", 1000), rewardedAds: form.get("rewardedAds") === "on" } };
 }
 
 const MAX_COVER = 2 * 1024 * 1024;

@@ -30,6 +30,7 @@ export const categoryEmoji: Record<Category, string> = {
 };
 
 export const licenses = [
+  { id: "Developer", url: undefined },
   { id: "MIT", url: "https://opensource.org/license/mit" },
   { id: "Apache-2.0", url: "https://www.apache.org/licenses/LICENSE-2.0" },
   { id: "GPL-3.0", url: "https://www.gnu.org/licenses/gpl-3.0.html" },
@@ -44,7 +45,7 @@ export const isCategory = (v: unknown): v is Category => categories.includes(v a
 export const isLicense = (v: unknown) => licenses.some((l) => l.id === v);
 
 export const slugRe = /^[a-z0-9](?:[a-z0-9-]{1,38})[a-z0-9]$/;
-export const handleRe = /^[a-z0-9](?:[a-z0-9-]{1,28})[a-z0-9]$/;
+export const handleRe = /^[a-z0-9](?:[a-z0-9_-]{1,28})[a-z0-9]$/;
 
 export function slugify(input: string): string {
   const map: Record<string, string> = { ç: "c", ğ: "g", ı: "i", İ: "i", ö: "o", ş: "s", ü: "u", ə: "e", Ə: "e" };

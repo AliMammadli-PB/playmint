@@ -31,12 +31,13 @@ export const users = pgTable(
     email: text("email").notNull(),
     passwordHash: text("password_hash").notNull(),
     name: text("name").notNull(),
+    username: text("username"),
     role: roleEnum("role").notNull().default("player"),
     locale: text("locale").notNull().default("tr"),
     banned: boolean("banned").notNull().default(false),
     createdAt: createdAt(),
   },
-  (t) => [uniqueIndex("users_email_uq").on(t.email)],
+  (t) => [uniqueIndex("users_email_uq").on(t.email),uniqueIndex("users_username_uq").on(t.username)],
 );
 
 export const sessions = pgTable(
@@ -50,6 +51,20 @@ export const sessions = pgTable(
     createdAt: createdAt(),
   },
   (t) => [index("sessions_user_idx").on(t.userId)],
+);
+
+export const emailTokens = pgTable(
+  "email_tokens",
+  {
+    id: id(),
+    email: text("email").notNull(),
+    purpose: text("purpose").notNull(),
+    tokenHash: text("token_hash").notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    usedAt: timestamp("used_at", { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => [index("email_tokens_email_idx").on(t.email)],
 );
 
 export const developerProfiles = pgTable(
@@ -87,10 +102,17 @@ export const games = pgTable(
     category: text("category").notNull(),
     tags: text("tags").array().notNull().default([]),
     license: text("license").notNull(),
+    mobileResponsive: boolean("mobile_responsive"),
+    fullscreenSupported: boolean("fullscreen_supported"),
     orientation: text("orientation").notNull().default("landscape"), // landscape | portrait | any
     coverPath: text("cover_path"),
     premiumOnly: boolean("premium_only").notNull().default(false),
+    subscriptionPriceCents: integer("subscription_price_cents").notNull().default(0),
+    subscriptionCurrency: text("subscription_currency").notNull().default("USD"),
+    subscriptionBenefits: text("subscription_benefits").notNull().default(""),
+    rewardedAds: boolean("rewarded_ads").notNull().default(false),
     featured: boolean("featured").notNull().default(false),
+    isDemo: boolean("is_demo").notNull().default(false),
     status: gameStatusEnum("status").notNull().default("draft"),
     liveVersionId: text("live_version_id"),
     likeCount: integer("like_count").notNull().default(0),
@@ -108,11 +130,16 @@ export const games = pgTable(
 );
 
 export type ScanReport = {
+  virustotal?: import("../virustotal-result").VirusTotalReport;
+  rejectionReason?: "virustotal" | "manual";
+  sourceRemovedAt?: string;
+  archiveSha256?: string;
   fileCount: number;
   totalBytes: number;
   entry: string;
   externalHosts: string[];
   warnings: string[];
+  project?: { kind: "browser"|"frontend-source"|"node-source"; root: string; publicRoot: string|null; ignoredFiles:number; requiresBuild:boolean; scripts:string[]; sourceProject?:boolean };
 };
 
 export const gameVersions = pgTable(
@@ -127,6 +154,8 @@ export const gameVersions = pgTable(
     changelog: text("changelog").notNull().default(""),
     sourceZipPath: text("source_zip_path").notNull(),
     filesDir: text("files_dir").notNull(),
+    projectDir: text("project_dir"),
+    runtimeKind: text("runtime_kind").notNull().default("browser"),
     entry: text("entry").notNull().default("index.html"),
     files: jsonb("files").$type<{ path: string; size: number }[]>().notNull().default([]),
     report: jsonb("report").$type<ScanReport>().notNull(),
@@ -226,6 +255,9 @@ export const subscriptions = pgTable(
     userId: text("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
+    gameId: text("game_id").references(() => games.id, { onDelete: "cascade" }),
+    priceCents: integer("price_cents").notNull().default(0),
+    currency: text("currency").notNull().default("USD"),
     provider: text("provider").notNull(),
     providerRef: text("provider_ref").notNull().default(""),
     status: subStatusEnum("status").notNull().default("active"),
@@ -327,3 +359,46 @@ export type User = typeof users.$inferSelect;
 export type Game = typeof games.$inferSelect;
 export type GameVersion = typeof gameVersions.$inferSelect;
 export type DeveloperProfile = typeof developerProfiles.$inferSelect;
+
+/** Server verified rewarded-ad events. Browser messages never create money. */
+export const adEvents = pgTable("ad_events", {
+  id: id(),
+  gameId: text("game_id").notNull().references(() => games.id),
+  playSessionId: text("play_session_id").notNull().references(() => playSessions.id),
+  placement: text("placement").notNull(),
+  status: text("status").notNull().default("pending"),
+  providerEventId: text("provider_event_id").unique(),
+  netCents: integer("net_cents").notNull().default(0),
+  developerCents: integer("developer_cents").notNull().default(0),
+  platformCents: integer("platform_cents").notNull().default(0),
+  currency: text("currency").notNull(),
+  createdAt: createdAt(),
+  verifiedAt: timestamp("verified_at", { withTimezone: true }),
+});
+
+/** Provider tracking and developer-selected ad placement settings. No money comes from this table. */
+export const gameAdSettings = pgTable('game_ad_settings', {
+ gameId:text('game_id').primaryKey().references(()=>games.id,{onDelete:'cascade'}),
+ enabled:boolean('enabled').notNull().default(false),
+ startup:boolean('startup').notNull().default(true),
+ midgame:boolean('midgame').notNull().default(false),
+ rewarded:boolean('rewarded').notNull().default(false),
+ intervalSeconds:integer('interval_seconds').notNull().default(300),
+ channelId:text('channel_id').unique(),
+ updatedAt:timestamp('updated_at',{withTimezone:true}).notNull().defaultNow(),
+});
+export const adSettlements = pgTable('ad_settlements', {
+ id:id(),period:text('period').notNull(),bankReference:text('bank_reference').notNull().unique(),
+ netTryCents:integer('net_try_cents').notNull(),reportCurrency:text('report_currency').notNull(),
+ reportCsv:text('report_csv').notNull(),status:text('status').notNull().default('draft'),
+ bankReceivedAt:timestamp('bank_received_at',{withTimezone:true}).notNull(),
+ createdBy:text('created_by').notNull(),confirmedBy:text('confirmed_by'),
+ confirmedAt:timestamp('confirmed_at',{withTimezone:true}),createdAt:createdAt(),
+});
+export const adAllocations = pgTable('ad_allocations', {
+ settlementId:text('settlement_id').notNull().references(()=>adSettlements.id,{onDelete:'cascade'}),
+ gameId:text('game_id').notNull().references(()=>games.id),
+ developerId:text('developer_id').notNull().references(()=>users.id),
+ reportedMinor:integer('reported_minor').notNull(),developerCents:integer('developer_cents').notNull(),
+ platformCents:integer('platform_cents').notNull(),
+},t=>[primaryKey({columns:[t.settlementId,t.gameId]})]);
