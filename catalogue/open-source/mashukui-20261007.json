@@ -1,0 +1,522 @@
+[
+  {
+    "key": "snake",
+    "slug": "opensource-snake",
+    "title": "Snake",
+    "category": "arcade",
+    "entry": "snake/index.html",
+    "tagline": {
+      "en": "Eat, grow and avoid your tail.",
+      "tr": "Yemleri topla, büyü ve kuyruğuna çarpma.",
+      "az": "Yemləri topla, böyü və quyruğuna toxunma."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/snake",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "breakout",
+    "slug": "opensource-breakout",
+    "title": "Breakout",
+    "category": "arcade",
+    "entry": "breakout/index.html",
+    "tagline": {
+      "en": "Bounce the ball and break every brick.",
+      "tr": "Topu sektir ve tüm tuğlaları kır.",
+      "az": "Topu qaytar və bütün kərpicləri qır."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/breakout",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": true
+  },
+  {
+    "key": "block-drop",
+    "slug": "opensource-block-drop",
+    "title": "Block Drop",
+    "category": "puzzle",
+    "entry": "block-drop/index.html",
+    "tagline": {
+      "en": "Fit falling blocks into complete lines.",
+      "tr": "Düşen bloklarla tam sıralar oluştur.",
+      "az": "Düşən bloklarla tam sıralar yarat."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/block-drop",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "2048",
+    "slug": "opensource-2048",
+    "title": "2048",
+    "category": "puzzle",
+    "entry": "2048/index.html",
+    "tagline": {
+      "en": "Slide matching numbers to reach 2048.",
+      "tr": "Aynı sayıları birleştir ve 2048’e ulaş.",
+      "az": "Eyni rəqəmləri birləşdir və 2048-ə çat."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/2048",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": true
+  },
+  {
+    "key": "minesweeper",
+    "slug": "opensource-minesweeper",
+    "title": "Minesweeper",
+    "category": "puzzle",
+    "entry": "minesweeper/index.html",
+    "tagline": {
+      "en": "Use the clues to find every hidden mine.",
+      "tr": "İpuçlarıyla gizli mayınları bul.",
+      "az": "İpucları ilə gizli minaları tap."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/minesweeper",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "memory-match",
+    "slug": "opensource-memory-match",
+    "title": "Memory Match",
+    "category": "puzzle",
+    "entry": "memory-match/index.html",
+    "tagline": {
+      "en": "Remember the cards and find matching pairs.",
+      "tr": "Kartları hatırla ve eşleşen çiftleri bul.",
+      "az": "Kartları yadda saxla və eyni cütləri tap."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/memory-match",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "sudoku",
+    "slug": "opensource-sudoku",
+    "title": "Sudoku",
+    "category": "puzzle",
+    "entry": "sudoku/index.html",
+    "tagline": {
+      "en": "Fill the grid without repeating a number.",
+      "tr": "Sayıları tekrarlamadan tabloyu tamamla.",
+      "az": "Rəqəmləri təkrarlamadan cədvəli tamamla."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/sudoku",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "water-sort",
+    "slug": "opensource-water-sort",
+    "title": "Water Sort",
+    "category": "puzzle",
+    "entry": "water-sort/index.html",
+    "tagline": {
+      "en": "Sort the liquids until each tube has one colour.",
+      "tr": "Her tüpte tek renk kalana kadar sıvıları ayır.",
+      "az": "Hər qabda bir rəng qalana qədər mayeləri ayır."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/water-sort",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": true
+  },
+  {
+    "key": "gem-match",
+    "slug": "opensource-gem-match",
+    "title": "Gem Match",
+    "category": "puzzle",
+    "entry": "gem-match/index.html",
+    "tagline": {
+      "en": "Match three gems and trigger chain reactions.",
+      "tr": "Üç taşı eşleştir ve zincirleme patlamalar yap.",
+      "az": "Üç daşı birləşdir və zəncirvari reaksiyalar yarat."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/gem-match",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "sokoban",
+    "slug": "opensource-sokoban",
+    "title": "Sokoban",
+    "category": "puzzle",
+    "entry": "sokoban/index.html",
+    "tagline": {
+      "en": "Push every crate onto its target.",
+      "tr": "Her sandığı hedefine it.",
+      "az": "Hər qutunu hədəfinə itələ."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/sokoban",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "reversi",
+    "slug": "opensource-reversi",
+    "title": "Reversi",
+    "category": "strategy",
+    "entry": "reversi/index.html",
+    "tagline": {
+      "en": "Outflank the computer and flip its discs.",
+      "tr": "Bilgisayarı kuşat ve taşlarını kendi rengine çevir.",
+      "az": "Rəqibi mühasirəyə al və daşlarını öz rənginə çevir."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/reversi",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "battleship",
+    "slug": "opensource-battleship",
+    "title": "Battleship",
+    "category": "strategy",
+    "entry": "battleship/index.html",
+    "tagline": {
+      "en": "Place your fleet and locate the enemy ships.",
+      "tr": "Filonu yerleştir ve rakibin gemilerini bul.",
+      "az": "Donanmanı yerləşdir və rəqibin gəmilərini tap."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/battleship",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "connect-four",
+    "slug": "opensource-connect-four",
+    "title": "Connect Four",
+    "category": "strategy",
+    "entry": "connect-four/index.html",
+    "tagline": {
+      "en": "Connect four discs before your opponent.",
+      "tr": "Rakibinden önce dört taşı sırala.",
+      "az": "Rəqibindən əvvəl dörd daşı sırala."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/connect-four",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "tic-tac-toe",
+    "slug": "opensource-tic-tac-toe",
+    "title": "Tic Tac Toe",
+    "category": "strategy",
+    "entry": "tic-tac-toe/index.html",
+    "tagline": {
+      "en": "Three in a row against the computer or a friend.",
+      "tr": "Bilgisayara veya arkadaşına karşı üç taşı sırala.",
+      "az": "Kompüterə və ya dostuna qarşı üç daşı sırala."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/tic-tac-toe",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "ant-flap",
+    "slug": "opensource-ant-flap",
+    "title": "Ant Flap",
+    "category": "casual",
+    "entry": "ant-flap/index.html",
+    "tagline": {
+      "en": "Tap to guide the flying ant through the gaps.",
+      "tr": "Dokunarak uçan karıncayı boşluklardan geçir.",
+      "az": "Toxunaraq uçan qarışqanı boşluqlardan keçir."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/ant-flap",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "ant-jump",
+    "slug": "opensource-ant-jump",
+    "title": "Ant Jump",
+    "category": "platformer",
+    "entry": "ant-jump/index.html",
+    "tagline": {
+      "en": "Jump from platform to platform and climb higher.",
+      "tr": "Platformdan platforma zıpla ve daha yükseğe çık.",
+      "az": "Platformadan platformaya tullan və yuxarı qalx."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/ant-jump",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": true
+  },
+  {
+    "key": "dino-run",
+    "slug": "opensource-dino-run",
+    "title": "Dino Run",
+    "category": "platformer",
+    "entry": "dino-run/index.html",
+    "tagline": {
+      "en": "Jump over cacti and duck under the birds.",
+      "tr": "Kaktüsleri aş ve kuşların altından geç.",
+      "az": "Kaktusları aş və quşların altından keç."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/dino-run",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "cross-road",
+    "slug": "opensource-cross-road",
+    "title": "Cross Road",
+    "category": "arcade",
+    "entry": "cross-road/index.html",
+    "tagline": {
+      "en": "Dodge traffic and cross the river safely.",
+      "tr": "Trafikten kaç ve nehri güvenle geç.",
+      "az": "Maşınlardan yayın və çayı təhlükəsiz keç."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/cross-road",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "star-defender",
+    "slug": "opensource-star-defender",
+    "title": "Star Defender",
+    "category": "shooter",
+    "entry": "star-defender/index.html",
+    "tagline": {
+      "en": "Dodge enemy waves and defend your starship.",
+      "tr": "Düşman dalgalarından kaç ve uzay gemini koru.",
+      "az": "Düşmən dalğalarından yayın və kosmik gəmini qoru."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/star-defender",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": true
+  },
+  {
+    "key": "fruit-slice",
+    "slug": "opensource-fruit-slice",
+    "title": "Fruit Slice",
+    "category": "action",
+    "entry": "fruit-slice/index.html",
+    "tagline": {
+      "en": "Slice the fruit, build combos and avoid bombs.",
+      "tr": "Meyveleri kes, kombo yap ve bombalardan kaç.",
+      "az": "Meyvələri kəs, kombo yarat və bombalardan yayın."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/fruit-slice",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "helix-drop",
+    "slug": "opensource-helix-drop",
+    "title": "Helix Drop",
+    "category": "action",
+    "entry": "helix-drop/index.html",
+    "tagline": {
+      "en": "Rotate the tower and drop through the gaps.",
+      "tr": "Kuleyi döndür ve boşluklardan düş.",
+      "az": "Qülləni döndər və boşluqlardan düş."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/helix-drop",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "paddle-duel",
+    "slug": "opensource-paddle-duel",
+    "title": "Paddle Duel",
+    "category": "sports",
+    "entry": "paddle-duel/index.html",
+    "tagline": {
+      "en": "Beat the computer in a paddle duel.",
+      "tr": "Raket düellosunda bilgisayarı yen.",
+      "az": "Raket duelində kompüteri məğlub et."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/paddle-duel",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "air-hockey",
+    "slug": "opensource-air-hockey",
+    "title": "Air Hockey",
+    "category": "sports",
+    "entry": "air-hockey/index.html",
+    "tagline": {
+      "en": "Aim the puck and score seven goals to win.",
+      "tr": "Diski yönlendir, yedi gol at ve kazan.",
+      "az": "Diski yönləndir, yeddi qol vur və qazan."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/air-hockey",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": true
+  },
+  {
+    "key": "stack-tower",
+    "slug": "opensource-stack-tower",
+    "title": "Stack Tower",
+    "category": "casual",
+    "entry": "stack-tower/index.html",
+    "tagline": {
+      "en": "Time each drop to build a taller tower.",
+      "tr": "Blokları zamanında bırak ve kuleni yükselt.",
+      "az": "Blokları vaxtında burax və qülləni yüksəlt."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/stack-tower",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "whack-a-mole",
+    "slug": "opensource-whack-a-mole",
+    "title": "Whack-a-Mole",
+    "category": "arcade",
+    "entry": "whack-a-mole/index.html",
+    "tagline": {
+      "en": "Catch the moles and avoid the bombs.",
+      "tr": "Köstebekleri yakala ve bombalardan kaç.",
+      "az": "Köstəbəkləri tut və bombalardan yayın."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/whack-a-mole",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  },
+  {
+    "key": "bubble-shooter",
+    "slug": "opensource-bubble-shooter",
+    "title": "Bubble Shooter",
+    "category": "arcade",
+    "entry": "bubble-shooter/index.html",
+    "tagline": {
+      "en": "Aim and match three bubbles to clear the board.",
+      "tr": "Üç balonu eşleştirerek alanı temizle.",
+      "az": "Üç balonu birləşdirərək sahəni təmizlə."
+    },
+    "source": "https://github.com/mashukui/web-games/tree/38094525ad727f40e3bbc7cfc91eb6dcbe042f11/bubble-shooter",
+    "author": "mashukui",
+    "license": "MIT",
+    "upstreamRevision": "38094525ad727f40e3bbc7cfc91eb6dcbe042f11",
+    "mobileResponsive": true,
+    "fullscreenSupported": true,
+    "orientation": "any",
+    "featured": false
+  }
+]

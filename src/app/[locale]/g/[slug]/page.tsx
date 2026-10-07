@@ -185,6 +185,7 @@ export default async function GamePage({ params, searchParams }: PageProps<"/[lo
                 {t.game.license}: {game.license}
               </a>
             </div>
+            {version?.report.openSource && /^https:\/\/github\.com\/mashukui\/web-games\/tree\/[a-f0-9]{40}\/[a-z0-9-]+$/.test(version.report.openSource.source) && <div className="mt-4 border-t border-line pt-4 text-sm"><p className="text-muted">{locale==="en"?"Original developer":locale==="az"?"Orijinal müəllif":"Orijinal geliştirici"}: <strong className="text-paper">{version.report.openSource.author}</strong></p><a href={version.report.openSource.source} target="_blank" rel="noopener noreferrer" className="btn btn-ghost mt-3 w-full">{t.game.sourceCode} <span aria-hidden="true">↗</span></a><a href={`/play/${version.id}/LICENSE`} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center text-mint">{locale==="en"?"License and copyright notice":locale==="az"?"Lisenziya və müəllif hüquqları":"Lisans ve telif bildirimi"}</a></div>}
             {version && !version.report.sourceRemovedAt && ((game.license!=="Developer"&&!version.report.project?.sourceProject) || canManage) && (
               <a href={`/api/source/${version.id}`} className="btn btn-ghost mt-4 w-full">
                 ⬇ {t.game.sourceCode}

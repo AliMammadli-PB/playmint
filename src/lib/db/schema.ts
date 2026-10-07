@@ -132,6 +132,8 @@ export const games = pgTable(
 );
 
 export type ScanReport = {
+  openSource?: {author:string;repository:string;source:string;revision:string;license:string;adaptations:string[]};
+  sharedScanVersionId?: string;
   virustotal?: import("../virustotal-result").VirusTotalReport;
   rejectionReason?: "virustotal" | "manual";
   sourceRemovedAt?: string;
