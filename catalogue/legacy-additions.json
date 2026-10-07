@@ -1,0 +1,57 @@
+[
+  {
+    "title": "Bloxorz",
+    "slug": "bloxorz",
+    "category": "puzzle",
+    "repo": "AmmarSAA/Flash-Games-Directory",
+    "revision": "c840ab5be6cf5a9ce4dcc6f072470b02111eca79",
+    "file": "bloxorz.swf",
+    "sourceSha": "abaebd73282f89eae0944da60baf7fc79b7787cb",
+    "sha256": "6f7963e058f06343d6736ec9eb0ff8320e83b7518c9fded18bee5a27ad27e3fb",
+    "bytes": 2250714
+  },
+  {
+    "title": "Bloons Tower Defense 2",
+    "slug": "bloons-tower-defense-2",
+    "category": "strategy",
+    "repo": "AmmarSAA/Flash-Games-Directory",
+    "revision": "c840ab5be6cf5a9ce4dcc6f072470b02111eca79",
+    "file": "bloons-tower-defence-2.swf",
+    "sourceSha": "e3c3d45d7f4513fc47144b953abd9754cc0ef0a2",
+    "sha256": "e41a083ca8b87438f9489777978cfa3be62a7bc6bebd82ad97c8be12e3ee2f47",
+    "bytes": 787394
+  },
+  {
+    "title": "Papa’s Pizzeria",
+    "slug": "papas-pizzeria",
+    "category": "casual",
+    "repo": "AmmarSAA/Flash-Games-Directory",
+    "revision": "c840ab5be6cf5a9ce4dcc6f072470b02111eca79",
+    "file": "papas-pizzeria.swf",
+    "sourceSha": "ae7ca684c642ffda88b10da65e252af5cc1ca063",
+    "sha256": "a8ad267490e9f03bfea4934191dbc8b3f419d77af726e1631480cb9256095c5b",
+    "bytes": 2562841
+  },
+  {
+    "title": "Red Remover",
+    "slug": "red-remover",
+    "category": "puzzle",
+    "repo": "Skywater88/Retro-Flash-Games",
+    "revision": "f5d61c758389799ec6aa983a8b03a7a83b6a4b96",
+    "file": "Red_Remover.swf",
+    "sourceSha": "541b468290574d50654e4f5f72b4e3cb28b9de21",
+    "sha256": "d376b7ab8d90aeb7fefabe277c20684365fff3622321d78191b7474e6f9aaa7c",
+    "bytes": 1117072
+  },
+  {
+    "title": "Open Doors 2",
+    "slug": "open-doors-2",
+    "category": "puzzle",
+    "repo": "Skywater88/Retro-Flash-Games",
+    "revision": "f5d61c758389799ec6aa983a8b03a7a83b6a4b96",
+    "file": "Open_Doors_2.swf",
+    "sourceSha": "8eb4c4f8dd340d640cf5eecaa55ecf311526a1d4",
+    "sha256": "2afe4c828222356460c8b0dd7014fd37807d551ba5a945ef720fb3ca9c4db099",
+    "bytes": 4903736
+  }
+]

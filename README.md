@@ -138,3 +138,9 @@ Typography is self-hosted Montserrat with a semibold body and bold headings/word
 `pnpm test:community` uses temporary users and exercises social API/concurrency, ordinary-player profiles, unsubscribe/count refresh, monetary separation, responsive pages, Chromium/Firefox touch language selection, Montserrat and main-document Standards Mode. It cleans its test users afterward.
 
 Google's AdSense script remains in the head as requested. The site's document uses Standards Mode; browser privacy diagnostics or Google-owned iframe/CSP/ORB messages may still vary by browser, privacy mode and ad response. We do not silence console methods or disable tracking protection to hide diagnostics.
+
+## Editorial catalogue profiles
+
+`scripts/populate-curators.ts` assigns an operator-selected catalogue to distinct editorial profiles, records the previous owner, and creates free reciprocal follows. Profiles use reserved `.invalid` emails and disabled password hashes; they cannot sign in as fictional people. Their public biographies identify them as Playmint curator profiles. Original author credits and licences remain attached to games.
+
+Public starter play/like counts live in `settings` under `catalogueSeed:<game-id>`. Public game cards, detail counts and like responses add these values to actual counters. Studio analytics, actual likes/play sessions, ad receipts, payment records and balances retain real data. Game details disclose the starter counts. `scripts/import-curated-swf.ts` accepts pinned archive manifests, checks source hashes, reviews Ruffle compatibility, verifies the real VirusTotal bundle hash, and adds one new curator per published import. It does not transfer unrelated user uploads. URL-locked trial imports are unlisted.

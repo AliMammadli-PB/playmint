@@ -3,7 +3,10 @@ import { and, desc, eq, ilike, or, sql, type SQL } from "drizzle-orm";
 import { db, schema } from "@/lib/db";
 import { gameFilesBase } from "@/lib/env";
 
+import {starterCounter} from "./catalogue-seed";
 const g = schema.games;
+const starterPlays=starterCounter(g.id,"plays"),starterLikes=starterCounter(g.id,"likes");
+const displayedPlays=sql<number>`${g.playCount} + ${starterPlays}`,displayedLikes=sql<number>`${g.likeCount} + ${starterLikes}`;
 const d = schema.developerProfiles;
 /** Every public catalogue surface uses the same reviewed, non-demo live-version policy. */
 export const publicGameCondition = and(eq(g.status,"published"),eq(g.isDemo,false),sql`exists (select 1 from game_versions v where v.id = ${g.liveVersionId} and v.game_id = ${g.id} and v.status = 'approved' and v.reviewed_at is not null and v.reviewed_by is not null)`)!;
@@ -19,8 +22,8 @@ export const cardFields = {
   premiumOnly: g.premiumOnly,
   subscriptionPriceCents:g.subscriptionPriceCents,
   subscriptionCurrency:g.subscriptionCurrency,
-  likeCount: g.likeCount,
-  playCount: g.playCount,
+  likeCount: displayedLikes,
+  playCount: displayedPlays,
   developerName: d.displayName,
   developerHandle: d.handle,
 };
@@ -70,8 +73,8 @@ export async function listGames(opts: ListOptions = {}): Promise<GameCardData[]>
       : opts.sort === "trending"
         ? [desc(sql`coalesce((select sum(s.plays) from daily_game_stats s where s.game_id = ${g.id} and s.day >= current_date - 6),0)`),desc(g.publishedAt)]
       : opts.sort === "liked"
-        ? [desc(g.likeCount), desc(g.playCount)]
-        : [desc(sql`${g.playCount} + ${g.likeCount} * 5`), desc(g.publishedAt)];
+        ? [desc(displayedLikes), desc(displayedPlays)]
+        : [desc(sql`${displayedPlays} + ${displayedLikes} * 5`), desc(g.publishedAt)];
   return db
     .select(cardFields)
     .from(g)

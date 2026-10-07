@@ -72,7 +72,13 @@
     ".next-curated-swf-20261007/types/**/*.ts",
     ".next-curated-swf-20261007/dev/types/**/*.ts",
     ".next-curated-live-20261007/types/**/*.ts",
-    ".next-curated-live-20261007/dev/types/**/*.ts"
+    ".next-curated-live-20261007/dev/types/**/*.ts",
+    ".next-curator-roster-20261007/types/**/*.ts",
+    ".next-curator-roster-20261007/dev/types/**/*.ts",
+    ".next-curators-release-20261007/types/**/*.ts",
+    ".next-curators-release-20261007/dev/types/**/*.ts",
+    ".next-curators-final-20261007/types/**/*.ts",
+    ".next-curators-final-20261007/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

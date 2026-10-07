@@ -1,3 +1,4 @@
+import {getStarterCounters} from "@/lib/catalogue-seed";
 import {profileById} from "@/lib/community";
 import {FollowButton} from "@/components/FollowButton";
 import {CategoryIcon} from "@/components/CategoryIcon";
@@ -38,6 +39,8 @@ export default async function GamePage({ params, searchParams }: PageProps<"/[lo
   const row = await getGameBySlug(slug);
   if (!row) notFound();
   const { game, dev } = row;
+  const starter=await getStarterCounters(game.id);
+  const displayPlays=game.playCount+starter.plays,displayLikes=game.likeCount+starter.likes;
   const user = await getCurrentUser();
   const canManage = !!user && (user.role === "admin" || user.id === game.developerId);
 
@@ -122,7 +125,7 @@ export default async function GamePage({ params, searchParams }: PageProps<"/[lo
               <LikeButton
                 gameId={game.id}
                 initialLiked={likedRow.length > 0}
-                initialCount={game.likeCount}
+                initialCount={displayLikes}
                 loggedIn={!!user}
                 locale={locale}
                 slug={game.slug}
@@ -163,8 +166,9 @@ export default async function GamePage({ params, searchParams }: PageProps<"/[lo
           </section>}
 
           <div className="card divide-y divide-line">
-            <Stat label={t.common.plays} value={num(game.playCount, locale)} />
-            <Stat label={t.common.likes} value={num(game.likeCount, locale)} />
+            {(starter.plays>0||starter.likes>0)&&<p className="col-span-full text-xs text-muted">{locale==="en"?"Includes editorial starter counts.":locale==="az"?"Başlanğıc göstəriciləri daxildir.":"Başlangıç sayaçlarını içerir."}</p>}
+            <Stat label={t.common.plays} value={num(displayPlays, locale)} />
+            <Stat label={t.common.likes} value={num(displayLikes, locale)} />
             <Stat label={t.game.playtime} value={`${hours(game.playSeconds, locale)} ${t.common.hours}`} />
             {isCategory(game.category) && (
               <Stat

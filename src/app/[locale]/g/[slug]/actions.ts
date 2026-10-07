@@ -1,5 +1,6 @@
 "use server";
 
+import {getStarterCounters} from "@/lib/catalogue-seed";
 import { eq } from "drizzle-orm";
 import { db, schema } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
@@ -14,5 +15,5 @@ export async function toggleLikeAction(gameId: string): Promise<{ liked: boolean
   if (!game) return { error: "not_found" };
   const liked = await toggleLike(user.id, gameId);
   const count = (await db.select({ c: schema.games.likeCount }).from(schema.games).where(eq(schema.games.id, gameId)))[0].c;
-  return { liked, count };
+  return { liked, count:count+(await getStarterCounters(gameId)).likes };
 }
