@@ -196,9 +196,9 @@ Charcoal and pale green-gray neutrals share mint action roles; the frontmatter r
 
 ## Layout
 
-Public and Studio shells share a centered maximum width of (1480px). Public desktop navigation occupies a (172px) column; Studio uses (225px), reducing to (195px) at its intermediate breakpoint. Main gaps use the frontmatter spacing scale. Generic content containers cap at (80rem); Studio content caps at (1180px).
+The public portal caps at (1600px), with a (188px) category rail and (24px) gaps. Studio caps at (1480px) and uses (225px), reducing to (195px) at its intermediate breakpoint. Main gaps use the frontmatter spacing scale. Generic content containers cap at (80rem); Studio content caps at (1180px).
 
-At a maximum width of (1199px), catalogue covers become two columns and upload content becomes one column. At (900px), public side navigation becomes a horizontal scrolling row. At (800px), Studio navigation becomes a horizontal row and authentication becomes one column. At (580px), catalogue covers become one column, shell edges use the mobile-edge token, and Studio illustration shortcuts become compact rows. Existing Tailwind utility breakpoints complement these shell transitions.
+At a maximum width of (1199px), catalogue covers become three columns and upload content becomes one column. At (900px), public side navigation becomes a horizontal scrolling row. At (800px), Studio navigation becomes a horizontal row and authentication becomes one column. At (580px), catalogue covers become two columns, shell edges use the mobile-edge token, and Studio illustration shortcuts become compact rows. Existing Tailwind utility breakpoints complement these shell transitions.
 
 Tables retain readable spacing and tabular numerals. Buttons meet a minimum height of (44px); fields meet (46px). Frontmatter component heights describe these minimums; CSS remains authoritative for content-driven expansion. Long labels and three supported interface languages must fit the responsive shells.
 
@@ -213,7 +213,7 @@ Solid tonal surfaces and borders carry most depth. Cards are flat at rest. The l
 
 ## Shapes
 
-Controls use the control radius; panels and game cards use the panel radius. Badges use the smaller badge radius. Game cover frames stay square and clip inside the panel silhouette. Language flags keep their rectangular proportions (24px by 16px); timeline step markers are circular (24px).
+Controls use the control radius; panels and game cards use the panel radius. Badges use the smaller badge radius. Catalogue card covers stay square. The homepage spotlight uses a wide cover with a bottom gradient to keep its title and play action legible. Language flags keep their rectangular proportions (24px by 16px); timeline step markers are circular (24px).
 
 ## Components
 
@@ -264,3 +264,9 @@ A dashed strong-line boundary on the second surface surrounds an inline upload i
 - **Don't** replace authentic game covers with invented game artwork.
 - **Don't** hide action labels or focus indicators in forms.
 - **Don't** replace the established brand mark with a text-only approximation.
+
+## Public portal update — 2026-10-07
+
+The public homepage follows the cover-led discovery patterns reviewed on gd.games and CrazyGames. A small page heading precedes a real approved-game spotlight. A colorful six-category discovery grid sits alongside it on desktop and below it on phones. Trending, recently added, and most-liked links open real catalogue filters. All twelve category tiles show actual published-game counts, including zero.
+
+The spotlight is selected from approved featured games, falling back to trending games. Game IDs are deduplicated across the spotlight and following shelves. Empty shelves stay hidden; no demo or invented games fill the catalogue. Desktop game grids use four columns, then three and two at narrower widths. Metadata is compact so covers carry the hierarchy. The public header exposes an actual search input on phones; SVG language flags and Montserrat remain unchanged.

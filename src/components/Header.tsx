@@ -12,7 +12,7 @@ export async function Header({ locale, t }: { locale: Locale; t: Dict }) {
   const L = (p: string) => `/${locale}${p}`;
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-ink/80 backdrop-blur-xl">
-      <div className="container-pm flex h-16 items-center gap-4">
+      <div className="portal-header-row container-pm flex h-16 items-center gap-4">
         <Link href={L("")} className="shrink-0" aria-label="Playmint">
           <Logo />
         </Link>
@@ -24,7 +24,7 @@ export async function Header({ locale, t }: { locale: Locale; t: Dict }) {
             {isDev?(locale==="en"?"Studio":locale === "az" ? "Studiya" : "Stüdyo"):t.nav.developers}
           </Link>
         </nav>
-        <form action={L("/games")} className="ml-auto hidden max-w-xl flex-1 sm:block">
+        <form action={L("/games")} className="portal-search ml-auto max-w-xl flex-1">
           <input name="q" type="search" placeholder={t.nav.search} className="input rounded-full py-2" aria-label={t.nav.search} />
         </form>
 
@@ -68,11 +68,7 @@ export async function Header({ locale, t }: { locale: Locale; t: Dict }) {
           )}
         </div>
       </div>
-      <nav className="container-pm flex gap-1 overflow-x-auto pb-2 text-sm font-medium text-muted no-scrollbar md:hidden">
-        <Link href={L(isDev?"/dev/games":"/games")} className="shrink-0 rounded-full bg-surface-2 px-3 py-1.5">{isDev?(locale==="en"?"My games":locale === "az" ? "Oyunlarım" : "Oyunlarım"):t.nav.games}</Link>
-        <Link href={L("/developers")} className="shrink-0 rounded-full bg-surface-2 px-3 py-1.5">{t.nav.developers}</Link>
-        <Link href={L("/games")} aria-label={t.nav.search} className="ml-auto grid h-11 w-11 shrink-0 place-items-center rounded-xl text-muted hover:bg-surface-2"><svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></Link>
-      </nav>
+
     </header>
   );
 }

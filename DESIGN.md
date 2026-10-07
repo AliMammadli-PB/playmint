@@ -264,3 +264,6 @@ A dashed strong-line boundary on the second surface surrounds an inline upload i
 - **Don't** replace authentic game covers with invented game artwork.
 - **Don't** hide action labels or focus indicators in forms.
 - **Don't** replace the established brand mark with a text-only approximation.
+
+### Portal refinement — 2026-10-07
+Public discovery now uses a cover-led spotlight, colorful category shortcuts, a persistent desktop category rail, and compact square catalogue cards. References: gd.games and CrazyGames. Only reviewed live games populate shelves, and each appears once on the homepage. Mobile header search is directly available. Studio/admin retain their light working environment.

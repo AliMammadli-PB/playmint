@@ -1,8 +1,6 @@
-import {CategoryIcon} from "./CategoryIcon";
 import Link from "next/link";
 import type { GameCardData } from "@/lib/games";
 import { coverUrl } from "@/lib/games";
-import { pickText } from "@/lib/i18n/text";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dict } from "@/lib/i18n";
 import { num, money } from "@/lib/format";
@@ -29,17 +27,10 @@ export function GameCard({ game, locale, t }: { game: GameCardData; locale: Loca
           <span className="badge absolute left-2.5 top-2.5 bg-amber text-ink shadow">{t.common.premium}</span>
         )}
       </div>
-      <div className="space-y-1 p-3.5">
+      <div className="game-card-caption space-y-1">
         <h3 className="truncate font-display text-[15px] font-bold">{game.title}</h3>
         <p className="text-[11px] text-mint">{game.subscriptionPriceCents>0?`${money(game.subscriptionPriceCents,game.subscriptionCurrency,locale)} / ${locale==="en"?"month":locale === "az" ? "ay" : "ay"}`:t.common.free}</p>
-        {pickText(game.tagline,locale)!==game.title&&<p className="line-clamp-1 text-xs text-muted">{pickText(game.tagline, locale)}</p>}
-        <div className="flex flex-wrap gap-2 pt-1 text-xs text-muted">{isCategory(game.category)&&<span className="inline-flex items-center gap-1.5"><CategoryIcon category={game.category} className="h-4 w-4"/>{t.categories[game.category]}</span>}</div><div className="flex items-center justify-between pt-1 text-[11px] text-faint">
-          <span className="truncate">{game.developerName}</span>
-          <span className="flex shrink-0 gap-2.5">
-            <span>▶ {num(game.playCount, locale)}</span>
-            <span>♥ {num(game.likeCount, locale)}</span>
-          </span>
-        </div>
+        <div className="game-card-meta"><span>{isCategory(game.category)?t.categories[game.category]:game.developerName}</span><span className="inline-flex items-center gap-1"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m8 5 11 7-11 7z"/></svg>{num(game.playCount,locale)}</span></div>
       </div>
     </Link>
   );
@@ -47,7 +38,7 @@ export function GameCard({ game, locale, t }: { game: GameCardData; locale: Loca
 
 export function GameGrid({ games, locale, t }: { games: GameCardData[]; locale: Locale; t: Dict }) {
   return (
-    <div className="game-grid">
+    <div className="game-grid" data-count={games.length}>
       {games.map((g) => (
         <GameCard key={g.id} game={g} locale={locale} t={t} />
       ))}

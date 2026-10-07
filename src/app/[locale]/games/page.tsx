@@ -5,7 +5,7 @@ import { resolveLocale } from "@/lib/i18n";
 import { fill } from "@/lib/i18n/text";
 import { listGames } from "@/lib/games";
 import { GameGrid } from "@/components/GameCard";
-import { categories, categoryEmoji, isCategory } from "@/lib/catalog";
+import { categories, isCategory } from "@/lib/catalog";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/games">) {
   const { t } = await resolveLocale(params);
@@ -33,15 +33,13 @@ export default async function Browse({ params, searchParams }: PageProps<"/[loca
     `shrink-0 rounded-full border px-3.5 py-1.5 text-sm transition ${active ? "border-mint bg-mint/15 text-mint" : "border-line bg-surface/70 text-muted hover:text-paper"}`;
 
   return (
-    <CatalogShell locale={locale} active="browse">
+    <CatalogShell locale={locale} active="browse" categoryLabels={t.categories}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="h1">{q ? fill(t.browse.resultsFor, { q }) : category ? t.categories[category] : t.browse.title}</h1>
           <p className="mt-1 text-sm text-muted">{fill(t.browse.count, { n: games.length })}</p>
         </div>
-        <form action={`/${locale}/games`} className="w-full sm:hidden">
-          <input name="q" type="search" defaultValue={q} placeholder={t.nav.search} className="input rounded-full" />
-        </form>
+
         <div className="flex flex-wrap gap-2">
           {(["popular", "trending", "new", "liked"] as const).map((s) => (
             <Link key={s} href={href({ sort: s === "popular" ? undefined : s })} className={chip(sort === s)}>

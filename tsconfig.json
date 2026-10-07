@@ -52,7 +52,13 @@
     ".next-montserrat-social/types/**/*.ts",
     ".next-montserrat-social/dev/types/**/*.ts",
     ".next-montserrat-social-final/types/**/*.ts",
-    ".next-montserrat-social-final/dev/types/**/*.ts"
+    ".next-montserrat-social-final/dev/types/**/*.ts",
+    ".next-portal-20261007/types/**/*.ts",
+    ".next-portal-20261007/dev/types/**/*.ts",
+    ".next-portal-release-20261007/types/**/*.ts",
+    ".next-portal-release-20261007/dev/types/**/*.ts",
+    ".next-portal-live-20261007/types/**/*.ts",
+    ".next-portal-live-20261007/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
