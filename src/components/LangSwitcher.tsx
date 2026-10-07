@@ -20,10 +20,9 @@ export function LangSwitcher({ locale, label }: { locale: Locale; label: string 
   // Close on outside pointer — not onBlur. Touch devices often have
   // relatedTarget=null on blur, which closed the menu before the option click fired.
   useEffect(() => {
-    const el = menu.current;
-    if (!el) return;
     function onPointerDown(e: PointerEvent) {
-      if (el.open && !el.contains(e.target as Node)) el.open = false;
+      const details = menu.current;
+      if (details?.open && !details.contains(e.target as Node)) details.open = false;
     }
     document.addEventListener("pointerdown", onPointerDown);
     return () => document.removeEventListener("pointerdown", onPointerDown);
