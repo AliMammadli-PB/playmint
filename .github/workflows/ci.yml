@@ -1,0 +1,75 @@
+name: Build and tests
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    name: Build, Vitest and Playwright
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: playmint_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d playmint_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      CI: 'true'
+      PLAYMINT_CI: '1'
+      DATABASE_URL: postgresql://postgres:ci-only-password@127.0.0.1:5432/playmint_ci
+      APP_SECRET: ci-only-secret-not-used-in-production-0123456789
+      SITE_URL: http://127.0.0.1:3032
+      PLAYMINT_TEST_ORIGIN: http://127.0.0.1:3032
+      DATA_DIR: ${{ github.workspace }}/test-results/ci-data
+      PLAYMINT_BUILD_DIR: .next-ci
+      H5_ADS_APPROVED: 'false'
+      GAME_ORIGIN: ''
+      VIRUSTOTAL_API_KEY: ''
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa # v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '20.20.2'
+          cache: pnpm
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Vitest unit tests
+        run: pnpm test:ci --reporter=default --reporter=junit --outputFile=test-results/vitest.xml
+      - name: Migrate disposable database
+        run: pnpm db:migrate
+      - name: Seed deterministic browser fixtures
+        run: pnpm seed:ci
+      - name: Production build
+        run: pnpm build
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Playwright browser and visual tests
+        run: pnpm test:e2e
+      - name: Save test reports and failure traces
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: test-reports
+          path: |
+            test-results/playwright-report/
+            test-results/artifacts/
+            test-results/vitest.xml
+          retention-days: 14
+          if-no-files-found: warn

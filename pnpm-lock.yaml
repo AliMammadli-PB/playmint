@@ -11,6 +11,9 @@ importers:
       '@node-rs/argon2':
         specifier: ^2.2.2
         version: 2.2.2
+      '@ruffle-rs/ruffle':
+        specifier: 0.7.0
+        version: 0.7.0
       drizzle-orm:
         specifier: ^0.45.3
         version: 0.45.3(@types/pg@8.23.1)(pg@8.23.1)
@@ -949,6 +952,9 @@ packages:
 
   '@rolldown/pluginutils@1.0.1':
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
+
+  '@ruffle-rs/ruffle@0.7.0':
+    resolution: {integrity: sha512-Eer2mPEIACNsJ5o6O2+d0TlbjxhExXF4/xNxZzcue7EHNgEGC7JrucpLBOjPcTu1lE89dUWE5Gyn588IQ418WQ==}
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
@@ -2382,6 +2388,8 @@ snapshots:
     optional: true
 
   '@rolldown/pluginutils@1.0.1': {}
+
+  '@ruffle-rs/ruffle@0.7.0': {}
 
   '@standard-schema/spec@1.1.0': {}
 

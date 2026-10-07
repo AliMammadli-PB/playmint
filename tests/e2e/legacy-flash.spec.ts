@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { createSwfWrapper } from "../../src/lib/legacy-flash";
 
 test("legacy flash wrapper loads Ruffle and does not trap a phone page", async ({ page }) => {

@@ -14,10 +14,14 @@
     "test:e2e": "playwright test",
     "test:integration": "node --env-file=.env scripts/redesign-qa.cjs",
     "test:community": "node --env-file=.env scripts/community-qa.cjs",
-    "import:swf-games": "tsx --conditions=react-server --env-file=.env scripts/import-swf-games.ts"
+    "import:swf-games": "tsx --conditions=react-server --env-file=.env scripts/import-swf-games.ts",
+    "seed:ci": "tsx --conditions=react-server scripts/seed-ci.ts",
+    "test:ci": "vitest run",
+    "postinstall": "node scripts/prepare-ruffle.mjs"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",
+    "@ruffle-rs/ruffle": "0.7.0",
     "drizzle-orm": "^0.45.3",
     "next": "16.3.8",
     "pg": "^8.23.1",

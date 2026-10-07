@@ -80,7 +80,9 @@
     ".next-curators-final-20261007/types/**/*.ts",
     ".next-curators-final-20261007/dev/types/**/*.ts",
     ".next-game-gallery-20261007/types/**/*.ts",
-    ".next-game-gallery-20261007/dev/types/**/*.ts"
+    ".next-game-gallery-20261007/dev/types/**/*.ts",
+    ".next-ci-20261008/types/**/*.ts",
+    ".next-ci-20261008/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
