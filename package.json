@@ -12,7 +12,8 @@
     "seed:demo": "tsx --conditions=react-server --env-file=.env scripts/seed-demo.ts",
     "admin:promote": "tsx --conditions=react-server --env-file=.env scripts/promote-admin.ts",
     "test:e2e": "playwright test",
-    "test:integration": "node --env-file=.env scripts/redesign-qa.cjs"
+    "test:integration": "node --env-file=.env scripts/redesign-qa.cjs",
+    "test:community": "node --env-file=.env scripts/community-qa.cjs"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",

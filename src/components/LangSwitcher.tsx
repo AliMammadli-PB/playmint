@@ -12,11 +12,11 @@ export function LangSwitcher({ locale, label }: { locale: Locale; label: string 
   const [open, setOpen] = useState(false);
 
   function change(next: Locale) {
-    document.cookie = `${localeCookie}=${next}; path=/; max-age=31536000; samesite=lax`;
+    document.cookie = `${localeCookie}=${next}; path=/; max-age=31536000; samesite=lax${window.location.protocol==="https:"?"; secure":""}`;
     const parts = pathname.split("/");
     parts[1] = next;
     setOpen(false);
-    router.push(parts.join("/") + window.location.search);
+    router.push(parts.join("/") + window.location.search + window.location.hash);
   }
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export function LangSwitcher({ locale, label }: { locale: Locale; label: string 
         aria-label={`${label}: ${locale.toUpperCase()} — ${localeNames[locale]}`}
         aria-expanded={open}
         aria-controls={listId}
-        aria-haspopup="listbox"
+        aria-haspopup="true"
         onClick={() => setOpen((v) => !v)}
       >
         <LangFlag locale={locale} />
@@ -55,15 +55,14 @@ export function LangSwitcher({ locale, label }: { locale: Locale; label: string 
         </svg>
       </button>
       {open && (
-        <div id={listId} className="language-options" role="listbox" aria-label={label}>
+        <div id={listId} className="language-options" role="group" aria-label={label}>
           {locales.map((l) => (
             <button
               type="button"
               key={l}
               lang={l}
-              role="option"
+              aria-pressed={locale === l}
               aria-label={localeNames[l]}
-              aria-selected={locale === l}
               onClick={() => change(l)}
             >
               <LangFlag locale={l} />

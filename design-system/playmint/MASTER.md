@@ -38,42 +38,42 @@ colors:
   studio-action-ink: "#fff"
 typography:
   display:
-    fontFamily: "Space Grotesk, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Montserrat, ui-sans-serif, system-ui, sans-serif"
     fontSize: "clamp(36px,4vw,56px)"
     fontWeight: 700
     lineHeight: 1.2
     letterSpacing: "-.035em"
   headline:
-    fontFamily: "Space Grotesk, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Montserrat, ui-sans-serif, system-ui, sans-serif"
     fontSize: "clamp(28px,3vw,42px)"
     fontWeight: 700
     lineHeight: 1.2
     letterSpacing: "-.035em"
   studio-headline:
-    fontFamily: "Space Grotesk, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Montserrat, ui-sans-serif, system-ui, sans-serif"
     fontSize: "clamp(28px,3vw,36px)"
     fontWeight: 700
     lineHeight: 1.2
     letterSpacing: "-.035em"
   body:
-    fontFamily: "DM Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Montserrat, ui-sans-serif, system-ui, sans-serif"
     fontSize: "16px"
     lineHeight: 1.6
   label:
-    fontFamily: "DM Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Montserrat, ui-sans-serif, system-ui, sans-serif"
     fontSize: "14px"
     fontWeight: 650
   button:
-    fontFamily: "DM Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Montserrat, ui-sans-serif, system-ui, sans-serif"
     fontSize: "14px"
     fontWeight: 600
     lineHeight: 1.3
   hint:
-    fontFamily: "DM Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Montserrat, ui-sans-serif, system-ui, sans-serif"
     fontSize: "13px"
     lineHeight: 1.6
   badge:
-    fontFamily: "DM Sans, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Montserrat, ui-sans-serif, system-ui, sans-serif"
     fontSize: "12px"
     fontWeight: 650
 rounded:
@@ -144,7 +144,7 @@ components:
 
 **Creative North Star: "Arcade and Studio"**
 
-Arcade Dark and Studio share one visual language with two working environments. The public environment uses deep charcoal surfaces and luminous mint actions; Studio and admin use pale green-gray grounds, white panels, and darker mint actions. Space Grotesk headings and DM Sans body copy connect the environments.
+Arcade Dark and Studio share one visual language with two working environments. The public environment uses deep charcoal surfaces and luminous mint actions; Studio and admin use pale green-gray grounds, white panels, and darker mint actions. Montserrat headings and Montserrat body copy connect the environments.
 
 The system is direct, spacious, and game-led. Solid fills, visible borders, and compact rounded controls keep navigation and forms clear. Existing generated PNG identity assets and original illustrations remain recognizable; SVG flags represent language choices. Motion stays brief and follows reduced-motion preferences.
 
@@ -180,9 +180,9 @@ Charcoal and pale green-gray neutrals share mint action roles; the frontmatter r
 
 ## Typography
 
-**Display Font:** Space Grotesk (ui-sans-serif, system-ui, sans-serif fallback).
-**Body Font:** DM Sans (ui-sans-serif, system-ui, sans-serif fallback).
-**Label/Mono Font:** Labels use DM Sans; code uses ui-monospace, SFMono-Regular, Menlo, monospace.
+**Display Font:** Montserrat (ui-sans-serif, system-ui, sans-serif fallback).
+**Body Font:** Montserrat (ui-sans-serif, system-ui, sans-serif fallback).
+**Label/Mono Font:** Labels use Montserrat; code uses ui-monospace, SFMono-Regular, Menlo, monospace.
 
 **Character:** Compact geometric headings anchor friendly, legible body copy. These are the current implemented faces retained in the approved world.
 

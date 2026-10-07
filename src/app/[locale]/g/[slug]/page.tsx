@@ -1,3 +1,5 @@
+import {profileById} from "@/lib/community";
+import {FollowButton} from "@/components/FollowButton";
 import {CategoryIcon} from "@/components/CategoryIcon";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -57,6 +59,7 @@ export default async function GamePage({ params, searchParams }: PageProps<"/[lo
   ]);
   const subscription = user ? await getActiveSubscription(user.id,game.id) : null;
   const locked = game.premiumOnly && !premium && !canManage;
+  const creatorProfile=await profileById(game.developerId,user?.id);
   const license = licenses.find((l) => l.id === game.license);
   const description = pickText(game.description, locale);
 
@@ -97,6 +100,7 @@ export default async function GamePage({ params, searchParams }: PageProps<"/[lo
             <div className="card flex aspect-video items-center justify-center text-muted">{t.game.notLive}</div>
           )}
 
+          {creatorProfile&&<div className="creator-social"><Link className="text-sm text-muted" href={`/${locale}/u/${creatorProfile.handle}`}>{creatorProfile.name} · {num(creatorProfile.followers,locale)} {locale==="en"?"subscribers":locale==="az"?"abunəçi":"abone"}</Link><FollowButton locale={locale} targetId={creatorProfile.id} handle={creatorProfile.handle} viewerId={user?.id} following={creatorProfile.following}/></div>}
           <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">

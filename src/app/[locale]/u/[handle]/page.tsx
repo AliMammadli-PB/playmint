@@ -1,42 +1,9 @@
-import { notFound } from "next/navigation";
-import { eq } from "drizzle-orm";
-import { resolveLocale } from "@/lib/i18n";
-import { db, schema } from "@/lib/db";
-import { listGames } from "@/lib/games";
-import { GameGrid } from "@/components/GameCard";
-
-export default async function DeveloperProfile({ params }: PageProps<"/[locale]/u/[handle]">) {
-  const { locale, t } = await resolveLocale(params);
-  const { handle } = await params;
-  const dev = (await db.select().from(schema.developerProfiles).where(eq(schema.developerProfiles.handle, handle)).limit(1))[0];
-  if (!dev) notFound();
-  const games = await listGames({ developerId: dev.userId, sort: "popular", limit: 60 });
-  const website = /^https?:\/\//.test(dev.website) ? dev.website : "";
-  return (
-    <div className="container-pm py-10">
-      <div className="flex items-center gap-4">
-        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-3 font-display text-2xl font-bold text-mint">
-          {dev.displayName.slice(0, 1).toUpperCase()}
-        </div>
-        <div>
-          <h1 className="h1">{dev.displayName}</h1>
-          <p className="text-sm text-muted">
-            @{dev.handle}
-            {website && (
-              <>
-                {" · "}
-                <a href={website} target="_blank" rel="noreferrer nofollow" className="hover:text-mint">
-                  {website.replace(/^https?:\/\//, "")}
-                </a>
-              </>
-            )}
-          </p>
-        </div>
-      </div>
-      {dev.bio && <p className="mt-5 max-w-2xl whitespace-pre-line text-muted">{dev.bio}</p>}
-      <div className="mt-10">
-        {games.length ? <GameGrid games={games} locale={locale} t={t} /> : <div className="card p-10 text-center text-muted">{t.browse.empty}</div>}
-      </div>
-    </div>
-  );
-}
+import {notFound} from "next/navigation";
+import {resolveLocale} from "@/lib/i18n";
+import {getCurrentUser} from "@/lib/auth";
+import {publicProfile} from "@/lib/community";
+import {listGames} from "@/lib/games";
+import {GameGrid} from "@/components/GameCard";
+import {FollowButton} from "@/components/FollowButton";
+import {num} from "@/lib/format";
+export default async function Profile({params}:PageProps<"/[locale]/u/[handle]">){const {locale,t}=await resolveLocale(params),{handle}=await params;const viewer=await getCurrentUser(),p=await publicProfile(handle,viewer?.id);if(!p)notFound();const games=await listGames({developerId:p.id,sort:"popular",limit:60});const website=p.website&&/^https?:\/\//.test(p.website)?p.website:"";return <div className="container-pm py-10"><header className="profile-heading"><div className="person-identity"><span className="person-avatar person-avatar-large" aria-hidden="true">{p.name.slice(0,1).toUpperCase()}</span><div><h1 className="h1">{p.name}</h1><p className="text-muted">@{p.handle}</p><div className="profile-counts"><span data-testid="subscriber-count">{num(p.followers,locale)} {locale==="en"?"subscribers":locale==="az"?"abunəçi":"abone"}</span><span>{num(p.followingCount,locale)} {locale==="en"?"subscribed to":locale==="az"?"abunəlik":"takip"}</span></div></div></div><FollowButton targetId={p.id} handle={p.handle} locale={locale} following={p.following} viewerId={viewer?.id}/></header><p className="hint mt-5">{locale==="en"?"User subscriptions are free. Paid game plans are separate.":locale==="az"?"İstifadəçiyə abunəlik pulsuzdur. Ödənişli oyun planları ayrıdır.":"Kullanıcıya abone olmak ücretsizdir. Ücretli oyun planları ayrıdır."}</p>{p.bio&&<p className="mt-5 max-w-2xl whitespace-pre-line text-muted">{p.bio}</p>}{website&&<a href={website} rel="noreferrer nofollow" target="_blank" className="mt-4 inline-block text-mint">{website.replace(/^https?:\/\//,"")}</a>}{games.length>0&&<section className="mt-10"><h2 className="h2 mb-5">{t.nav.games}</h2><GameGrid games={games} locale={locale} t={t}/></section>}</div>;}

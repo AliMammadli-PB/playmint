@@ -43,6 +43,7 @@ export async function Header({ locale, t }: { locale: Locale; t: Dict }) {
                 </div>
                 {isDev && <MenuLink href={L("/dev/notifications")}>{locale==="en"?"Notifications":locale==="az"?"Bildirişlər":"Bildirimler"}</MenuLink>}
                 {isDev && <MenuLink href={L("/dev/games")}>{locale==="en"?"My games":locale === "az" ? "Oyunlarım" : "Oyunlarım"}</MenuLink>}
+                <MenuLink href={L("/me/community")}>{locale==="en"?"User subscriptions":locale==="az"?"İstifadəçi abunəlikləri":"Kullanıcı abonelikleri"}</MenuLink>
                 <MenuLink href={L(isDev?"/dev/settings":"/me")}>{t.nav.profile}</MenuLink>
                 <MenuLink href={L(isDev?"/dev/account":"/me/settings")}>{locale==="en"?"Account settings":locale==="az"?"Hesab ayarları":"Hesap ayarları"}</MenuLink>
                 {(user.role === "developer" || user.role === "admin") && <MenuLink href={L("/dev")}>{t.nav.devPanel}</MenuLink>}

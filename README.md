@@ -122,3 +122,13 @@ Checkout remains disabled by owner instruction. Game plans accept USD or TRY; ne
 Validation: `pnpm test` and `pnpm test:e2e`. Playwright includes mobile immersive exit with preserved iframe, localized SVG flags/query preservation, responsive catalogue checks and serious/critical axe accessibility checks. Set `PLAYMINT_TEST_ORIGIN` for a test host and `PLAYMINT_CHROMIUM_PATH` for an installed browser. Financial tests must use private test accounts and never real bank references.
 
 Build into a fresh release directory with `PLAYMINT_BUILD_DIR=.next-<release> pnpm build`, verify the release, then restart PM2 with that same environment value. Never rebuild the directory currently serving production. Retain the preceding release directory for rollback.
+
+## Free user subscriptions
+
+`/people` discovers players and creators; `/u/<username-or-handle>` shows public profiles and subscriber counts. `/me/community` lists subscribers and followed users with pagination. These are free social relationships in `user_follows`, entirely separate from paid game subscriptions. Following cannot unlock a paid game or create revenue. The API uses authenticated actor identity, rejects self/cross-origin subscriptions, limits payload size, and serializes idempotent updates per pair. User deletion cascades relationships; blocked users are excluded from public counts/lists.
+
+Typography is self-hosted Montserrat with a semibold body and bold headings/wordmark. Font preloading is disabled to avoid preloading unused language subsets. SVG language flags are the exact unmodified assets supplied in the approved Pocket Factory game. Language navigation preserves query/hash and uses a touch-friendly button disclosure, keeping upload state alive through soft navigation.
+
+`pnpm test:community` uses temporary users and exercises social API/concurrency, ordinary-player profiles, unsubscribe/count refresh, monetary separation, responsive pages, Chromium/Firefox touch language selection, Montserrat and main-document Standards Mode. It cleans its test users afterward.
+
+Google's AdSense script remains in the head as requested. The site's document uses Standards Mode; browser privacy diagnostics or Google-owned iframe/CSP/ORB messages may still vary by browser, privacy mode and ad response. We do not silence console methods or disable tracking protection to hide diagnostics.

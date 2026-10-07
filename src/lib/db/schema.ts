@@ -1,3 +1,4 @@
+import {sql} from "drizzle-orm";
 import {
   pgTable,
   pgEnum,
@@ -12,6 +13,7 @@ import {
   uniqueIndex,
   index,
   serial,
+  check,
 } from "drizzle-orm/pg-core";
 
 export const roleEnum = pgEnum("role", ["player", "developer", "admin"]);
@@ -402,3 +404,10 @@ export const adAllocations = pgTable('ad_allocations', {
  reportedMinor:integer('reported_minor').notNull(),developerCents:integer('developer_cents').notNull(),
  platformCents:integer('platform_cents').notNull(),
 },t=>[primaryKey({columns:[t.settlementId,t.gameId]})]);
+
+/** Free social follows; never grant paid game access or financial credit. */
+export const userFollows = pgTable("user_follows",{
+ followerId:text("follower_id").notNull().references(()=>users.id,{onDelete:"cascade"}),
+ followingId:text("following_id").notNull().references(()=>users.id,{onDelete:"cascade"}),
+ createdAt:createdAt(),
+},t=>[primaryKey({columns:[t.followerId,t.followingId]}),index("user_follows_target_idx").on(t.followingId),check("user_follows_not_self",sql`${t.followerId} <> ${t.followingId}`)]);
