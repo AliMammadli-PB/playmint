@@ -78,7 +78,9 @@
     ".next-curators-release-20261007/types/**/*.ts",
     ".next-curators-release-20261007/dev/types/**/*.ts",
     ".next-curators-final-20261007/types/**/*.ts",
-    ".next-curators-final-20261007/dev/types/**/*.ts"
+    ".next-curators-final-20261007/dev/types/**/*.ts",
+    ".next-game-gallery-20261007/types/**/*.ts",
+    ".next-game-gallery-20261007/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
