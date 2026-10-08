@@ -75,7 +75,15 @@ header nav a{display:inline-flex;align-items:center}
 .game-tile{display:block;min-width:0;border-radius:14px;overflow:hidden;transition:transform .18s ease}
 .game-tile:hover{transform:translateY(-3px)}
 .game-cover{aspect-ratio:1 / 1;border-radius:14px;overflow:hidden;background:var(--color-surface-2)}
-.game-tile>div:last-child{padding:12px 2px}.game-tile h3{font-size:16px;font-weight:800}.game-tile p{font-size:13px}.game-card-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--color-muted)}
+.game-tile>div:last-child{padding:12px 2px}.game-tile h3{font-size:16px;font-weight:800}.game-tile p{font-size:13px}
+.game-card-details{display:grid;gap:5px;min-width:0;font-size:11px;line-height:1.45;font-weight:600;color:var(--color-muted)}
+.game-card-byline{display:flex;align-items:center;gap:8px;min-width:0}
+.game-card-author{display:inline-flex;align-items:center;gap:5px;min-width:0}.game-card-author-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.game-card-details svg{width:13px;height:13px;flex-shrink:0}.game-card-author>svg{color:var(--color-faint)}
+.game-card-followers{display:inline-flex;align-items:center;gap:4px;flex-shrink:0;color:var(--color-mint);font-weight:800;font-variant-numeric:tabular-nums}
+.game-card-plays{display:flex;align-items:center;gap:5px;font-variant-numeric:tabular-nums}.game-card-plays svg{color:var(--color-mint)}
+.portal-spotlight .game-card-details{margin-top:8px;max-width:24rem;color:#e0e9e4}.portal-spotlight .game-card-author>svg{color:#e0e9e4}
+.portal-opening-games .game-card-details{margin-top:4px;color:#e0e9e4}.portal-opening-games .game-card-author>svg{color:#e0e9e4}
 .portal-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.portal-heading h1{font-size:26px;font-weight:800}.portal-heading>a{display:inline-flex;align-items:center;gap:10px;min-height:44px;color:var(--color-mint);font-size:13px}
 .portal-opening{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:16px;align-items:stretch}
 .portal-spotlight{position:relative;isolation:isolate;min-height:360px;background:var(--color-surface)}
@@ -83,7 +91,7 @@ header nav a{display:inline-flex;align-items:center}
 .portal-spotlight::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#080e16f5 0%,#080e1670 45%,transparent 75%);z-index:0;pointer-events:none}
 .portal-spotlight>div.spotlight-copy{position:relative;z-index:1;padding:24px;display:flex;min-height:360px;flex-direction:column;justify-content:flex-end;align-items:flex-start;color:#fff}
 .spotlight-kicker{font-size:11px;letter-spacing:.12em;color:#b7ffd9;margin-bottom:8px;font-weight:800}.spotlight-copy h2{font-size:32px;font-weight:800}.spotlight-copy p{font-size:14px;color:#e0e9e4;margin-top:6px;max-width:48ch}.spotlight-action{display:inline-flex;gap:14px;align-items:center;padding:10px 18px;min-height:44px;background:var(--color-mint);color:var(--accent-ink);border-radius:10px;margin-top:18px;font-size:14px;font-weight:800}
-.portal-opening{margin-bottom:18px}.portal-opening-games .game-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;height:100%}.portal-opening-games .game-tile{position:relative;min-width:0}.portal-opening-games .game-card-caption{position:absolute;inset:auto 0 0;padding:24px 12px 10px;background:linear-gradient(transparent,#080e16ed);pointer-events:none}.portal-opening-games .game-card-caption p,.portal-opening-games .game-card-meta{display:none}.portal-opening-games .game-tile h3{font-size:14px}.portal-opening-games .game-cover{height:100%}.portal-opening-games .game-tile:hover{transform:translateY(-2px)}
+.portal-opening{margin-bottom:18px}.portal-opening-games .game-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;height:100%}.portal-opening-games .game-tile{position:relative;min-width:0}.portal-opening-games .game-card-caption{position:absolute;inset:auto 0 0;padding:24px 12px 10px;background:linear-gradient(transparent,rgba(8,14,22,.82) 24px,rgba(8,14,22,.94));pointer-events:none}.portal-opening-games .game-card-caption p{display:none}.portal-opening-games .game-tile h3{font-size:14px}.portal-opening-games .game-cover{height:100%}.portal-opening-games .game-tile:hover{transform:translateY(-2px)}
 .catalog-shell .shrink-0.rounded-full{min-height:44px;display:inline-flex;align-items:center;border-radius:10px}
 body:has(.catalog-shell)>footer{margin-top:24px}
 .studio-shell{max-width:1480px;margin:0 auto;display:grid;grid-template-columns:225px minmax(0,1fr);gap:32px;padding:28px 24px;min-height:calc(100vh - 64px)}

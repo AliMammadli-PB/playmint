@@ -82,7 +82,11 @@
     ".next-game-gallery-20261007/types/**/*.ts",
     ".next-game-gallery-20261007/dev/types/**/*.ts",
     ".next-ci-20261008/types/**/*.ts",
-    ".next-ci-20261008/dev/types/**/*.ts"
+    ".next-ci-20261008/dev/types/**/*.ts",
+    ".next-card-publisher-20261008/types/**/*.ts",
+    ".next-card-publisher-20261008/dev/types/**/*.ts",
+    ".next-card-publisher-release-20261008/types/**/*.ts",
+    ".next-card-publisher-release-20261008/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

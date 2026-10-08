@@ -4,7 +4,18 @@ import { coverUrl } from "@/lib/games";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dict } from "@/lib/i18n";
 import { num, money } from "@/lib/format";
-import { isCategory } from "@/lib/catalog";
+
+export function GameCardDetails({game,locale}:{game:GameCardData;locale:Locale}) {
+  const labels=locale==="en"?{publisher:"Publisher",subscribers:"subscribers",plays:"plays"}:locale==="az"?{publisher:"Paylaşan",subscribers:"abunə",plays:"oynanış"}:{publisher:"Paylaşan",subscribers:"abone",plays:"oynanma"};
+  const publisher=game.developerName||labels.publisher;
+  return <div className="game-card-details">
+    <div className="game-card-byline">
+      <span className="game-card-author" title={publisher}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg><span className="game-card-author-name">{publisher}</span></span>
+      <span className="game-card-followers" title={`${num(game.developerSubscriberCount,locale)} ${labels.subscribers}`}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/><circle cx="9" cy="7" r="4"/></svg><span>{num(game.developerSubscriberCount,locale)}</span><span className="sr-only"> {labels.subscribers}</span></span>
+    </div>
+    <div className="game-card-plays"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4z"/></svg><span>{num(game.playCount,locale)} {labels.plays}</span></div>
+  </div>;
+}
 
 export function Cover({ title, path, category, className = "" }: { title: string; path: string | null; category: string; className?: string }) {
   const url = coverUrl(path);
@@ -29,8 +40,8 @@ export function GameCard({ game, locale, t }: { game: GameCardData; locale: Loca
       </div>
       <div className="game-card-caption space-y-1">
         <h3 className="truncate font-display text-[15px] font-bold">{game.title}</h3>
-        <p className="text-[11px] text-mint">{game.subscriptionPriceCents>0?`${money(game.subscriptionPriceCents,game.subscriptionCurrency,locale)} / ${locale==="en"?"month":locale === "az" ? "ay" : "ay"}`:t.common.free}</p>
-        <div className="game-card-meta"><span>{isCategory(game.category)?t.categories[game.category]:game.developerName}</span><span className="inline-flex items-center gap-1"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m8 5 11 7-11 7z"/></svg>{num(game.playCount,locale)}</span></div>
+        {game.subscriptionPriceCents>0&&<p className="text-[11px] text-mint">{money(game.subscriptionPriceCents,game.subscriptionCurrency,locale)} / {locale==="en"?"month":locale === "az" ? "ay" : "ay"}</p>}
+        <GameCardDetails game={game} locale={locale}/>
       </div>
     </Link>
   );

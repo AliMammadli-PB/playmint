@@ -24,8 +24,9 @@ export const cardFields = {
   subscriptionCurrency:g.subscriptionCurrency,
   likeCount: displayedLikes,
   playCount: displayedPlays,
-  developerName: d.displayName,
+  developerName: sql<string>`coalesce(${d.displayName}, (select name from users where id=${g.developerId}))`,
   developerHandle: d.handle,
+  developerSubscriberCount: sql<number>`(select count(*)::int from user_follows uf join users member on member.id=uf.follower_id where uf.following_id=${g.developerId} and member.banned=false)`,
 };
 
 export type GameCardData = {
@@ -42,6 +43,7 @@ export type GameCardData = {
   playCount: number;
   developerName: string | null;
   developerHandle: string | null;
+  developerSubscriberCount: number;
 };
 
 export type ListOptions = {
