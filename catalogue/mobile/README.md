@@ -1,0 +1,9 @@
+# Reviewed mobile additions
+
+Three independent upstream games: **Dante** by Salvatore Previti, **Stolen Sword** by Ian Chiao, and **Jewelsback** by Erick Eduardo Petrucelli. The manifest pins source and prebuilt revisions. Original MIT notices and source links remain in each runtime and catalogue description. Editorial curator profiles manage the listings; they are not represented as the original authors.
+
+Run `node scripts/prepare-mobile-games.cjs` to prepare browser-only ZIPs under ignored `work/mobile-games` (override with `PLAYMINT_MOBILE_PREPARED`). No upstream install hooks, development servers or build scripts execute. Stolen Sword uses the esbuild bundled with the project's locked tsx dependency. Dante uses its readable prebuilt bundle rather than the packed version. Jewelsback omits optional external art and audio because upstream does not identify their individual asset licences; its procedural board and jewel artwork remains intact.
+
+`pnpm exec tsx --conditions=react-server --env-file=.env scripts/import-mobile-games.ts stage` stores pending versions. `scan` advances the first incomplete real VirusTotal analysis; the existing scan worker also processes the queue. `status` displays progress. No scan result is fabricated or shared between different runtimes.
+
+Before `publish`, review the actual sandboxed runtime on desktop and a phone-sized touch browser. Save a gameplay screenshot to `covers/<key>.png` and a review record to `reviews/<key>.json` with `{version, runtimeSha256, mobile: true, desktop: true, touch: true}`. Publishing requires all three real clean scans, matching review records and screenshots. Approval uses the existing retention policy: source ZIPs and project files are removed, leaving the reviewed browser runtime and licence notices. New listings receive distinct editorial curators; only those operator-owned profiles mutually follow one another. Paid subscriptions, balances and real-user follows are not seeded.
