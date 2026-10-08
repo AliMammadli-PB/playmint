@@ -17,7 +17,7 @@ export type TechnicalStatus = "pending" | "approved" | "rejected";
 export type RuntimeStatus = "untested" | "ok" | "broken";
 
 export type LegacyFlashMeta = {
-  sourceType: "github-swf";
+  sourceType: "github-swf" | "publisher-swf";
   sourceRepository: string;
   sourceFile: string;
   sourceFiles: string[];

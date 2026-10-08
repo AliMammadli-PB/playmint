@@ -1,0 +1,122 @@
+[
+  {
+    "slug": "fancy-pants-adventure",
+    "title": "Fancy Pants Adventure",
+    "category": "platformer",
+    "repo": "flashresurrection/Swf",
+    "revision": "67ac11511e77fd197e2cc5dcb30dc43f7a496e58",
+    "file": "Fancy Pants Adventure.swf",
+    "sourceSha": "2403f9376522e6df192e4215254e7c4c3cfef3c0",
+    "sha256": "17403cd2608c7a508d649489069b904bc11afaacf28e167730bffc2ac1032f60",
+    "bytes": 2577111,
+    "sourceUrl": "https://raw.githubusercontent.com/flashresurrection/Swf/67ac11511e77fd197e2cc5dcb30dc43f7a496e58/Fancy%20Pants%20Adventure.swf"
+  },
+  {
+    "slug": "n-v2",
+    "title": "N v2",
+    "category": "platformer",
+    "repo": "flashresurrection/Swf",
+    "revision": "67ac11511e77fd197e2cc5dcb30dc43f7a496e58",
+    "file": "Nv2.swf",
+    "sourceSha": "fe2ea0a6745580a999a12ebf4a6b21874358abe8",
+    "sha256": "3aea73de85d37b1092026c6c07296cf7e5074d55191f00020e611b2e1b1869c3",
+    "bytes": 564948,
+    "sourceUrl": "https://raw.githubusercontent.com/flashresurrection/Swf/67ac11511e77fd197e2cc5dcb30dc43f7a496e58/Nv2.swf"
+  },
+  {
+    "slug": "breaking-the-bank",
+    "title": "Breaking the Bank",
+    "category": "adventure",
+    "repo": "flashresurrection/Swf",
+    "revision": "67ac11511e77fd197e2cc5dcb30dc43f7a496e58",
+    "file": "Stickman Collection/161792_breaking-the-bank.swf",
+    "sourceSha": "a1509324373583d0be3c64626cf2955bdb33e6c4",
+    "sha256": "dfbd9ae58e9e505aae7d0edb26e7c2aa5d46e63815ccfbcbb8158dc982f7e835",
+    "bytes": 3143678,
+    "sourceUrl": "https://raw.githubusercontent.com/flashresurrection/Swf/67ac11511e77fd197e2cc5dcb30dc43f7a496e58/Stickman%20Collection/161792_breaking-the-bank.swf"
+  },
+  {
+    "slug": "escaping-the-prison",
+    "title": "Escaping the Prison",
+    "category": "adventure",
+    "repo": "flashresurrection/Swf",
+    "revision": "67ac11511e77fd197e2cc5dcb30dc43f7a496e58",
+    "file": "Stickman Collection/533001_PrisonNG.swf",
+    "sourceSha": "afed6b0abc98d25352ed9728289298a85fafb534",
+    "sha256": "42504141d897498c5f4e785a44b66f9d918b07278f14a924c8c93808f602b856",
+    "bytes": 9799626,
+    "sourceUrl": "https://raw.githubusercontent.com/flashresurrection/Swf/67ac11511e77fd197e2cc5dcb30dc43f7a496e58/Stickman%20Collection/533001_PrisonNG.swf"
+  },
+  {
+    "slug": "stealing-the-diamond",
+    "title": "Stealing the Diamond",
+    "category": "adventure",
+    "repo": "flashresurrection/Swf",
+    "revision": "67ac11511e77fd197e2cc5dcb30dc43f7a496e58",
+    "file": "Stickman Collection/574241_DiamondNGSP.swf",
+    "sourceSha": "2f0ebdb3642b66f925e029a12cff6c27a6d4c2de",
+    "sha256": "8b438fe8b958f9a0795599bc73125eaad4bbf47e82e35419b2943c03d82925d8",
+    "bytes": 14610074,
+    "sourceUrl": "https://raw.githubusercontent.com/flashresurrection/Swf/67ac11511e77fd197e2cc5dcb30dc43f7a496e58/Stickman%20Collection/574241_DiamondNGSP.swf"
+  },
+  {
+    "slug": "infiltrating-the-airship",
+    "title": "Infiltrating the Airship",
+    "category": "adventure",
+    "repo": "flashresurrection/Swf",
+    "revision": "67ac11511e77fd197e2cc5dcb30dc43f7a496e58",
+    "file": "Stickman Collection/618518_Airship.swf",
+    "sourceSha": "929917d5ec5084fc5eec9693934741f7231c472b",
+    "sha256": "8afd246b022b5888c49b9f71ae0d7b95b4208d32d7a8b28d26372dcc83a24b6d",
+    "bytes": 29763646,
+    "sourceUrl": "https://raw.githubusercontent.com/flashresurrection/Swf/67ac11511e77fd197e2cc5dcb30dc43f7a496e58/Stickman%20Collection/618518_Airship.swf"
+  },
+  {
+    "slug": "fleeing-the-complex",
+    "title": "Fleeing the Complex",
+    "category": "adventure",
+    "repo": "flashresurrection/Swf",
+    "revision": "67ac11511e77fd197e2cc5dcb30dc43f7a496e58",
+    "file": "Stickman Collection/665992_complex.swf",
+    "sourceSha": "e372c3276bd28cc90c9c1247341ddc79c84e54f7",
+    "sha256": "e27fd0d7128b71dd25c197866973ace27a81de2fd65bf7a7dadc87743b2853c1",
+    "bytes": 34525817,
+    "sourceUrl": "https://raw.githubusercontent.com/flashresurrection/Swf/67ac11511e77fd197e2cc5dcb30dc43f7a496e58/Stickman%20Collection/665992_complex.swf"
+  },
+  {
+    "slug": "the-impossible-quiz",
+    "title": "The Impossible Quiz",
+    "category": "puzzle",
+    "repo": "flashresurrection/Swf",
+    "revision": "67ac11511e77fd197e2cc5dcb30dc43f7a496e58",
+    "file": "dagobah_The_Impossible_Quiz.swf",
+    "sourceSha": "d8303a5f594862728678536a87673cf3b22f8d6c",
+    "sha256": "03d860b0f0bcdea0620bbb0fd4e771113fd2f72639fc8b9725ed9e4c14ef1121",
+    "bytes": 8369962,
+    "sourceUrl": "https://raw.githubusercontent.com/flashresurrection/Swf/67ac11511e77fd197e2cc5dcb30dc43f7a496e58/dagobah_The_Impossible_Quiz.swf"
+  },
+  {
+    "slug": "the-gun-game",
+    "title": "The Gun Game",
+    "category": "shooter",
+    "repo": "flashresurrection/Swf",
+    "revision": "67ac11511e77fd197e2cc5dcb30dc43f7a496e58",
+    "file": "thegungame.swf",
+    "sourceSha": "27ad82fbeb985dbb36e76f36884572908c32bd1b",
+    "sha256": "be4ec9e5951c8af175af06becb964a1d69daaa3fd99c2906b1e9e5add81107a3",
+    "bytes": 150468,
+    "sourceUrl": "https://raw.githubusercontent.com/flashresurrection/Swf/67ac11511e77fd197e2cc5dcb30dc43f7a496e58/thegungame.swf"
+  },
+  {
+    "slug": "electric-box",
+    "title": "Electric Box",
+    "category": "puzzle",
+    "repo": "MaxGames",
+    "revision": "2026-10-08",
+    "file": "ebNzYw.swf",
+    "sourceSha": "e141e5fc3e809f11bd2202fca540972f52a3e7c4",
+    "sha256": "d87d62f2045565d0ab5844f8be7fb0041e73a182af6103e0fca8f152c08fea84",
+    "bytes": 3731250,
+    "sourceUrl": "https://farm.maxgames.com/ebNzYw.swf"
+  }
+]
